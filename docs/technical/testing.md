@@ -81,28 +81,42 @@ E2E tests run against `npm run build && npm run preview` to test the production 
 
 ## Test Organization
 
+Unit tests are co-located with their source files (`*.test.ts` next to the module). E2E tests live in a top-level `tests/e2e/` directory. Vitest is configured inside `vite.config.ts` (not a separate `vitest.config.ts`).
+
+### Current State (Post-Phase 1)
+
 ```
 cubehill/
-├── src/
-│   └── lib/
-│       └── cube/
-│           ├── CubeState.ts
-│           ├── CubeState.test.ts      # Co-located unit tests
-│           ├── moves.ts
-│           ├── moves.test.ts
-│           ├── notation.ts
-│           └── notation.test.ts
-├── tests/
-│   └── e2e/
-│       ├── navigation.test.ts         # E2E: page navigation and routing
-│       ├── algorithm-browse.test.ts   # E2E: algorithm listing and detail pages
-│       ├── playback.test.ts           # E2E: 3D viewer playback controls
-│       └── theme.test.ts              # E2E: theme switching and persistence
-├── vitest.config.ts
+├── src/lib/
+│   └── smoke.test.ts                  # Smoke unit test (trivial assertions)
+├── tests/e2e/
+│   └── smoke.test.ts                  # E2E smoke test (page loads)
+├── vite.config.ts                     # Vitest configured here
 └── playwright.config.ts
 ```
 
-Unit tests are co-located with their source files (`*.test.ts` next to the module). E2E tests live in a top-level `tests/e2e/` directory.
+### Target Structure (Future Phases)
+
+```
+cubehill/
+├── src/lib/
+│   ├── smoke.test.ts                  # Smoke unit test
+│   └── cube/
+│       ├── CubeState.ts
+│       ├── CubeState.test.ts          # Co-located unit tests
+│       ├── moves.ts
+│       ├── moves.test.ts
+│       ├── notation.ts
+│       └── notation.test.ts
+├── tests/e2e/
+│   ├── smoke.test.ts                  # E2E: basic page load
+│   ├── navigation.test.ts            # E2E: page navigation and routing
+│   ├── algorithm-browse.test.ts      # E2E: algorithm listing and detail pages
+│   ├── playback.test.ts              # E2E: 3D viewer playback controls
+│   └── theme.test.ts                 # E2E: theme switching and persistence
+├── vite.config.ts                     # Vitest configured here
+└── playwright.config.ts
+```
 
 ## CI Integration
 

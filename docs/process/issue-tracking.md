@@ -25,20 +25,38 @@ Run `bd prime` for the full command reference.
 
 ## Labels
 
-Use labels to categorize issues by area. Standard labels for this project:
+Use labels to categorize issues by area. Labels exist in two systems:
+
+### GitHub Labels
+
+These are the labels configured on the GitHub repository (used for epic-level issues):
+
+| Label           | Area                                           |
+| --------------- | ---------------------------------------------- |
+| `bug`           | Something isn't working                        |
+| `feature`       | Major feature work                             |
+| `epic`          | Epic-level tracking issue                      |
+| `cube-engine`   | Cube state, moves, notation                    |
+| `rendering`     | Three.js, animation, 3D                        |
+| `ui`            | Svelte components, pages, layout               |
+| `infra`         | Build, CI/CD, deployment, tooling              |
+| `documentation` | Improvements or additions to documentation     |
+| `enhancement`   | New feature or request                         |
+
+### Beads Labels
+
+For granular beads issues, use these labels. They don't need to match GitHub labels exactly, but stay consistent within beads:
 
 | Label          | Area                                                    |
 | -------------- | ------------------------------------------------------- |
-| `architecture` | Project structure, data flow, technical design          |
 | `cube-engine`  | Cube state, moves, notation parser                      |
 | `rendering`    | Three.js, animations, 3D visualization                  |
 | `ui`           | Svelte components, pages, routing                       |
 | `ux`           | User experience, interaction design, accessibility      |
 | `cubing`       | Algorithm accuracy, notation, domain correctness        |
 | `theming`      | DaisyUI, dark/light mode, styling                       |
-| `deployment`   | GitHub Pages, CI/CD, build config                       |
-| `bug`          | Defects and broken behavior                             |
-| `code-quality` | Code review findings, refactoring                       |
+| `infra`        | Build, CI/CD, deployment, tooling                       |
+| `docs`         | Documentation updates                                   |
 | `critical`     | Must fix — blocks progress or causes incorrect behavior |
 
 Multiple labels can be applied to a single issue. Use `bd create -l "label1,label2"`.

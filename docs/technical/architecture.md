@@ -4,17 +4,25 @@ This document describes the project structure, data flow, and key architectural 
 
 ## Project Structure
 
+The tree below shows the **target** structure. Items marked with `*` exist after Phase 1 scaffolding; unmarked items are planned for later phases.
+
 ```
 cubehill/
-├── .github/workflows/deploy.yml        # GitHub Actions deploy to GitHub Pages
-├── .claude/agents/                     # Agent definitions for the team
-├── docs/                               # Project wiki (this folder)
+├── .github/workflows/
+│   ├── ci.yml *                        # PR checks (lint, format, test, build)
+│   └── deploy.yml *                    # Deploy to GitHub Pages on push to main
+├── .claude/agents/ *                   # Agent definitions for the team
+├── docs/ *                             # Project wiki (this folder)
 ├── static/
-│   └── .nojekyll                       # Bypass Jekyll on GitHub Pages
+│   └── robots.txt *                    # Search engine directives
 ├── src/
-│   ├── app.html                        # SvelteKit HTML shell
-│   ├── app.css                         # Tailwind/DaisyUI imports
+│   ├── app.html *                      # SvelteKit HTML shell (FOUC prevention)
+│   ├── app.css *                       # Tailwind v4 / DaisyUI v5 imports
+│   ├── app.d.ts *                      # SvelteKit type declarations
 │   ├── lib/
+│   │   ├── index.ts *                  # $lib barrel file
+│   │   ├── assets/
+│   │   │   └── favicon.svg *           # Site favicon
 │   │   ├── cube/                       # Cube state engine (pure TypeScript)
 │   │   │   ├── CubeState.ts            # 54-sticker state model
 │   │   │   ├── notation.ts             # Algorithm notation parser
@@ -40,21 +48,28 @@ cubehill/
 │   │       ├── PlaybackControls.svelte # Play/pause/step/reset
 │   │       ├── ThemeToggle.svelte     # Dark/light switch
 │   │       └── Navbar.svelte          # Top navigation bar
-│   └── routes/                         # SvelteKit file-based routing
-│       ├── +layout.svelte             # Root layout (navbar, command palette)
-│       ├── +layout.ts                 # Prerender config
-│       ├── +page.svelte               # Home page
+│   └── routes/ *                       # SvelteKit file-based routing
+│       ├── +layout.svelte *           # Root layout (imports CSS, favicon)
+│       ├── +layout.ts *               # Prerender + trailingSlash config
+│       ├── +page.svelte *             # Home page (placeholder)
 │       ├── oll/
 │       │   ├── +page.svelte           # OLL cases listing
 │       │   └── [id]/+page.svelte      # Individual OLL case
 │       └── pll/
 │           ├── +page.svelte           # PLL cases listing
 │           └── [id]/+page.svelte      # Individual PLL case
-├── svelte.config.js                   # SvelteKit config (adapter-static)
-├── vite.config.ts                     # Vite config
-├── tsconfig.json                      # TypeScript config
-├── CLAUDE.md                          # Project conventions for agents
-└── package.json
+├── tests/
+│   └── e2e/
+│       └── smoke.test.ts *            # Basic E2E smoke test
+├── svelte.config.js *                 # SvelteKit config (adapter-static)
+├── vite.config.ts *                   # Vite + Vitest config
+├── playwright.config.ts *             # Playwright E2E config
+├── tsconfig.json *                    # TypeScript config
+├── eslint.config.js *                 # ESLint flat config
+├── .prettierrc *                      # Prettier config
+├── .prettierignore *                  # Prettier ignore list
+├── CLAUDE.md *                        # Project conventions for agents
+└── package.json *
 ```
 
 ## Data Flow
@@ -132,7 +147,7 @@ All routes are statically prerendered at build time via `adapter-static`. Dynami
 +layout.svelte
 ├── Navbar
 ├── CommandPalette (global, always mounted)
-└── <slot> (page content)
+└── {@render children()} (page content)
     ├── Home (+page.svelte)
     │   └── CubeViewer (interactive demo)
     ├── OLL List (oll/+page.svelte)

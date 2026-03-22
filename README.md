@@ -52,6 +52,7 @@ Detailed documentation lives in [`docs/`](docs/):
 | [algorithms.md](docs/product/algorithms.md)             | OLL/PLL case inventory and learning priority |
 | [pages-and-layout.md](docs/product/pages-and-layout.md) | Pages, responsive layout, navigation         |
 | [theming.md](docs/product/theming.md)                   | DaisyUI theme system, theme-aware components |
+| [roadmap.md](docs/product/roadmap.md)                   | 10-phase development roadmap and status      |
 
 **Process** (`docs/process/`):
 

@@ -118,7 +118,7 @@ This document explains the technology choices for CubeHill and the reasoning beh
 ### Why TypeScript
 
 - Cube state management involves complex data (54-sticker arrays, permutation cycles, algorithm parsing) where types prevent subtle bugs.
-- Three.js has excellent TypeScript support via `@types/three`.
+- Three.js has excellent built-in TypeScript type definitions (shipped with the `three` package since v0.160).
 - Refactoring is safer — renaming a move type propagates through the codebase.
 - IDE support (autocompletion, error detection) speeds up development.
 - SvelteKit has first-class TypeScript support.

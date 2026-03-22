@@ -109,8 +109,8 @@ The `CubeViewer` canvas uses a `ResizeObserver` rather than fixed dimensions. Th
 
 ```mermaid
 flowchart TD
-    Layout[+layout.svelte] --> Navbar & CmdPal[CommandPalette] & Slot[slot]
-    Slot --> Home & Listing & Detail
+    Layout[+layout.svelte] --> Navbar & CmdPal[CommandPalette] & Children[children]
+    Children --> Home & Listing & Detail
 ```
 
 The root layout (`src/routes/+layout.svelte`) provides the persistent shell:
@@ -119,10 +119,10 @@ The root layout (`src/routes/+layout.svelte`) provides the persistent shell:
 <Navbar />
 <CommandPalette />
 <main class="container mx-auto p-4">
-  <slot />
+  {@render children()}
 </main>
 ```
 
 - `Navbar` and `CommandPalette` are always mounted, regardless of the active page
-- Page content renders into the `<slot>` within a centered container
+- Page content renders via `{@render children()}` (Svelte 5 snippet syntax) within a centered container
 - The layout imports no Three.js or browser-only code directly — those are deferred to child components via `onMount`

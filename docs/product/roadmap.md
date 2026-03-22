@@ -26,9 +26,13 @@ flowchart TD
 - After Phase 1: Phases 2, 3, and 6 can all start simultaneously
 - After Phase 4: Phases 5, 7, 8, and 9 can all start simultaneously (Phase 7 also requires Phase 6)
 
+## Current Status
+
+**Phase 1 is complete.** Phases 2, 3, and 6 are now unblocked and can start in parallel.
+
 ## Phases
 
-### Phase 1: Project Scaffolding
+### Phase 1: Project Scaffolding -- COMPLETE
 
 **Issue**: `cubehill-at3` / [#1](https://github.com/ajmalk/cubehill/issues/1)
 
@@ -36,11 +40,11 @@ SvelteKit setup with all dependencies, configuration, and infrastructure in plac
 
 **Key deliverables:**
 
-- SvelteKit project with `adapter-static`, TypeScript, Tailwind, DaisyUI
+- SvelteKit project with `adapter-static`, TypeScript, Tailwind v4, DaisyUI v5
 - ESLint + Prettier configuration
-- Vitest testing infrastructure
-- GitHub Pages deployment pipeline
-- Project documentation scaffolding
+- Vitest + Playwright testing infrastructure
+- GitHub Pages deployment pipeline (CI on PRs, deploy on push to main)
+- Project documentation scaffolding (`docs/technical/`, `docs/product/`, `docs/process/`)
 
 **Dependencies:** None — this is the starting point.
 

@@ -7,12 +7,11 @@ This document describes the DaisyUI theme system, theme selection, and theme-awa
 DaisyUI themes are applied via the `data-theme` attribute on the `<html>` element. Switching themes is as simple as changing this attribute — no JavaScript runtime, no CSS-in-JS, no class toggling on individual elements.
 
 ```html
-<html data-theme="dark">
-  <!-- All DaisyUI components render in dark mode -->
-  <html data-theme="light">
-    <!-- All DaisyUI components render in light mode -->
-  </html>
-</html>
+<!-- Dark mode -->
+<html data-theme="dark">...</html>
+
+<!-- Light mode -->
+<html data-theme="light">...</html>
 ```
 
 ### Configured Themes

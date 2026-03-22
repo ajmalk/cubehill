@@ -113,6 +113,7 @@ build/
 .svelte-kit/
 node_modules/
 package-lock.json
+.beads/dolt/
 ```
 
 ## npm Scripts

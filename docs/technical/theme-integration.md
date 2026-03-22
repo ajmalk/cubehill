@@ -49,7 +49,7 @@ An inline `<script>` in `src/app.html` runs **before** the page paints, setting 
 
 ```html
 <!-- src/app.html -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -65,8 +65,8 @@ An inline `<script>` in `src/app.html` runs **before** the page paints, setting 
     </script>
     %sveltekit.head%
   </head>
-  <body>
-    %sveltekit.body%
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents">%sveltekit.body%</div>
   </body>
 </html>
 ```

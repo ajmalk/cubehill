@@ -184,13 +184,15 @@ This tells SvelteKit to prerender all pages and append trailing slashes to all r
 
 GitHub Pages runs Jekyll by default, which ignores files and directories starting with `_` (underscore). SvelteKit/Vite produces assets in a `_app/` directory, so without the `.nojekyll` file, these assets would be invisible to the web server.
 
-The file is placed at `static/.nojekyll` (empty file, no content needed). SvelteKit copies everything in `static/` to the build output root, so it ends up at `build/.nojekyll`, which GitHub Pages respects.
+The file should be placed at `static/.nojekyll` (empty file, no content needed). SvelteKit copies everything in `static/` to the build output root, so it ends up at `build/.nojekyll`, which GitHub Pages respects.
+
+**Status**: This file does not exist yet. It must be created before the first production deployment to GitHub Pages.
 
 **If this file is missing**: the deployed site loads the HTML but all JavaScript, CSS, and assets fail to load — the page appears broken with no interactivity or styling.
 
 ## GitHub Actions Workflow
 
-The deployment is automated via `.github/workflows/deploy.yml`:
+The deployment is automated via `.github/workflows/deploy.yml`. The workflow has three jobs: test, build, and deploy, chained with `needs` dependencies so a broken build is never deployed.
 
 ```yaml
 name: Deploy to GitHub Pages
@@ -209,7 +211,23 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright install --with-deps
+      - run: npm run test:e2e
+
   build:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -249,9 +267,10 @@ jobs:
 1. **Trigger**: Runs on every push to `main`
 2. **Permissions**: Requires `pages: write` and `id-token: write` for the new GitHub Pages deployment API
 3. **Concurrency**: Only one deployment runs at a time; queued deployments are not cancelled (to avoid partial deploys)
-4. **Build job**: Checks out code, installs dependencies with `npm ci` (deterministic), runs `npm run build`
-5. **Upload artifact**: Uploads the `build/` directory as a GitHub Pages artifact
-6. **Deploy job**: Deploys the artifact to GitHub Pages using the official `deploy-pages` action
+4. **Test job**: Runs lint, unit tests, build, and E2E tests. Gates the build job.
+5. **Build job**: Checks out code, installs dependencies with `npm ci` (deterministic), runs `npm run build`
+6. **Upload artifact**: Uploads the `build/` directory as a GitHub Pages artifact
+7. **Deploy job**: Deploys the artifact to GitHub Pages using the official `deploy-pages` action
 
 ### GitHub Repository Settings
 
@@ -323,36 +342,7 @@ If any step fails, the PR cannot be merged.
 
 ### Push to Main (Deploy Pipeline)
 
-The deploy workflow (already documented above) is extended with a test gate:
-
-```yaml
-# .github/workflows/deploy.yml (updated)
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run lint
-      - run: npm test
-      - run: npm run build
-      - run: npx playwright install --with-deps
-      - run: npm run test:e2e # E2E tests against production build
-
-  build:
-    needs: test # Build only runs if tests pass
-    # ... (existing build job)
-
-  deploy:
-    needs: build # Deploy only runs if build succeeds
-    # ... (existing deploy job)
-```
-
-The test job gates the build job, which gates the deploy job. A broken build is never deployed.
+The deploy workflow (documented above) includes a test job that gates the build and deploy jobs. The test job runs lint, unit tests, builds the project, and then runs E2E tests against the production build. A broken build is never deployed.
 
 ### Branch Protection Rules
 
@@ -395,11 +385,11 @@ Note: `npm run preview` serves from the root, so links will point to `/cubehill/
 
 ## Build Output Structure
 
-After `npm run build`, the `build/` directory contains:
+After `npm run build`, the `build/` directory will contain (target structure with all routes implemented):
 
 ```
 build/
-├── .nojekyll
+├── .nojekyll                         # Must add static/.nojekyll first
 ├── index.html                    # Home page
 ├── 404.html                      # Fallback 404 page
 ├── oll/

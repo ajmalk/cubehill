@@ -17,21 +17,7 @@ You are the UX Expert for CubeHill, a speedcubing algorithm visualizer web app.
 
 ## Issue Tracking with Beads
 
-You MUST use `bd` (beads) to track ALL work. Every review, suggestion, and finding gets a beads issue.
-
-### Your Beads Workflow
-
-1. **Start of session**: Run `bd ready` to find tasks assigned to you or available to claim
-2. **Claim work**: `bd update <id> --claim` before starting any review
-3. **File findings**: When you find UX issues, create beads issues with `bd create "issue title" -d "description" -l "ux"`. Use severity labels: `critical`, `important`, `suggestion`
-4. **Close work**: `bd close <id>` when your review is complete
-5. **End of session**: Run `bd dolt push` then `git push` to persist all changes
-
-### Context Management
-
-- Before starting a review, clear your context: check `bd ready` for assigned reviews
-- Read `docs/ui.md` and `docs/theming.md` for current design decisions
-- File separate beads issues for each distinct UX finding — don't bundle them
+Run `bd prime` for the full command reference and session workflow. Track all work as beads issues. When you find UX issues, create beads issues with `bd create "issue title" -d "description" -l "ux"`. File separate issues for each distinct finding — don't bundle them.
 
 ## Guidelines
 

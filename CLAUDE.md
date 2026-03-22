@@ -20,47 +20,16 @@ npm run build        # Build static site to build/
 npm run preview      # Preview production build locally
 ```
 
-## Issue Tracking: Beads (`bd`)
-
-This project uses **beads** (`bd`) for all task and issue tracking. Every piece of work — no matter how small — must be tracked as a beads issue.
-
-### Rules
-
-- **Use `bd` for ALL task tracking** — do NOT use TodoWrite, TaskCreate, or markdown TODO lists
-- **Every task gets an issue** — before starting work, create or claim an issue
-- **Update status as you work** — claim issues when starting, close when done
-- **Use `docs/` for long-term knowledge** — architecture, design decisions, and planning live in the wiki (`docs/` folder). Beads tracks work items, not reference documentation.
-- **Clear context before large tasks** — when taking on a larger task, review `bd ready` for available work and clear completed items
-
-### Quick Reference
-
-```bash
-bd ready                    # Find available work
-bd show <id>                # View issue details
-bd create "title" -d "desc" # Create a new issue
-bd update <id> --claim      # Claim work atomically
-bd close <id>               # Complete work
-bd list                     # List all issues
-bd status                   # Overview and statistics
-bd epic create "name"       # Create an epic for larger initiatives
-bd dep add <id> --blocks <other-id>  # Add dependency
-bd note <id> "note text"    # Add a note to an issue
-```
-
-### Session Workflow
-
-1. Run `bd ready` to find available work
-2. `bd update <id> --claim` to claim a task
-3. Do the work
-4. `bd close <id>` when done
-5. Before ending a session: `bd dolt push` then `git push`
-
 ## Knowledge Management
 
-- **Beads (`bd`)** — tracks all work items: tasks, bugs, features, reviews. Short-lived, actionable.
+- **Beads (`bd`)** — tracks all work items: tasks, bugs, features, reviews. Short-lived, actionable. Run `bd prime` for full command reference.
 - **Wiki (`docs/`)** — stores long-term knowledge: architecture, design decisions, conventions, data models. Persistent reference.
 
 When in doubt: if it's something to *do*, put it in beads. If it's something to *know*, put it in docs.
+
+### Agent Isolation
+
+When agents work in parallel on code, use `isolation: "worktree"` to give each agent its own git worktree and branch. Beads syncs issues across worktrees via Dolt.
 
 ## Project Architecture
 
@@ -118,3 +87,51 @@ This project uses a team of 6 agents:
 6. **Code Reviewer / QA** — reviews code, checks builds
 
 Shared doc pages (stack, algorithms, ui, theming) are co-owned by the PM and Architect — PM owns product aspects, Architect owns technical aspects.
+
+
+<!-- BEGIN BEADS INTEGRATION v:1 profile:minimal hash:ca08a54f -->
+## Beads Issue Tracker
+
+This project uses **bd (beads)** for issue tracking. Run `bd prime` to see full workflow context and commands.
+
+### Quick Reference
+
+```bash
+bd ready              # Find available work
+bd show <id>          # View issue details
+bd update <id> --claim  # Claim work
+bd close <id>         # Complete work
+```
+
+### Rules
+
+- Use `bd` for ALL task tracking — do NOT use TodoWrite, TaskCreate, or markdown TODO lists
+- Run `bd prime` for detailed command reference and session close protocol
+- Use `bd remember` for persistent knowledge — do NOT use MEMORY.md files
+
+## Session Completion
+
+**When ending a work session**, you MUST complete ALL steps below. Work is NOT complete until `git push` succeeds.
+
+**MANDATORY WORKFLOW:**
+
+1. **File issues for remaining work** - Create issues for anything that needs follow-up
+2. **Run quality gates** (if code changed) - Tests, linters, builds
+3. **Update issue status** - Close finished work, update in-progress items
+4. **PUSH TO REMOTE** - This is MANDATORY:
+   ```bash
+   git pull --rebase
+   bd dolt push
+   git push
+   git status  # MUST show "up to date with origin"
+   ```
+5. **Clean up** - Clear stashes, prune remote branches
+6. **Verify** - All changes committed AND pushed
+7. **Hand off** - Provide context for next session
+
+**CRITICAL RULES:**
+- Work is NOT complete until `git push` succeeds
+- NEVER stop before pushing - that leaves work stranded locally
+- NEVER say "ready to push when you are" - YOU must push
+- If push fails, resolve and retry until it succeeds
+<!-- END BEADS INTEGRATION -->

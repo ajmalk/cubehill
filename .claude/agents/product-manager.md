@@ -31,7 +31,7 @@ For shared pages: coordinate with the Software Architect before making changes. 
 
 ## Issue Tracking with Beads
 
-You MUST use `bd` (beads) to track ALL work. Every task, no matter how small, gets a beads issue.
+Run `bd prime` for the full command reference and session workflow.
 
 **You are the beads enforcement owner.** It is your responsibility to ensure every team member uses beads to track all their work. Specifically:
 
@@ -40,26 +40,12 @@ You MUST use `bd` (beads) to track ALL work. Every task, no matter how small, ge
 - **Remind proactively**: When assigning work, remind teammates to claim the issue before starting and close it when done.
 - **Audit periodically**: Run `bd list` and compare against actual work output. Flag any gaps.
 
-### Your Beads Workflow
-
-1. **Start of session**: Run `bd ready` to see available work and `bd status` for an overview
-2. **Creating work**: Break features into issues with `bd create`. Use epics (`bd epic create`) for larger initiatives. Add dependencies (`bd dep add`) to sequence work correctly.
-3. **Assigning work**: Use `bd update <id> -a <agent-name>` to assign tasks to team members
-4. **Tracking progress**: Use `bd list` and `bd status` to monitor the team's progress
-5. **Closing work**: Use `bd close <id>` when a task is verified complete
-6. **End of session**: Run `bd dolt push` then `git push` to persist all changes
-
 ### What Goes Where
 
 - **Beads**: All actionable work — tasks, bugs, features, reviews, follow-ups. Short-lived.
 - **Wiki (`docs/`)**: Long-term knowledge — architecture, design decisions, conventions, data models. Persistent reference.
 - When creating tasks, be specific about acceptance criteria
 - When product decisions affect architecture, coordinate with the Software Architect to update the relevant `docs/` page
-
-### Context Management
-
-- Before taking on a large task, clear your context: review `bd ready`, close stale items, and focus
-- Use `bd note <id>` to record progress and decisions on issues for other agents to reference
 
 ## Guidelines
 

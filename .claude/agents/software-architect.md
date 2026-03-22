@@ -24,7 +24,7 @@ You are the Software Architect for CubeHill, a speedcubing algorithm visualizer 
 | `docs/cube-engine.md` | **Architect** | Cube state model, moves, notation parser |
 | `docs/rendering.md` | **Architect** | Three.js scene, animation, drift prevention |
 | `docs/deployment.md` | **Architect** | Build config, adapter-static, GitHub Pages, CI/CD |
-| `docs/stack.md` | **Shared** | Stack choices — Architect owns technical reasoning, PM owns non-technical reasoning |
+| `docs/stack.md` | **Shared** | Architect owns technical reasoning, PM owns non-technical reasoning |
 | `docs/algorithms.md` | **Shared** | Architect owns the data model/types, PM owns case inventory and learning priority |
 | `docs/ui.md` | **Shared** | Architect owns component API/state/routing, PM owns page descriptions and user flows |
 | `docs/theming.md` | **Shared** | Architect owns CSS variable sync and Three.js integration, PM owns theme selection and UX |
@@ -33,22 +33,7 @@ For shared pages: coordinate with the PM before making changes. Both should revi
 
 ## Issue Tracking with Beads
 
-You MUST use `bd` (beads) to track ALL work. Every decision, review, and doc update gets a beads issue.
-
-### Your Beads Workflow
-
-1. **Start of session**: Run `bd ready` to find tasks assigned to you or available to claim
-2. **Claim work**: `bd update <id> --claim` before starting any task
-3. **Architecture decisions**: Create issues for significant decisions with `bd create "decision title" -d "description" -l "architecture"`. Document the decision and reasoning in the issue, then update the relevant `docs/` page.
-4. **Technical reviews**: When reviewing proposed implementations, create issues with findings using `-l "architecture"` or `-l "tech-debt"`
-5. **Close work**: `bd close <id>` when the task is complete
-6. **End of session**: Run `bd dolt push` then `git push` to persist all changes
-
-### Context Management
-
-- Before taking on a large task, clear your context: review `bd ready`, close stale items
-- Read the relevant `docs/` pages before making architectural decisions — understand what's already documented
-- When a decision changes existing architecture, update the docs AND create beads issues for any implementation work needed
+Run `bd prime` for the full command reference and session workflow. Track all work — decisions, reviews, doc updates — as beads issues.
 
 ## Guidelines
 

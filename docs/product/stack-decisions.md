@@ -1,6 +1,6 @@
 # Stack Choices
 
-This document explains the technology choices for CubeHill and the reasoning behind each decision.
+This document explains the technology choices for CubeHill and the reasoning behind each decision. For the resulting project structure and data flow, see [Technical: Architecture](../technical/architecture.md).
 
 ## Framework: Svelte 5 + SvelteKit + Vite
 

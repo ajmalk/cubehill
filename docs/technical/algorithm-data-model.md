@@ -6,18 +6,32 @@ Algorithm data lives in `src/lib/data/` as static TypeScript arrays.
 
 ## Data Model
 
+The data model uses a discriminated union so TypeScript can narrow the `pattern` field based on `category`:
+
 ```typescript
-interface Algorithm {
+interface BaseAlgorithm {
   id: string;             // Unique identifier, e.g., "oll-1", "pll-aa"
   name: string;           // Display name, e.g., "OLL 1", "Aa Perm"
-  category: 'oll' | 'pll';
   notation: string;       // Primary algorithm, e.g., "R U2 R2 F R F' U2 R' F R F'"
   altNotations?: string[]; // Alternative algorithms for the same case
-  pattern: boolean[] | PermutationArrow[];  // OLL: boolean[9], PLL: arrow diagram data
   group: string;          // Grouping label, e.g., "Dot Cases", "T-Shape"
   probability: string;    // Probability of encountering, e.g., "1/54"
 }
+
+interface OllAlgorithm extends BaseAlgorithm {
+  category: 'oll';
+  pattern: boolean[];     // 9-element array: true = sticker oriented (yellow up)
+}
+
+interface PllAlgorithm extends BaseAlgorithm {
+  category: 'pll';
+  pattern: PermutationArrow[];  // Arrow diagram data showing piece permutations
+}
+
+type Algorithm = OllAlgorithm | PllAlgorithm;
 ```
+
+This discriminated union means checking `algorithm.category === 'oll'` automatically narrows `pattern` to `boolean[]`, eliminating runtime type checks.
 
 ## Fields Explained
 
@@ -29,7 +43,7 @@ interface Algorithm {
 
 **`altNotations`**: Optional array of alternative algorithms. Some cubers prefer different algorithms for the same case based on ergonomics or finger-trick efficiency.
 
-**`pattern`**: A 9-element boolean array representing the top face of the cube:
+**`pattern`** (OLL): A 9-element boolean array representing the top face of the cube:
 - For OLL: `true` = the sticker is oriented correctly (yellow facing up), `false` = not oriented
 - This maps to the 3x3 grid in row-major order (top-left to bottom-right)
 - Used to render the 2D case thumbnail on algorithm cards

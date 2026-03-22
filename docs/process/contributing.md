@@ -76,6 +76,7 @@ For theme selection UX, see [Product: Theming](../product/theming.md).
 
 | Technical | Product |
 |-----------|---------|
+| `architecture.md` | `stack-decisions.md` |
 | `algorithm-data-model.md` | `algorithms.md` |
 | `components.md` | `pages-and-layout.md` |
 | `theme-integration.md` | `theming.md` |

@@ -1,6 +1,6 @@
 # Architecture
 
-This document describes the project structure, data flow, and key architectural decisions for CubeHill.
+This document describes the project structure, data flow, and key architectural decisions for CubeHill. For the reasoning behind each technology choice, see [Product: Stack Choices](../product/stack-decisions.md).
 
 ## Project Structure
 

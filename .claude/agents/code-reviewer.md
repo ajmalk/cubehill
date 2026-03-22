@@ -16,7 +16,7 @@ You are the Code Reviewer and QA agent for CubeHill, a speedcubing algorithm vis
 
 ## Issue Tracking with Beads
 
-Run `bd prime` for the full command reference and session workflow. Read `docs/issue-tracking.md` for full standards — issue types, labels, statuses, and best practices.
+Run `bd prime` for the full command reference and session workflow. Read `docs/process/issue-tracking.md` for full standards — issue types, labels, statuses, and best practices.
 
 Track all work as beads issues. When you find bugs or issues, create beads issues with `bd create "issue title" -d "description" -l "bug"` or `-l "code-quality"`. File separate issues for each distinct finding.
 

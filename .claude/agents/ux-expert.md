@@ -17,7 +17,7 @@ You are the UX Expert for CubeHill, a speedcubing algorithm visualizer web app.
 
 ## Issue Tracking with Beads
 
-Run `bd prime` for the full command reference and session workflow. Read `docs/issue-tracking.md` for full standards — issue types, labels, statuses, and best practices.
+Run `bd prime` for the full command reference and session workflow. Read `docs/process/issue-tracking.md` for full standards — issue types, labels, statuses, and best practices.
 
 Track all work as beads issues. When you find UX issues, create beads issues with `bd create "issue title" -d "description" -l "ux"`. File separate issues for each distinct finding — don't bundle them.
 
@@ -40,4 +40,4 @@ Track all work as beads issues. When you find UX issues, create beads issues wit
 
 ## Project Context
 
-Read `CLAUDE.md` for project overview and the full docs table of contents. Your key docs: `docs/ui.md`, `docs/theming.md`, `docs/algorithms.md`.
+Read `CLAUDE.md` for project overview and the full docs table of contents. Your key docs: `docs/product/pages-and-layout.md`, `docs/product/theming.md`, `docs/product/algorithms.md`.

@@ -16,7 +16,7 @@ You are the Full-Stack Developer for CubeHill, a speedcubing algorithm visualize
 
 ## Issue Tracking with Beads
 
-Run `bd prime` for the full command reference and session workflow. Read `docs/issue-tracking.md` for full standards — issue types, labels, statuses, and best practices.
+Run `bd prime` for the full command reference and session workflow. Read `docs/process/issue-tracking.md` for full standards — issue types, labels, statuses, and best practices.
 
 Track all work as beads issues — claim before starting, close when done. If implementation reveals a design gap, create a beads issue for the Architect to update the docs.
 
@@ -49,4 +49,4 @@ Read `CLAUDE.md` for full conventions. Key rules:
 
 ## Documentation Reference
 
-Always read the relevant `docs/` page before implementing a feature. See `CLAUDE.md` for the full docs table of contents.
+Always read the relevant `docs/` page before implementing a feature. See `CLAUDE.md` for the full docs table of contents. Key docs: `docs/technical/cube-engine.md`, `docs/technical/rendering.md`, `docs/technical/components.md`, `docs/technical/architecture.md`.

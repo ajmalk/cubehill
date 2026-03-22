@@ -36,16 +36,4 @@ Track all work as beads issues. When you find accuracy issues, create beads issu
 
 ## Project Context
 
-Read `CLAUDE.md` for project overview. Key docs for cubing work:
-
-| Page | What's in it |
-|------|-------------|
-| `docs/algorithms.md` | Algorithm data model, OLL/PLL cases, groupings, learning priority |
-| `docs/cube-engine.md` | Cube state model, moves, notation parser |
-| `docs/ui.md` | UI components, algorithm cards, playback controls |
-| `docs/rendering.md` | Three.js scene, animation, drift prevention |
-| `docs/architecture.md` | Project structure, data flow, component hierarchy |
-| `docs/stack.md` | Stack choices and reasoning |
-| `docs/theming.md` | DaisyUI theming, dark/light mode |
-| `docs/deployment.md` | GitHub Pages, adapter-static, base path, CI/CD |
-| `docs/issue-tracking.md` | Beads issue tracking standards and best practices |
+Read `CLAUDE.md` for project overview and the full docs table of contents. Your key docs: `docs/algorithms.md`, `docs/cube-engine.md`.

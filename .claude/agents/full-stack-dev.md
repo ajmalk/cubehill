@@ -49,16 +49,4 @@ Read `CLAUDE.md` for full conventions. Key rules:
 
 ## Documentation Reference
 
-Always read the relevant `docs/` page before implementing a feature. The docs describe the intended design and architecture.
-
-| Page | What's in it |
-|------|-------------|
-| `docs/stack.md` | Stack choices and reasoning |
-| `docs/architecture.md` | Project structure, data flow, component hierarchy |
-| `docs/cube-engine.md` | Cube state model, moves, notation parser |
-| `docs/rendering.md` | Three.js scene, animation, drift prevention |
-| `docs/algorithms.md` | Algorithm data model, OLL/PLL cases |
-| `docs/ui.md` | UI components, routing, command palette, keyboard controls |
-| `docs/theming.md` | DaisyUI theming, dark/light mode, CSS variable sync |
-| `docs/deployment.md` | GitHub Pages, adapter-static, base path, CI/CD |
-| `docs/issue-tracking.md` | Beads issue tracking standards and best practices |
+Always read the relevant `docs/` page before implementing a feature. See `CLAUDE.md` for the full docs table of contents.

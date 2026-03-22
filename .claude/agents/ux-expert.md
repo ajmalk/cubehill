@@ -40,16 +40,4 @@ Track all work as beads issues. When you find UX issues, create beads issues wit
 
 ## Project Context
 
-Read `CLAUDE.md` for project overview. Key docs for UX work:
-
-| Page | What's in it |
-|------|-------------|
-| `docs/ui.md` | UI components, routing, command palette, keyboard controls, responsive layout |
-| `docs/theming.md` | DaisyUI theming, dark/light mode, FOUC prevention |
-| `docs/algorithms.md` | Algorithm data model, OLL/PLL cases, learning priority |
-| `docs/rendering.md` | Three.js scene, animation, OrbitControls |
-| `docs/architecture.md` | Project structure, data flow, component hierarchy |
-| `docs/stack.md` | Stack choices and reasoning |
-| `docs/cube-engine.md` | Cube state model, moves, notation parser |
-| `docs/deployment.md` | GitHub Pages, adapter-static, base path, CI/CD |
-| `docs/issue-tracking.md` | Beads issue tracking standards and best practices |
+Read `CLAUDE.md` for project overview and the full docs table of contents. Your key docs: `docs/ui.md`, `docs/theming.md`, `docs/algorithms.md`.

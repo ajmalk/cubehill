@@ -55,16 +55,4 @@ Track all work as beads issues. When you find bugs or issues, create beads issue
 
 ## Project Context
 
-Read `CLAUDE.md` for full project conventions. All project documentation:
-
-| Page | What's in it |
-|------|-------------|
-| `docs/stack.md` | Stack choices and reasoning |
-| `docs/architecture.md` | Project structure, data flow, component hierarchy |
-| `docs/cube-engine.md` | Cube state model, moves, notation parser |
-| `docs/rendering.md` | Three.js scene, animation, drift prevention |
-| `docs/algorithms.md` | Algorithm data model, OLL/PLL cases |
-| `docs/ui.md` | UI components, routing, command palette, keyboard controls |
-| `docs/theming.md` | DaisyUI theming, dark/light mode, CSS variable sync |
-| `docs/deployment.md` | GitHub Pages, adapter-static, base path, CI/CD |
-| `docs/issue-tracking.md` | Beads issue tracking standards and best practices |
+Read `CLAUDE.md` for full project conventions and the docs table of contents.

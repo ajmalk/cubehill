@@ -165,8 +165,9 @@ The key invariant: **the logical cube state and the visual state must always agr
 
 ### Animation State Machine
 
-> **Diagram:** See the "Architecture Diagrams" FigJam file in Figma for the interactive state machine diagram.
-> [Open in FigJam](https://www.figma.com/board/QrDngrgFppJtNIMPd7z1Eb/Architecture-Diagrams)
+![Animation State Machine](images/animation-state-machine.png)
+
+> Edit in FigJam: [Architecture Diagrams](https://www.figma.com/board/QrDngrgFppJtNIMPd7z1Eb/Architecture-Diagrams)
 
 **States:** Idle, Animating, Paused
 

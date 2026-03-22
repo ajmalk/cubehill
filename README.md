@@ -55,6 +55,8 @@ Detailed documentation lives in [`docs/`](docs/):
 
 | Page | Description |
 |------|-------------|
+| [browser-tools.md](docs/process/browser-tools.md) | Playwright MCP browser tools for agents |
+| [contributing.md](docs/process/contributing.md) | Best practices for contributing to the wiki |
 | [issue-tracking.md](docs/process/issue-tracking.md) | Issue tracking standards |
 
 ## Contributing

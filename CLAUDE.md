@@ -20,6 +20,48 @@ npm run build        # Build static site to build/
 npm run preview      # Preview production build locally
 ```
 
+## Issue Tracking: Beads (`bd`)
+
+This project uses **beads** (`bd`) for all task and issue tracking. Every piece of work — no matter how small — must be tracked as a beads issue.
+
+### Rules
+
+- **Use `bd` for ALL task tracking** — do NOT use TodoWrite, TaskCreate, or markdown TODO lists
+- **Every task gets an issue** — before starting work, create or claim an issue
+- **Update status as you work** — claim issues when starting, close when done
+- **Use `docs/` for long-term knowledge** — architecture, design decisions, and planning live in the wiki (`docs/` folder). Beads tracks work items, not reference documentation.
+- **Clear context before large tasks** — when taking on a larger task, review `bd ready` for available work and clear completed items
+
+### Quick Reference
+
+```bash
+bd ready                    # Find available work
+bd show <id>                # View issue details
+bd create "title" -d "desc" # Create a new issue
+bd update <id> --claim      # Claim work atomically
+bd close <id>               # Complete work
+bd list                     # List all issues
+bd status                   # Overview and statistics
+bd epic create "name"       # Create an epic for larger initiatives
+bd dep add <id> --blocks <other-id>  # Add dependency
+bd note <id> "note text"    # Add a note to an issue
+```
+
+### Session Workflow
+
+1. Run `bd ready` to find available work
+2. `bd update <id> --claim` to claim a task
+3. Do the work
+4. `bd close <id>` when done
+5. Before ending a session: `bd dolt push` then `git push`
+
+## Knowledge Management
+
+- **Beads (`bd`)** — tracks all work items: tasks, bugs, features, reviews. Short-lived, actionable.
+- **Wiki (`docs/`)** — stores long-term knowledge: architecture, design decisions, conventions, data models. Persistent reference.
+
+When in doubt: if it's something to *do*, put it in beads. If it's something to *know*, put it in docs.
+
 ## Project Architecture
 
 See `docs/` for detailed documentation:
@@ -66,10 +108,13 @@ See `docs/` for detailed documentation:
 
 ## Team
 
-This project uses a team of 5 agents:
+This project uses a team of 6 agents:
 
-1. **Product Manager** — manages team, prioritizes work, writes/maintains docs
-2. **Full-Stack Dev** — implements all code
-3. **UX Expert** — reviews UI/UX decisions
-4. **Cubing Advisor** — validates algorithm correctness and beginner-friendliness
-5. **Code Reviewer / QA** — reviews code, checks builds
+1. **Product Manager** — manages team, prioritizes work, owns non-technical decisions and product-focused docs
+2. **Software Architect** — owns technical architecture decisions and maintains technical docs (architecture, cube-engine, rendering, deployment)
+3. **Full-Stack Dev** — implements all code
+4. **UX Expert** — reviews UI/UX decisions
+5. **Cubing Advisor** — validates algorithm correctness and beginner-friendliness
+6. **Code Reviewer / QA** — reviews code, checks builds
+
+Shared doc pages (stack, algorithms, ui, theming) are co-owned by the PM and Architect — PM owns product aspects, Architect owns technical aspects.

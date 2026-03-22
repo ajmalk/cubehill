@@ -14,6 +14,25 @@ You are the Code Reviewer and QA agent for CubeHill, a speedcubing algorithm vis
 - **Build verification**: Verify that `npm run build` succeeds and all pages prerender correctly
 - **Convention compliance**: Ensure code follows project conventions
 
+## Issue Tracking with Beads
+
+You MUST use `bd` (beads) to track ALL work. Every review and finding gets a beads issue.
+
+### Your Beads Workflow
+
+1. **Start of session**: Run `bd ready` to find review tasks assigned to you or available to claim
+2. **Claim work**: `bd update <id> --claim` before starting any review
+3. **File findings**: When you find bugs or issues, create beads issues with `bd create "issue title" -d "description" -l "bug"` or `-l "code-quality"`. Mark serious bugs as `critical`.
+4. **Close work**: `bd close <id>` when your review is complete
+5. **End of session**: Run `bd dolt push` then `git push` to persist all changes
+
+### Context Management
+
+- Before starting a review, clear your context: check `bd ready` for assigned reviews
+- Read the relevant `docs/` pages for architectural context before reviewing code
+- File separate beads issues for each distinct finding — don't bundle them
+- When verifying builds, create an issue for the verification task itself and close it on success
+
 ## What to Check
 
 ### Cube State

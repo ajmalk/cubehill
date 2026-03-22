@@ -19,7 +19,7 @@ There is no server — all algorithm data is bundled at build time, and all page
 
 ```javascript
 import adapter from '@sveltejs/adapter-static';
-import { vitePreprocess } from '@sveltejs/kit/vite';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 const dev = process.argv.includes('dev');
 
@@ -37,11 +37,18 @@ const config = {
     paths: {
       base: dev ? '' : '/cubehill',
     },
-    trailingSlash: 'always',
   },
 };
 
 export default config;
+```
+
+Note: `trailingSlash` is configured as a route-level export in `src/routes/+layout.ts`, not in the kit config (SvelteKit 2.x moved this to a page/layout option):
+
+```typescript
+// src/routes/+layout.ts
+export const prerender = true;
+export const trailingSlash = 'always';
 ```
 
 ### Key Settings Explained
@@ -71,6 +78,8 @@ Forces all routes to end with a trailing slash (e.g., `/cubehill/oll/` not `/cub
 - `/cubehill/oll` would need server-side rewrite rules that GitHub Pages doesn't support
 
 Without this setting, navigating directly to a route (or refreshing the page) may return a 404 on GitHub Pages.
+
+In SvelteKit 2.x, `trailingSlash` is a route-level export rather than a kit config option. It is exported from `src/routes/+layout.ts` so it applies to all routes.
 
 ## Base Path Gotcha
 
@@ -161,14 +170,15 @@ If `strict: false`, the build succeeds silently but the dynamic pages simply don
 
 ### Layout-Level Prerender
 
-The root layout enables prerendering globally:
+The root layout enables prerendering and trailing slashes globally:
 
 ```typescript
 // src/routes/+layout.ts
 export const prerender = true;
+export const trailingSlash = 'always';
 ```
 
-This tells SvelteKit to prerender all pages. Individual pages inherit this setting.
+This tells SvelteKit to prerender all pages and append trailing slashes to all routes. Individual pages inherit these settings.
 
 ## `.nojekyll` File
 

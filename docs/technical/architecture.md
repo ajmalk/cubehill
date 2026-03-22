@@ -52,7 +52,6 @@ cubehill/
 │           └── [id]/+page.svelte      # Individual PLL case
 ├── svelte.config.js                   # SvelteKit config (adapter-static)
 ├── vite.config.ts                     # Vite config
-├── tailwind.config.js                 # Tailwind + DaisyUI config
 ├── tsconfig.json                      # TypeScript config
 ├── CLAUDE.md                          # Project conventions for agents
 └── package.json

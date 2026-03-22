@@ -102,7 +102,7 @@ function syncThemeToScene(scene: CubeScene) {
 
 ### DaisyUI Color Format
 
-DaisyUI 4 uses oklch color values in its CSS custom properties (e.g., `--b1: 0.2 0.02 260`). These are oklch lightness, chroma, and hue values without the `oklch()` wrapper.
+DaisyUI 5 uses oklch color values in its CSS custom properties (e.g., `--b1: 0.2 0.02 260`). These are oklch lightness, chroma, and hue values without the `oklch()` wrapper.
 
 To use these in Three.js:
 

@@ -109,6 +109,17 @@ You have access to **figma-console** (FigJam tools) and **plugin:figma:figma** (
 - **Team workflow diagrams**: Agent responsibilities and handoff points
 - **Brainstorming boards**: Ideation sessions for new features
 
+## Session Completion
+
+**Before finishing any work session**, you MUST commit and push all changes:
+
+1. `git status` — verify what changed
+2. `git add <files>` — stage your changes (be specific, don't use `git add .`)
+3. `git commit -m "..."` — commit with a clear message
+4. `git push` — push to remote
+
+**Work is NOT complete until `git push` succeeds.** Never leave changes uncommitted or unpushed. If push fails, resolve and retry.
+
 ## Guidelines
 
 - Always read `CLAUDE.md` and relevant `docs/` pages before making decisions

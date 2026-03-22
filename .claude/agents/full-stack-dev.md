@@ -64,6 +64,17 @@ You have access to Playwright MCP browser tools for debugging and verifying impl
 - **Theme testing**: Toggle themes and verify CSS variable sync with Three.js canvas background
 - **Testing interactions**: Use `browser_click` and `browser_type` to test user flows without manual intervention
 
+## Session Completion
+
+**Before finishing any work session**, you MUST commit and push all changes:
+
+1. `git status` — verify what changed
+2. `git add <files>` — stage your changes (be specific, don't use `git add .`)
+3. `git commit -m "..."` — commit with a clear message
+4. `git push` — push to remote
+
+**Work is NOT complete until `git push` succeeds.** Never leave changes uncommitted or unpushed. If push fails, resolve and retry.
+
 ## Documentation Reference
 
 Always read the relevant `docs/` page before implementing a feature. See `CLAUDE.md` for the full docs table of contents. Key docs: `docs/technical/cube-engine.md`, `docs/technical/rendering.md`, `docs/technical/components.md`, `docs/technical/architecture.md`.

@@ -89,6 +89,17 @@ You have access to Playwright MCP browser tools for testing the running app. See
 - **Responsive testing**: Test at mobile, tablet, and desktop breakpoints to verify layout adaptations
 - **Interaction testing**: Use `browser_click` and `browser_type` to walk through user flows (algorithm browsing, playback, theme switching, command palette)
 
+## Session Completion
+
+**Before finishing any work session**, you MUST commit and push all changes:
+
+1. `git status` — verify what changed
+2. `git add <files>` — stage your changes (be specific, don't use `git add .`)
+3. `git commit -m "..."` — commit with a clear message
+4. `git push` — push to remote
+
+**Work is NOT complete until `git push` succeeds.** Never leave changes uncommitted or unpushed. If push fails, resolve and retry.
+
 ## Project Context
 
 Read `CLAUDE.md` for project overview and the full docs table of contents. Your key docs: `docs/product/pages-and-layout.md`, `docs/product/theming.md`, `docs/product/algorithms.md`.

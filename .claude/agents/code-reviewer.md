@@ -70,6 +70,17 @@ You have access to Playwright MCP browser tools for runtime testing. See `docs/p
 - **Keyboard control testing**: Use `browser_evaluate` to simulate key events and verify shortcuts work (and are correctly disabled when command palette is open or inputs are focused)
 - **SSR safety verification**: Check that pages render without errors on initial load — no `window is not defined` or `document is not defined` crashes
 
+## Session Completion
+
+**Before finishing any work session**, you MUST commit and push all changes:
+
+1. `git status` — verify what changed
+2. `git add <files>` — stage your changes (be specific, don't use `git add .`)
+3. `git commit -m "..."` — commit with a clear message
+4. `git push` — push to remote
+
+**Work is NOT complete until `git push` succeeds.** Never leave changes uncommitted or unpushed. If push fails, resolve and retry.
+
 ## Project Context
 
 Read `CLAUDE.md` for full project conventions and the docs table of contents.

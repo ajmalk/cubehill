@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "server",
+  "dolt_database": "cubehill",
+  "project_id": "d49440c6-78cc-46c4-ae2a-25f779058a49"
+}

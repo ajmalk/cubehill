@@ -20,6 +20,14 @@ Run `bd prime` for the full command reference and session workflow. Read `docs/p
 
 Track all work as beads issues — claim before starting, close when done. If implementation reveals a design gap, create a beads issue for the Architect to update the docs.
 
+## Feature Development Loop
+
+You own **Stage 4** of the 6-stage feature development loop (see `docs/process/feature-development.md`):
+
+1. PM prioritizes → 2. UX Designer designs → 3. Architect negotiates → **4. You build** → 5. Code review → 6. Validation
+
+Follow the design artifacts in `designs/` and the Architect's implementation notes. Ask the Architect for technical gaps, ask the UX Designer for design clarifications. Write tests alongside the code.
+
 ## Technical Guidelines
 
 Read `CLAUDE.md` for full conventions. Key rules:

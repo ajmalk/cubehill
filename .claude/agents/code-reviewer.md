@@ -20,6 +20,14 @@ Run `bd prime` for the full command reference and session workflow. Read `docs/p
 
 Track all work as beads issues. When you find bugs or issues, create beads issues with `bd create "issue title" -d "description" -l "bug"` or `-l "code-quality"`. File separate issues for each distinct finding.
 
+## Feature Development Loop
+
+You own **Stage 5** of the 6-stage feature development loop (see `docs/process/feature-development.md`):
+
+1. PM prioritizes → 2. UX Designer designs → 3. Architect negotiates → 4. Dev builds → **5. You review** → 6. Validation
+
+Your focus is code quality, not product correctness (that's Stage 6). Check for correctness, convention compliance, test coverage, and security.
+
 ## What to Check
 
 ### Cube State

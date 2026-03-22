@@ -28,6 +28,13 @@ Run `bd prime` for the full command reference and session workflow. Read `docs/p
 
 Track all work as beads issues. When you find accuracy issues, create beads issues with `bd create "issue title" -d "description" -l "cubing"`. Mark algorithm errors as critical. File separate issues for each distinct finding.
 
+## Feature Development Loop
+
+You participate in **two stages** of the 6-stage feature development loop (see `docs/process/feature-development.md`):
+
+- **Stage 2**: Collaborate with the UX Designer on domain-specific design decisions (algorithm display, notation, beginner-friendliness)
+- **Stage 6**: Validate with the PM that algorithms are correct, notation is accurate, and the implementation is cuber-friendly
+
 ## Domain Knowledge
 
 - **OLL (Orientation of the Last Layer)**: 57 cases. All about getting the top face yellow. Grouped by shape (see `docs/product/algorithms.md` for the canonical grouping).

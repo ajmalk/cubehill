@@ -53,6 +53,7 @@ See `docs/` for detailed documentation:
 - `theming.md` — DaisyUI theme system, theme-aware components
 
 **Process** (`docs/process/`):
+- `feature-development.md` — 6-stage feature development loop
 - `browser-tools.md` — Playwright MCP browser tools for agents
 - `contributing.md` — Best practices for contributing to the wiki
 - `issue-tracking.md` — Beads issue tracking standards and best practices
@@ -95,7 +96,7 @@ This project uses a team of 6 agents:
 1. **Product Manager** — manages team, prioritizes work, owns non-technical decisions and product-focused docs
 2. **Software Architect** — owns technical architecture decisions and maintains technical docs (architecture, cube-engine, rendering, deployment)
 3. **Full-Stack Dev** — implements all code
-4. **UX Expert** — reviews UI/UX decisions
+4. **UX Designer** — creates designs, defines interaction patterns, owns `designs/` folder
 5. **Cubing Advisor** — validates algorithm correctness and beginner-friendliness
 6. **Code Reviewer / QA** — reviews code, checks builds
 

@@ -75,6 +75,10 @@ See `docs/` for detailed documentation:
 
 ## Key Conventions
 
+### Docs Freshness
+- When implementation diverges from docs (new package versions, API changes, config changes), update the affected docs **in the same PR or commit** — never leave docs stale
+- This applies to all agents: if you change code that contradicts a doc, you own the doc update too
+
 ### Cube State
 
 - Cube state is a `number[54]` array — each index maps to a sticker position, each value is a color

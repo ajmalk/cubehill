@@ -120,6 +120,18 @@ d2 --watch input.d2 output.svg  # Live preview while editing
 - Add a source note below the image: `> Source: \`diagrams/filename.d2\``
 - Visually verify the rendered SVG before committing
 
+## Keeping Docs Fresh After Code Changes
+
+**When implementation diverges from docs, update the docs in the same PR or commit.** Never leave docs stale. This applies to all agents — if you change code that contradicts a doc, you own the doc update too, regardless of doc ownership.
+
+Common triggers:
+- Package version upgrades that change APIs or config format
+- Moving a config option to a different file or export
+- Renaming files, functions, or types referenced in docs
+- Changing architectural patterns (e.g., switching from JS config to CSS config)
+
+If the doc update is outside your ownership area, make the fix anyway — accuracy trumps ownership boundaries. The owner can refine the wording later.
+
 ## How to Flag Docs That Need Updates
 
 When you notice a doc is stale, inaccurate, or incomplete — but you're not the owner or don't have time to fix it right now:

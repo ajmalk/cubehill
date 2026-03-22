@@ -4,6 +4,28 @@ This document describes the pages, responsive layout, and navigation structure. 
 
 ## Pages
 
+```mermaid
+flowchart TD
+    Home["Home Page"]
+    OLLList["OLL Listing"]
+    PLLList["PLL Listing"]
+    OLLDetail["OLL Detail"]
+    PLLDetail["PLL Detail"]
+    CmdK["Command Palette\n(Cmd+K)"]
+
+    Home --> OLLList
+    Home --> PLLList
+    OLLList --> OLLDetail
+    PLLList --> PLLDetail
+    OLLDetail -- "prev / next" --> OLLDetail
+    PLLDetail -- "prev / next" --> PLLDetail
+
+    CmdK -. "jump to any case" .-> OLLDetail
+    CmdK -. "jump to any case" .-> PLLDetail
+    CmdK -. "jump to listing" .-> OLLList
+    CmdK -. "jump to listing" .-> PLLList
+```
+
 ### Home (`src/routes/+page.svelte`)
 
 The landing page features:
@@ -63,6 +85,17 @@ The layout uses Tailwind CSS breakpoints (via DaisyUI) to adapt to different scr
 
 ### Algorithm Listing Pages
 
+```
+Mobile (<640px)       Tablet (640-1024px)     Desktop (>1024px)
++--------------+      +------+-------+        +----+----+----+----+
+| [  Card 1  ] |      |Card 1|Card 2 |        | C1 | C2 | C3 | C4 |
++--------------+      +------+-------+        +----+----+----+----+
+| [  Card 2  ] |      |Card 3|Card 4 |        | C5 | C6 | C7 | C8 |
++--------------+      +------+-------+        +----+----+----+----+
+| [  Card 3  ] |      |Card 5|Card 6 |        | C9 |C10 |C11 |C12 |
++--------------+      +------+-------+        +----+----+----+----+
+```
+
 - Algorithm cards use a responsive CSS grid: `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`
 - Group headers span the full width of the grid
 
@@ -83,6 +116,24 @@ The layout uses Tailwind CSS breakpoints (via DaisyUI) to adapt to different scr
 The `CubeViewer` canvas uses a `ResizeObserver` rather than fixed dimensions. This ensures the 3D renderer adapts to any container size, whether in a full-width hero section on the home page or a constrained panel on the detail page.
 
 ## Layout Structure
+
+```mermaid
+flowchart TD
+    Layout["+layout.svelte"]
+    Navbar["Navbar (top bar)"]
+    CmdPal["CommandPalette (overlay)"]
+    Slot["&lt;slot /&gt;"]
+    Home["Home Page"]
+    Listing["OLL / PLL Listing"]
+    Detail["OLL / PLL Detail"]
+
+    Layout --> Navbar
+    Layout --> CmdPal
+    Layout --> Slot
+    Slot --> Home
+    Slot --> Listing
+    Slot --> Detail
+```
 
 The root layout (`src/routes/+layout.svelte`) provides the persistent shell:
 

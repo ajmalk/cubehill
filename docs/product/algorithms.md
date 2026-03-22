@@ -8,23 +8,25 @@ This document contains the OLL/PLL case inventory, grouping tables, algorithm no
 
 Each OLL case belongs to exactly one group. Groups are based on the shape formed by the oriented (yellow) stickers on the top face. The groupings below follow the standard jperm.net convention and are non-overlapping (total = 57).
 
-| Group | Count | Cases |
-|-------|-------|-------|
-| All Edges Oriented (OCLL) | 7 | OLL 21 (H), 22 (Pi), 23 (Headlights), 24 (Chameleon), 25 (Bowtie), 26 (Anti-Sune), 27 (Sune) |
-| T-Shape | 2 | OLL 33, 45 |
-| Square | 2 | OLL 5, 6 |
-| P-Shape | 4 | OLL 31, 32, 43, 44 |
-| W-Shape | 2 | OLL 36, 38 |
-| Fish | 4 | OLL 9, 10, 35, 37 |
-| Knight Move | 4 | OLL 13, 14, 15, 16 |
-| Awkward | 4 | OLL 29, 30, 41, 42 |
-| Big Lightning | 4 | OLL 39, 40, 49, 50 |
-| Small Lightning | 4 | OLL 7, 8, 11, 12 |
-| C-Shape | 2 | OLL 34, 46 |
-| I-Shape | 4 | OLL 51, 52, 55, 56 |
-| L-Shape | 6 | OLL 47, 48, 53, 54, 28, 57 |
-| Dot | 8 | OLL 1, 2, 3, 4, 17, 18, 19, 20 |
-| **Total** | **57** | |
+| Group | Count | Top-Face Pattern | Cases |
+|-------|-------|------------------|-------|
+| All Edges Oriented (OCLL) | 7 | `#.# / .#. / #.#` | OLL 21 (H), 22 (Pi), 23 (Headlights), 24 (Chameleon), 25 (Bowtie), 26 (Anti-Sune), 27 (Sune) |
+| T-Shape | 2 | `.#. / ### / ...` | OLL 33, 45 |
+| Square | 2 | `##. / ##. / ...` | OLL 5, 6 |
+| P-Shape | 4 | `.#. / ##. / .#.` | OLL 31, 32, 43, 44 |
+| W-Shape | 2 | `#.. / ##. / .##` | OLL 36, 38 |
+| Fish | 4 | `.#. / .## / #..` | OLL 9, 10, 35, 37 |
+| Knight Move | 4 | `.#. / .#. / #..` | OLL 13, 14, 15, 16 |
+| Awkward | 4 | `.#. / .#. / .#.` | OLL 29, 30, 41, 42 |
+| Big Lightning | 4 | `.#. / ##. / ..#` | OLL 39, 40, 49, 50 |
+| Small Lightning | 4 | `..# / .## / .#.` | OLL 7, 8, 11, 12 |
+| C-Shape | 2 | `.#. / #.# / ...` | OLL 34, 46 |
+| I-Shape | 4 | `... / ### / ...` | OLL 51, 52, 55, 56 |
+| L-Shape | 6 | `... / .## / .#.` | OLL 47, 48, 53, 54, 28, 57 |
+| Dot | 8 | `... / .#. / ...` | OLL 1, 2, 3, 4, 17, 18, 19, 20 |
+| **Total** | **57** | | |
+
+> **Reading the patterns**: Each 3x3 grid shows the top face. `#` = oriented (yellow facing up), `.` = not oriented. Edges are the center cells of each side; corners are the four corner cells. The center is always oriented (`#`). Patterns show the defining shape of the group -- individual cases within a group differ in which corner/edge stickers are oriented on the sides.
 
 **Important**: OLL grouping varies slightly across community references (jperm.net, algdb.net, cubeskills.com). The canonical numbering (OLL 1–57) is universal, but group names and assignments differ at the edges. During implementation, verify each case's group assignment against jperm.net. The critical constraint is: **every case appears in exactly one group, and all 57 are accounted for**.
 
@@ -68,6 +70,19 @@ Each OLL case belongs to exactly one group. Groups are based on the shape formed
 **Important**: All algorithms above should be verified against jperm.net or algdb.net before implementation. Alternative algorithms exist for most cases and can be included in the `altNotations` field. During implementation, test each algorithm by applying it to the appropriate PLL state and confirming it solves to identity.
 
 ## Learning Priority
+
+```mermaid
+flowchart LR
+    A["2-Look OLL\n~10 algs"]
+    B["2-Look PLL\n~6 algs"]
+    C["Full PLL\n21 algs"]
+    D["Full OLL\n57 algs"]
+
+    A -->|"Solves OLL in 2 steps\n(best entry point)"| B
+    B -->|"Solves PLL in 2 steps\n(sub-30s solves)"| C
+    C -->|"1-look PLL\n(high payoff per alg)"| D
+    D -->|"1-look OLL\n(diminishing returns)"| E["Mastery"]
+```
 
 For users new to the last layer, the standard recommended learning order:
 

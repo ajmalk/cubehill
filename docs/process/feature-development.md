@@ -10,6 +10,23 @@ This document describes the 6-stage workflow for developing features in CubeHill
 6. PM + Cubing Advisor Validate ← 5. Code Reviewer Reviews ← 4. Full-Stack Dev Builds
 ```
 
+```mermaid
+flowchart LR
+    S1["1. PM Prioritizes"]
+    S2["2. UX Designer Designs"]
+    S3["3. Architect Negotiates"]
+    S4["4. Full-Stack Dev Builds"]
+    S5["5. Code Reviewer Reviews"]
+    S6["6. PM + Cubing Advisor\nValidate"]
+
+    S1 -->|"Issue with\nacceptance criteria"| S2
+    S2 -->|"Design artifacts\nin designs/"| S3
+    S3 -->|"Technical approach\nin docs/technical/"| S4
+    S4 -->|"Code committed,\ntests passing"| S5
+    S5 -->|"Review approved"| S6
+    S6 -->|"Follow-up issues\n(if needed)"| S1
+```
+
 ### Stage 1: PM Prioritizes
 
 **Owner**: Product Manager

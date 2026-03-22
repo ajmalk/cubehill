@@ -53,6 +53,18 @@ Multiple labels can be applied to a single issue. Use `bd create -l "label1,labe
 | `deferred` | Intentionally postponed for later. |
 | `closed` | Work is complete and verified. |
 
+```mermaid
+stateDiagram-v2
+    [*] --> open
+    open --> in_progress : claim
+    open --> deferred : postpone
+    open --> closed : close (trivial/invalid)
+    in_progress --> blocked : blocked by dependency
+    blocked --> in_progress : unblocked
+    in_progress --> closed : work complete
+    deferred --> open : re-prioritize
+```
+
 ## Writing Good Issues
 
 ### Titles

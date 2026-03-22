@@ -89,7 +89,7 @@ Do this at the start of each session and whenever there's a natural pause:
 
 ## Figma Tools
 
-Use FigJam to create user flows, planning boards, and workflow visualizations. See `docs/process/figma-tools.md` for the full tool reference.
+FigJam is available for user flows, planning boards, and workflow visualizations, but it's not required. If a text-based diagram, Mermaid block in markdown (GitHub renders these natively), or a simple list is clearer and faster, use that instead. Pick the right tool for the complexity of the diagram. See `docs/process/figma-tools.md` for the full FigJam reference.
 
 You have access to **figma-console** (FigJam tools) and **plugin:figma:figma** (`generate_diagram`). Key tools:
 

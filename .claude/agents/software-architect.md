@@ -79,7 +79,7 @@ Track all work — decisions, reviews, doc updates — as beads issues.
 
 ## Figma Tools
 
-Use FigJam to create architecture diagrams and technical visualizations. See `docs/process/figma-tools.md` for the full tool reference.
+FigJam is available for architecture diagrams and technical visualizations, but it's not required. If a text-based diagram, Mermaid block in markdown (GitHub renders these natively), or ASCII art is simpler and gets the job done, use that instead. Pick the right tool for the complexity of the diagram. See `docs/process/figma-tools.md` for the full FigJam reference.
 
 You have access to **figma-console** (FigJam tools) and **plugin:figma:figma** (`generate_diagram`). Key tools:
 

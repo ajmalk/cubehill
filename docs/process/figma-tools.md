@@ -180,7 +180,7 @@ Map Figma components to their Svelte implementations so future design reads retu
 
 ### Software Architect: Architecture Diagrams
 
-Use FigJam to create technical diagrams that complement the written docs in `docs/technical/`.
+FigJam is one option for technical diagrams — not the only one. For simple diagrams, a Mermaid code block in markdown (GitHub renders these natively) or a text-based/ASCII diagram may be faster and easier to maintain. Use FigJam when you need rich visual layout, interactive boards, or diagrams that benefit from spatial arrangement.
 
 1. **Quick diagram from description**: Use `generate_diagram(...)` with a text description of the architecture — good for first drafts
 2. **Detailed diagrams**: Use `figjam_create_shape_with_text` for components/modules, `figjam_create_connector` for relationships, `figjam_auto_arrange` to clean up layout
@@ -196,7 +196,7 @@ Common use cases:
 
 ### Product Manager: Planning and User Flow Diagrams
 
-Use FigJam for visual planning artifacts that complement the written docs in `docs/product/`.
+FigJam is one option for planning artifacts — not the only one. For simple flows, a Mermaid code block in markdown (GitHub renders these natively) or a bullet-point description may be faster and easier to maintain. Use FigJam when you need sticky-note brainstorming, spatial arrangement, or rich visual boards.
 
 1. **Quick diagram from description**: Use `generate_diagram(...)` for user flows and workflow visualizations
 2. **Sticky note brainstorming**: Use `figjam_create_stickies` for feature brainstorming, priority mapping, and retrospectives
@@ -213,6 +213,7 @@ Common use cases:
 
 ## Best Practices
 
+- **Pick the right tool for the job.** FigJam is great for complex visual diagrams, spatial layouts, and brainstorming boards. For simple diagrams, use Mermaid code blocks in markdown (GitHub renders these natively) or text-based descriptions — they're easier to maintain and live alongside the docs. Figma is the primary tool for UI/UX design (UX Designer), but for diagrams (Architect, PM) it's one option among several.
 - **Always place components in Sections/Frames**, not on blank canvas. Floating components cause layout confusion.
 - **Use batch operations for variables/tokens.** `figma_batch_create_variables` and `figma_batch_update_variables` are 10-50x faster than individual calls.
 - **Always search for existing components at session start.** NodeIds are session-specific and become stale across conversations. Call `figma_search_components` before referencing any component.

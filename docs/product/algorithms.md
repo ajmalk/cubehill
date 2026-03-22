@@ -73,15 +73,7 @@ Each OLL case belongs to exactly one group. Groups are based on the shape formed
 
 ```mermaid
 flowchart LR
-    A["2-Look OLL\n~10 algs"]
-    B["2-Look PLL\n~6 algs"]
-    C["Full PLL\n21 algs"]
-    D["Full OLL\n57 algs"]
-
-    A -->|"Solves OLL in 2 steps\n(best entry point)"| B
-    B -->|"Solves PLL in 2 steps\n(sub-30s solves)"| C
-    C -->|"1-look PLL\n(high payoff per alg)"| D
-    D -->|"1-look OLL\n(diminishing returns)"| E["Mastery"]
+    A["2-Look OLL\n10 algs"] --> B["2-Look PLL\n6 algs"] --> C["Full PLL\n21 algs"] --> D["Full OLL\n57 algs"]
 ```
 
 For users new to the last layer, the standard recommended learning order:

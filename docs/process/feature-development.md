@@ -12,19 +12,14 @@ This document describes the 6-stage workflow for developing features in CubeHill
 
 ```mermaid
 flowchart LR
-    S1["1. PM Prioritizes"]
-    S2["2. UX Designer Designs"]
-    S3["3. Architect Negotiates"]
-    S4["4. Full-Stack Dev Builds"]
-    S5["5. Code Reviewer Reviews"]
-    S6["6. PM + Cubing Advisor\nValidate"]
+    S1["1. PM"]
+    S2["2. UX Designer"]
+    S3["3. Architect"]
+    S4["4. Dev"]
+    S5["5. Reviewer"]
+    S6["6. Validate"]
 
-    S1 -->|"Issue with\nacceptance criteria"| S2
-    S2 -->|"Design artifacts\nin designs/"| S3
-    S3 -->|"Technical approach\nin docs/technical/"| S4
-    S4 -->|"Code committed,\ntests passing"| S5
-    S5 -->|"Review approved"| S6
-    S6 -->|"Follow-up issues\n(if needed)"| S1
+    S1 --> S2 --> S3 --> S4 --> S5 --> S6 --> S1
 ```
 
 ### Stage 1: PM Prioritizes

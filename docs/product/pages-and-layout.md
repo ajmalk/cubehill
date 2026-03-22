@@ -6,24 +6,11 @@ This document describes the pages, responsive layout, and navigation structure. 
 
 ```mermaid
 flowchart TD
-    Home["Home Page"]
-    OLLList["OLL Listing"]
-    PLLList["PLL Listing"]
-    OLLDetail["OLL Detail"]
-    PLLDetail["PLL Detail"]
-    CmdK["Command Palette\n(Cmd+K)"]
-
-    Home --> OLLList
-    Home --> PLLList
-    OLLList --> OLLDetail
-    PLLList --> PLLDetail
-    OLLDetail -- "prev / next" --> OLLDetail
-    PLLDetail -- "prev / next" --> PLLDetail
-
-    CmdK -. "jump to any case" .-> OLLDetail
-    CmdK -. "jump to any case" .-> PLLDetail
-    CmdK -. "jump to listing" .-> OLLList
-    CmdK -. "jump to listing" .-> PLLList
+    Home[Home] --> OLL[OLL Listing] --> OLLCase[OLL Detail]
+    Home --> PLL[PLL Listing] --> PLLCase[PLL Detail]
+    OLLCase -- prev/next --> OLLCase
+    PLLCase -- prev/next --> PLLCase
+    CmdK[Cmd+K] -. jump .-> OLLCase & PLLCase & OLL & PLL
 ```
 
 ### Home (`src/routes/+page.svelte`)
@@ -119,20 +106,8 @@ The `CubeViewer` canvas uses a `ResizeObserver` rather than fixed dimensions. Th
 
 ```mermaid
 flowchart TD
-    Layout["+layout.svelte"]
-    Navbar["Navbar (top bar)"]
-    CmdPal["CommandPalette (overlay)"]
-    Slot["&lt;slot /&gt;"]
-    Home["Home Page"]
-    Listing["OLL / PLL Listing"]
-    Detail["OLL / PLL Detail"]
-
-    Layout --> Navbar
-    Layout --> CmdPal
-    Layout --> Slot
-    Slot --> Home
-    Slot --> Listing
-    Slot --> Detail
+    Layout[+layout.svelte] --> Navbar & CmdPal[CommandPalette] & Slot[slot]
+    Slot --> Home & Listing & Detail
 ```
 
 The root layout (`src/routes/+layout.svelte`) provides the persistent shell:

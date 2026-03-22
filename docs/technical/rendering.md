@@ -169,19 +169,19 @@ The key invariant: **the logical cube state and the visual state must always agr
 stateDiagram-v2
     [*] --> Idle
 
-    Idle --> Animating : play / step forward
-    Animating --> Idle : animation complete (last move)
-    Animating --> Animating : animation complete (more moves)
-    Animating --> Paused : pause / step during playback
-    Animating --> Idle : reset (snap + restore initial state)
-    Animating --> Idle : new algorithm loaded (snap + load new state)
+    Idle --> Animating : play / step
+    Animating --> Idle : last move done
+    Animating --> Animating : move done, more queued
+    Animating --> Paused : pause
+    Animating --> Idle : reset
+    Animating --> Idle : new algorithm
 
-    Paused --> Animating : play / step forward
-    Paused --> Idle : reset (restore initial state)
-    Paused --> Idle : new algorithm loaded (load new state)
+    Paused --> Animating : play / step
+    Paused --> Idle : reset
+    Paused --> Idle : new algorithm
 ```
 
-Transitions labeled with the user action. "Snap" means the in-progress animation is completed instantly (rotation applied, transforms reset, colors updated) before the state change takes effect.
+When transitioning out of Animating via reset or new algorithm, the in-progress animation is snapped to completion (rotation applied instantly, transforms reset, colors updated) before the state change takes effect.
 
 ## OrbitControls
 

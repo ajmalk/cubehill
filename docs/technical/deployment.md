@@ -270,19 +270,14 @@ PRs run a fast feedback loop (lint + test + build). The full E2E suite and deplo
 
 ```mermaid
 flowchart LR
-    subgraph "PR to main"
-        PR([Pull Request]) --> Lint1[Lint + Format]
-        Lint1 --> Test1[Unit Tests]
-        Test1 --> Build1[Build]
-        Build1 --> Gate{Merge Gate}
+    subgraph PR["PR to main"]
+        direction LR
+        PR1([PR]) --> L1[Lint] --> T1[Test] --> B1[Build] --> G1{Gate}
     end
 
-    subgraph "Push to main"
-        Push([Push / Merge]) --> Lint2[Lint]
-        Lint2 --> Test2[Unit Tests]
-        Test2 --> Build2[Build]
-        Build2 --> E2E[E2E Tests]
-        E2E --> Deploy[Deploy to GitHub Pages]
+    subgraph Push["Push to main"]
+        direction LR
+        P1([Push]) --> L2[Lint] --> T2[Test] --> B2[Build] --> E2[E2E] --> D2[Deploy]
     end
 ```
 

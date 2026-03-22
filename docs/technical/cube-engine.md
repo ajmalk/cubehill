@@ -117,28 +117,9 @@ const R_CYCLES: [number, number, number, number][] = [
 ];
 ```
 
-The three "around the layer" cycles move stickers between the U, F, D, and B faces along the right column. The two "face rotation" cycles spin the R face itself. Visualized as loops:
+The three "around the layer" cycles move stickers between the U, F, D, and B faces along the right column. The two "face rotation" cycles spin the R face itself.
 
-```mermaid
-graph LR
-    subgraph "Cycle 1 — corners"
-        A2["2 (U)"] --> A20["20 (F)"] --> A29["29 (D)"] --> A47["47 (B)"] --> A2
-    end
-    subgraph "Cycle 2 — edges"
-        B5["5 (U)"] --> B23["23 (F)"] --> B32["32 (D)"] --> B50["50 (B)"] --> B5
-    end
-    subgraph "Cycle 3 — corners"
-        C8["8 (U)"] --> C26["26 (F)"] --> C35["35 (D)"] --> C53["53 (B)"] --> C8
-    end
-    subgraph "Cycle 4 — R face corners"
-        D9["9"] --> D11["11"] --> D17["17"] --> D15["15"] --> D9
-    end
-    subgraph "Cycle 5 — R face edges"
-        E10["10"] --> E14["14"] --> E16["16"] --> E12["12"] --> E10
-    end
-```
-
-Each arrow means "the sticker at the source index moves to the destination index" for a clockwise R move. For R', the arrows reverse.
+Each cycle is a closed loop — stickers rotate `a → b → c → d → a` for a clockwise R move, and reverse for R'. Refer to the unfolded cube net above to locate each index spatially.
 
 ### Move Variants
 

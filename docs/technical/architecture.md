@@ -60,29 +60,24 @@ cubehill/
 
 ## Data Flow
 
+```mermaid
+flowchart TB
+    AlgoData["Algorithm Data\n(static .ts files)"]
+    Engine["Cube State Engine\n(pure TypeScript)\nparse notation, apply moves,\nreturn new immutable state"]
+    Store["Svelte Store\n(cubeStore.svelte.ts)\ncube state, playback,\nalgorithm + step index"]
+    Renderer["Three.js Renderer\nread state array,\nupdate cubie colors,\nanimate face turns"]
+    UI["Svelte UI Components\nalgorithm browser,\nplayback controls,\nnavigation, command palette"]
+
+    AlgoData --> Engine
+    Engine --> Store
+    Store --> Renderer
+    Store --> UI
+
+    UI -- "play / pause / step / reset\nalgorithm selected" --> Store
+    Renderer -- "animation complete" --> Store
 ```
-Algorithm Data (static .ts files)
-        │
-        ▼
-Cube State Engine (pure TypeScript)
-  - Parses notation string → Move[]
-  - Applies moves to number[54] state
-  - Returns new immutable state
-        │
-        ▼
-Svelte Store (cubeStore.svelte.ts)
-  - Holds current cube state
-  - Manages playback (play/pause/step/reset)
-  - Tracks current algorithm and step index
-        │
-        ├──────────────────────┐
-        ▼                      ▼
-Three.js Renderer          Svelte UI Components
-  - Reads state array      - Algorithm browser
-  - Updates cubie colors   - Playback controls
-  - Animates face turns    - Navigation
-  - OrbitControls          - Command palette
-```
+
+The downward arrows show data flowing from static algorithm data through the engine and store to the rendering and UI layers. The upward feedback arrows show user actions (from playback controls, algorithm selection, and keyboard shortcuts) and animation-complete events flowing back into the store, which then triggers the next state update.
 
 ## Key Architectural Decisions
 

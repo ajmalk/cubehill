@@ -268,6 +268,24 @@ The project uses two separate CI triggers with different purposes:
 
 PRs run a fast feedback loop (lint + test + build). The full E2E suite and deployment only run after merge to `main`, since E2E tests are slower and deployment should only happen from a known-good main branch.
 
+```mermaid
+flowchart LR
+    subgraph "PR to main"
+        PR([Pull Request]) --> Lint1[Lint + Format]
+        Lint1 --> Test1[Unit Tests]
+        Test1 --> Build1[Build]
+        Build1 --> Gate{Merge Gate}
+    end
+
+    subgraph "Push to main"
+        Push([Push / Merge]) --> Lint2[Lint]
+        Lint2 --> Test2[Unit Tests]
+        Test2 --> Build2[Build]
+        Build2 --> E2E[E2E Tests]
+        E2E --> Deploy[Deploy to GitHub Pages]
+    end
+```
+
 ### PR Checks (CI Gate)
 
 Every pull request must pass these checks before merge:

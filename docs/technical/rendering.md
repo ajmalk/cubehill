@@ -92,6 +92,34 @@ When a move is requested:
    - **Reset all cubie transforms** to their canonical grid positions
    - Call `updateColors()` with the new logical state
 
+#### Scene Graph Reparenting (Visual)
+
+The reparenting strategy during animation, shown as three scene graph snapshots:
+
+```
+BEFORE (idle)              DURING (animating R)         AFTER (complete)
+
+Scene                      Scene                        Scene
+├── cubie(1,1,1)           ├── cubie(1,1,-1)            ├── cubie(1,1,1)   ← reset
+├── cubie(1,1,0)           ├── cubie(1,-1,-1)           ├── cubie(1,1,0)     transforms
+├── cubie(1,1,-1)          ├── ...                      ├── cubie(1,1,-1)    + recolor
+├── cubie(1,0,1)           ├── (17 other cubies)        ├── cubie(1,0,1)
+├── cubie(1,0,0)           │                            ├── cubie(1,0,0)
+├── cubie(1,0,-1)          └── TurnGroup (temp)         ├── cubie(1,0,-1)
+├── cubie(1,-1,1)              │ rotation: -90° X       ├── cubie(1,-1,1)
+├── cubie(1,-1,0)              ├── cubie(1,1,1)         ├── cubie(1,-1,0)
+├── cubie(1,-1,-1)             ├── cubie(1,1,0)         ├── cubie(1,-1,-1)
+├── ... (17 others)            ├── cubie(1,1,-1)        ├── ... (17 others)
+                               ├── cubie(1,0,1)
+                               ├── cubie(1,0,0)
+                               ├── cubie(1,0,-1)
+                               ├── cubie(1,-1,1)
+                               ├── cubie(1,-1,0)
+                               └── cubie(1,-1,-1)
+```
+
+The 9 cubies with `x === 1` are reparented into a temporary `TurnGroup`. The group rotates around the X axis. On completion, cubies return to the scene root with canonical transforms, and colors are updated from the logical state.
+
 ### Drift Prevention (Critical)
 
 **Never accumulate cubie rotations across multiple moves.**
@@ -134,6 +162,26 @@ If the user triggers a new action while an animation is in progress (e.g., loadi
 4. **Rapid step-forward clicks**: Queue the next step. If an animation is already running, wait for it to complete before starting the next. Do not skip animations — each move should be visually shown, even if briefly.
 
 The key invariant: **the logical cube state and the visual state must always agree after any animation completes or is cancelled**. If an animation is cancelled mid-tween, snap the logical state forward (apply the move) and reset cubie transforms to match.
+
+### Animation State Machine
+
+```mermaid
+stateDiagram-v2
+    [*] --> Idle
+
+    Idle --> Animating : play / step forward
+    Animating --> Idle : animation complete (last move)
+    Animating --> Animating : animation complete (more moves)
+    Animating --> Paused : pause / step during playback
+    Animating --> Idle : reset (snap + restore initial state)
+    Animating --> Idle : new algorithm loaded (snap + load new state)
+
+    Paused --> Animating : play / step forward
+    Paused --> Idle : reset (restore initial state)
+    Paused --> Idle : new algorithm loaded (load new state)
+```
+
+Transitions labeled with the user action. "Snap" means the in-progress animation is completed instantly (rotation applied, transforms reset, colors updated) before the state change takes effect.
 
 ## OrbitControls
 

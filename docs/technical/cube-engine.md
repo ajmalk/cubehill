@@ -33,6 +33,34 @@ Face indices (e.g., U face = indices 0-8):
 └───┴───┴───┘
 ```
 
+### Unfolded Cube Net (All 54 Sticker Indices)
+
+The full cube state laid out as an unfolded cross-shaped net. Each cell shows its absolute index in the `number[54]` array:
+
+```
+                  ┌────┬────┬────┐
+                  │  0 │  1 │  2 │
+                  ├────┼────┼────┤
+              U   │  3 │  4 │  5 │
+                  ├────┼────┼────┤
+                  │  6 │  7 │  8 │
+   ┌────┬────┬────┼────┼────┼────┼────┬────┬────┬────┬────┬────┐
+   │ 36 │ 37 │ 38 │ 18 │ 19 │ 20 │  9 │ 10 │ 11 │ 53 │ 52 │ 51 │
+   ├────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┤
+ L │ 39 │ 40 │ 41 │ 21 │ 22 │ 23 │ 12 │ 13 │ 14 │ 50 │ 49 │ 48 │ B
+   ├────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┤
+   │ 42 │ 43 │ 44 │ 24 │ 25 │ 26 │ 15 │ 16 │ 17 │ 47 │ 46 │ 45 │
+   └────┴────┴────┼────┼────┼────┼────┴────┴────┴────┴────┴────┘
+                  │ 27 │ 28 │ 29 │
+                  ├────┼────┼────┤
+              D   │ 30 │ 31 │ 32 │
+                  ├────┼────┼────┤
+                  │ 33 │ 34 │ 35 │
+                  └────┴────┴────┘
+```
+
+Faces read left-to-right, top-to-bottom (row-major) within each face. The B face appears mirrored because it is viewed from the front of the cube (looking through to the back).
+
 So for the R face, index 9 is top-left of the R face, index 13 is the center, index 17 is bottom-right.
 
 ### Color Enum
@@ -88,6 +116,29 @@ const R_CYCLES: [number, number, number, number][] = [
   [10, 14, 16, 12],  // face edge stickers
 ];
 ```
+
+The three "around the layer" cycles move stickers between the U, F, D, and B faces along the right column. The two "face rotation" cycles spin the R face itself. Visualized as loops:
+
+```mermaid
+graph LR
+    subgraph "Cycle 1 — corners"
+        A2["2 (U)"] --> A20["20 (F)"] --> A29["29 (D)"] --> A47["47 (B)"] --> A2
+    end
+    subgraph "Cycle 2 — edges"
+        B5["5 (U)"] --> B23["23 (F)"] --> B32["32 (D)"] --> B50["50 (B)"] --> B5
+    end
+    subgraph "Cycle 3 — corners"
+        C8["8 (U)"] --> C26["26 (F)"] --> C35["35 (D)"] --> C53["53 (B)"] --> C8
+    end
+    subgraph "Cycle 4 — R face corners"
+        D9["9"] --> D11["11"] --> D17["17"] --> D15["15"] --> D9
+    end
+    subgraph "Cycle 5 — R face edges"
+        E10["10"] --> E14["14"] --> E16["16"] --> E12["12"] --> E10
+    end
+```
+
+Each arrow means "the sticker at the source index moves to the destination index" for a clockwise R move. For R', the arrows reverse.
 
 ### Move Variants
 

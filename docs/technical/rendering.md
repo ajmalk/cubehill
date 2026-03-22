@@ -165,21 +165,22 @@ The key invariant: **the logical cube state and the visual state must always agr
 
 ### Animation State Machine
 
-```mermaid
-stateDiagram-v2
-    [*] --> Idle
+> **Diagram:** See the "Architecture Diagrams" FigJam file in Figma for the interactive state machine diagram.
+> [Open in FigJam](https://www.figma.com/board/QrDngrgFppJtNIMPd7z1Eb/Architecture-Diagrams)
 
-    Idle --> Animating : play / step
-    Animating --> Idle : last move done
-    Animating --> Animating : move done, more queued
-    Animating --> Paused : pause
-    Animating --> Idle : reset
-    Animating --> Idle : new algorithm
+**States:** Idle, Animating, Paused
 
-    Paused --> Animating : play / step
-    Paused --> Idle : reset
-    Paused --> Idle : new algorithm
-```
+**Transitions:**
+- `[start]` --> Idle
+- Idle --> Animating: play / step
+- Animating --> Idle: last move done
+- Animating --> Animating: move done, more queued
+- Animating --> Paused: pause
+- Animating --> Idle: reset
+- Animating --> Idle: new algorithm
+- Paused --> Animating: play / step
+- Paused --> Idle: reset
+- Paused --> Idle: new algorithm
 
 When transitioning out of Animating via reset or new algorithm, the in-progress animation is snapped to completion (rotation applied instantly, transforms reset, colors updated) before the state change takes effect.
 

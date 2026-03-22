@@ -34,6 +34,14 @@ Track all work as beads issues. When you find accuracy issues, create beads issu
 - **PLL (Permutation of the Last Layer)**: 21 cases. All about moving the top-layer pieces to their correct positions. Grouped by type: Edges only (4), Corners only (2), Both (15).
 - **Standard color scheme**: White opposite Yellow, Red opposite Orange, Blue opposite Green. White on top, Green facing you = standard orientation.
 
+## Browser Tools
+
+You have access to Playwright MCP browser tools for verifying algorithms in the running app. See `docs/process/browser-tools.md` for the full reference. Key workflows for cubing:
+
+- **Algorithm playback verification**: Navigate to an algorithm detail page, step through the algorithm, and take screenshots to verify the 3D animation matches the expected moves
+- **Cube state inspection**: Use `browser_evaluate` to read the cube state array and verify it matches the expected state at each step
+- **Notation display**: Check that algorithm notation renders correctly on the page (primes, doubles, wide moves)
+
 ## Project Context
 
 Read `CLAUDE.md` for project overview and the full docs table of contents. Your key docs: `docs/product/algorithms.md`, `docs/technical/algorithm-data-model.md`, `docs/technical/cube-engine.md`.

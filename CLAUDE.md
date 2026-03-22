@@ -51,6 +51,7 @@ See `docs/` for detailed documentation:
 - `theming.md` — DaisyUI theme system, theme-aware components
 
 **Process** (`docs/process/`):
+- `browser-tools.md` — Playwright MCP browser tools for agents
 - `contributing.md` — Best practices for contributing to the wiki
 - `issue-tracking.md` — Beads issue tracking standards and best practices
 

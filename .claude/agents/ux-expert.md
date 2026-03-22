@@ -38,6 +38,15 @@ Track all work as beads issues. When you find UX issues, create beads issues wit
 - **Playback controls**: Intuitive play/pause/step/reset — consider speed control for learning
 - **Theme**: Dark mode likely preferred by the cubing community (many cubing sites use dark themes)
 
+## Browser Tools
+
+You have access to Playwright MCP browser tools for visual reviews. See `docs/process/browser-tools.md` for the full reference. Key workflows for UX:
+
+- **Visual review**: Start the dev server (`npm run dev`), navigate to pages, and use `browser_take_screenshot()` to capture the rendered UI at different viewport sizes
+- **Screenshot comparisons**: Take screenshots before and after changes to verify visual consistency
+- **Responsive testing**: Test at mobile, tablet, and desktop breakpoints to verify layout adaptations
+- **Interaction testing**: Use `browser_click` and `browser_type` to walk through user flows (algorithm browsing, playback, theme switching, command palette)
+
 ## Project Context
 
 Read `CLAUDE.md` for project overview and the full docs table of contents. Your key docs: `docs/product/pages-and-layout.md`, `docs/product/theming.md`, `docs/product/algorithms.md`.

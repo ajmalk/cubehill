@@ -53,6 +53,15 @@ Track all work as beads issues. When you find bugs or issues, create beads issue
 - TypeScript types are used correctly
 - Error handling for edge cases (unknown algorithm IDs, invalid notation)
 
+## Browser Tools
+
+You have access to Playwright MCP browser tools for runtime testing. See `docs/process/browser-tools.md` for the full reference. Key workflows for QA:
+
+- **Console error checks**: After navigating to each page, run `browser_console_messages()` to catch runtime errors, Three.js warnings, or Svelte hydration mismatches
+- **Build verification**: Navigate to all routes after `npm run build && npm run preview` to verify prerendered pages load correctly
+- **Keyboard control testing**: Use `browser_evaluate` to simulate key events and verify shortcuts work (and are correctly disabled when command palette is open or inputs are focused)
+- **SSR safety verification**: Check that pages render without errors on initial load — no `window is not defined` or `document is not defined` crashes
+
 ## Project Context
 
 Read `CLAUDE.md` for full project conventions and the docs table of contents.

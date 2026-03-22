@@ -8,7 +8,7 @@ Best practices for writing and maintaining the CubeHill `docs/` wiki. Owned by t
 |--------|-------|-------|
 | `docs/technical/` | **Architect** | Architecture, implementation details, data models, rendering, deployment |
 | `docs/product/` | **PM** | Stack decisions, algorithm inventory, pages/layout, theming UX |
-| `docs/process/` | **Architect** (this page), **PM** (issue-tracking.md) | Workflows and team conventions |
+| `docs/process/` | **Architect** (contributing.md, browser-tools.md), **PM** (issue-tracking.md) | Workflows and team conventions |
 
 Each page has exactly one owner. The owner writes and maintains the page. Other team members can suggest changes, but the owner has final say.
 

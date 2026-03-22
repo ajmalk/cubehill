@@ -47,6 +47,15 @@ Read `CLAUDE.md` for full conventions. Key rules:
 - Use `$state` runes in `.svelte.ts` files for reactive state
 - Prefer runes over legacy `writable`/`readable` store API
 
+## Browser Tools
+
+You have access to Playwright MCP browser tools for debugging and verifying implementations. See `docs/process/browser-tools.md` for the full reference. Key workflows for development:
+
+- **Debugging**: Start the dev server, navigate to the page you're working on, and use `browser_evaluate` to inspect runtime state (cube state array, store values, Three.js scene graph)
+- **Verifying implementations**: After making changes, use `browser_take_screenshot()` to verify the visual result and `browser_console_messages()` to check for errors
+- **Theme testing**: Toggle themes and verify CSS variable sync with Three.js canvas background
+- **Testing interactions**: Use `browser_click` and `browser_type` to test user flows without manual intervention
+
 ## Documentation Reference
 
 Always read the relevant `docs/` page before implementing a feature. See `CLAUDE.md` for the full docs table of contents. Key docs: `docs/technical/cube-engine.md`, `docs/technical/rendering.md`, `docs/technical/components.md`, `docs/technical/architecture.md`.

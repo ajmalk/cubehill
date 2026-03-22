@@ -44,7 +44,7 @@ Each OLL case belongs to exactly one group. Groups are based on the shape formed
 | Name | Algorithm |
 |------|-----------|
 | Aa Perm | x R' U R' D2 R U' R' D2 R2 x' |
-| Ab Perm | x R2' D2 R U R' D2 R U' R x' |
+| Ab Perm | x R2 D2 R U R' D2 R U' R x' |
 
 **Both Edges and Corners (15 cases)**:
 | Name | Algorithm |

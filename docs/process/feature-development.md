@@ -123,18 +123,37 @@ Final validation that the feature works as intended.
 
 **Handoff artifact**: Validation sign-off on the beads issue. Feature is done.
 
+## Post-Task Review for Epics and Phases
+
+After completing an epic or phase-level body of work, the **Architect** and **PM** must each review their docs before the work is considered done.
+
+### Architect Review
+- Check all `docs/technical/` pages for accuracy against the new code
+- Verify code examples, config snippets, and file paths still match reality
+- Check architecture diagrams and data flow descriptions
+- Flag any new patterns that need documentation
+
+### PM Review
+- Check all `docs/product/` pages for accuracy against what was built
+- Verify feature descriptions, UX flows, and screenshots
+- Update the roadmap with completed milestones
+- Close the corresponding GitHub Issue if the epic is done
+
+Both reviews happen **before** the epic is marked complete. If either review finds stale docs, fix them before closing.
+
 ## Which Stages Apply?
 
 Not every task needs all 6 stages. Use this guide:
 
-| Task Type                              | Stages                                |
-| -------------------------------------- | ------------------------------------- |
-| UI feature (new page, component)       | All 6                                 |
-| UI refinement (styling, layout tweak)  | 1, 2, 4, 5, 6                         |
-| Engine/renderer (cube state, Three.js) | 1, 3, 4, 5                            |
-| Data (algorithm entries)               | 1, 4, 5, 6 (Cubing Advisor validates) |
-| Config/infra (CI, linting, deploy)     | 1, 4, 5                               |
-| Docs-only                              | 1, 4 (write), 5 (review)              |
+| Task Type                              | Stages                                             |
+| -------------------------------------- | -------------------------------------------------- |
+| UI feature (new page, component)       | All 6                                              |
+| UI refinement (styling, layout tweak)  | 1, 2, 4, 5, 6                                      |
+| Engine/renderer (cube state, Three.js) | 1, 3, 4, 5                                         |
+| Data (algorithm entries)               | 1, 4, 5, 6 (Cubing Advisor validates)              |
+| Config/infra (CI, linting, deploy)     | 1, 4, 5                                            |
+| Docs-only                              | 1, 4 (write), 5 (review)                           |
+| Epic / phase completion                | All applicable stages + Post-Task Review (Arch+PM) |
 
 ## Beads Integration
 

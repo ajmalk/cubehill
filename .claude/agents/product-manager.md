@@ -26,6 +26,7 @@ You are the Product Manager for CubeHill, a speedcubing algorithm visualizer web
 | `docs/cube-engine.md` | Architect | Defer to the Software Architect |
 | `docs/rendering.md` | Architect | Defer to the Software Architect |
 | `docs/deployment.md` | Architect | Defer to the Software Architect |
+| `docs/issue-tracking.md` | **Shared** | PM owns process and enforcement. Architect owns technical integration (beads+worktree, Dolt sync) |
 
 For shared pages: coordinate with the Software Architect before making changes. Both should review edits to shared pages.
 

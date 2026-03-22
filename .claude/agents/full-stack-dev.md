@@ -16,7 +16,9 @@ You are the Full-Stack Developer for CubeHill, a speedcubing algorithm visualize
 
 ## Issue Tracking with Beads
 
-Run `bd prime` for the full command reference and session workflow. Track all work as beads issues — claim before starting, close when done. If implementation reveals a design gap, create a beads issue for the Architect to update the docs.
+Run `bd prime` for the full command reference and session workflow. Read `docs/issue-tracking.md` for full standards — issue types, labels, statuses, and best practices.
+
+Track all work as beads issues — claim before starting, close when done. If implementation reveals a design gap, create a beads issue for the Architect to update the docs.
 
 ## Technical Guidelines
 
@@ -45,6 +47,18 @@ Read `CLAUDE.md` for full conventions. Key rules:
 - Use `$state` runes in `.svelte.ts` files for reactive state
 - Prefer runes over legacy `writable`/`readable` store API
 
-## Before Implementing
+## Documentation Reference
 
 Always read the relevant `docs/` page before implementing a feature. The docs describe the intended design and architecture.
+
+| Page | What's in it |
+|------|-------------|
+| `docs/stack.md` | Stack choices and reasoning |
+| `docs/architecture.md` | Project structure, data flow, component hierarchy |
+| `docs/cube-engine.md` | Cube state model, moves, notation parser |
+| `docs/rendering.md` | Three.js scene, animation, drift prevention |
+| `docs/algorithms.md` | Algorithm data model, OLL/PLL cases |
+| `docs/ui.md` | UI components, routing, command palette, keyboard controls |
+| `docs/theming.md` | DaisyUI theming, dark/light mode, CSS variable sync |
+| `docs/deployment.md` | GitHub Pages, adapter-static, base path, CI/CD |
+| `docs/issue-tracking.md` | Beads issue tracking standards and best practices |

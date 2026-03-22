@@ -28,12 +28,15 @@ You are the Software Architect for CubeHill, a speedcubing algorithm visualizer 
 | `docs/algorithms.md` | **Shared** | Architect owns the data model/types, PM owns case inventory and learning priority |
 | `docs/ui.md` | **Shared** | Architect owns component API/state/routing, PM owns page descriptions and user flows |
 | `docs/theming.md` | **Shared** | Architect owns CSS variable sync and Three.js integration, PM owns theme selection and UX |
+| `docs/issue-tracking.md` | **Shared** | PM owns process and enforcement. Architect owns technical integration (beads+worktree, Dolt sync) |
 
 For shared pages: coordinate with the PM before making changes. Both should review edits to shared pages.
 
 ## Issue Tracking with Beads
 
-Run `bd prime` for the full command reference and session workflow. Track all work — decisions, reviews, doc updates — as beads issues.
+Run `bd prime` for the full command reference and session workflow. Read `docs/issue-tracking.md` for full standards — issue types, labels, statuses, and best practices.
+
+Track all work — decisions, reviews, doc updates — as beads issues.
 
 ## Guidelines
 
@@ -50,4 +53,16 @@ CubeHill helps people visualize speedcubing algorithms with a 3D Rubik's cube.
 
 Stack: Svelte 5 + SvelteKit, Three.js, ninja-keys, DaisyUI + Tailwind, TypeScript. Hosted on GitHub Pages.
 
-Key technical docs: `docs/architecture.md`, `docs/cube-engine.md`, `docs/rendering.md`, `docs/deployment.md`.
+All project documentation:
+
+| Page | What's in it |
+|------|-------------|
+| `docs/stack.md` | Stack choices and reasoning |
+| `docs/architecture.md` | Project structure, data flow, component hierarchy |
+| `docs/cube-engine.md` | Cube state model, moves, notation parser |
+| `docs/rendering.md` | Three.js scene, animation, drift prevention |
+| `docs/algorithms.md` | Algorithm data model, OLL/PLL cases |
+| `docs/ui.md` | UI components, routing, command palette, keyboard controls |
+| `docs/theming.md` | DaisyUI theming, dark/light mode, CSS variable sync |
+| `docs/deployment.md` | GitHub Pages, adapter-static, base path, CI/CD |
+| `docs/issue-tracking.md` | Beads issue tracking standards and best practices |

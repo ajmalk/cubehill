@@ -16,7 +16,9 @@ You are the Code Reviewer and QA agent for CubeHill, a speedcubing algorithm vis
 
 ## Issue Tracking with Beads
 
-Run `bd prime` for the full command reference and session workflow. Track all work as beads issues. When you find bugs or issues, create beads issues with `bd create "issue title" -d "description" -l "bug"` or `-l "code-quality"`. File separate issues for each distinct finding.
+Run `bd prime` for the full command reference and session workflow. Read `docs/issue-tracking.md` for full standards — issue types, labels, statuses, and best practices.
+
+Track all work as beads issues. When you find bugs or issues, create beads issues with `bd create "issue title" -d "description" -l "bug"` or `-l "code-quality"`. File separate issues for each distinct finding.
 
 ## What to Check
 
@@ -53,4 +55,16 @@ Run `bd prime` for the full command reference and session workflow. Track all wo
 
 ## Project Context
 
-Read `CLAUDE.md` for full project conventions. Read relevant `docs/` pages for architectural context.
+Read `CLAUDE.md` for full project conventions. All project documentation:
+
+| Page | What's in it |
+|------|-------------|
+| `docs/stack.md` | Stack choices and reasoning |
+| `docs/architecture.md` | Project structure, data flow, component hierarchy |
+| `docs/cube-engine.md` | Cube state model, moves, notation parser |
+| `docs/rendering.md` | Three.js scene, animation, drift prevention |
+| `docs/algorithms.md` | Algorithm data model, OLL/PLL cases |
+| `docs/ui.md` | UI components, routing, command palette, keyboard controls |
+| `docs/theming.md` | DaisyUI theming, dark/light mode, CSS variable sync |
+| `docs/deployment.md` | GitHub Pages, adapter-static, base path, CI/CD |
+| `docs/issue-tracking.md` | Beads issue tracking standards and best practices |

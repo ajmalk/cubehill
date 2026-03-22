@@ -80,6 +80,7 @@ See `docs/` for detailed documentation:
 - When implementation diverges from docs (new package versions, API changes, config changes), update the affected docs **in the same PR or commit** — never leave docs stale
 - This applies to all agents: if you change code that contradicts a doc, you own the doc update too
 - After completing an epic or phase, the **Architect** and **PM** must each review their docs for accuracy before the work is marked done (see `docs/process/feature-development.md`)
+- The **Architect** is responsible for verifying CI/CD pipelines pass after each epic — check `gh run list` and fix any failures
 
 ### Cube State
 

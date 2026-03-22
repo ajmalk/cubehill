@@ -133,6 +133,7 @@ After completing an epic or phase-level body of work, the **Architect** and **PM
 - Verify code examples, config snippets, and file paths still match reality
 - Check architecture diagrams and data flow descriptions
 - Flag any new patterns that need documentation
+- Verify GitHub Actions CI/CD pipelines pass (`gh run list`). If any deployment or CI run failed, diagnose and fix before closing the epic
 
 ### PM Review
 

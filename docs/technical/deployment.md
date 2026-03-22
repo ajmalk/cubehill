@@ -184,11 +184,9 @@ This tells SvelteKit to prerender all pages and append trailing slashes to all r
 
 GitHub Pages runs Jekyll by default, which ignores files and directories starting with `_` (underscore). SvelteKit/Vite produces assets in a `_app/` directory, so without the `.nojekyll` file, these assets would be invisible to the web server.
 
-The file should be placed at `static/.nojekyll` (empty file, no content needed). SvelteKit copies everything in `static/` to the build output root, so it ends up at `build/.nojekyll`, which GitHub Pages respects.
+The file is at `static/.nojekyll` (empty file, no content needed). SvelteKit copies everything in `static/` to the build output root, so it ends up at `build/.nojekyll`, which GitHub Pages respects.
 
-**Status**: This file does not exist yet. It must be created before the first production deployment to GitHub Pages.
-
-**If this file is missing**: the deployed site loads the HTML but all JavaScript, CSS, and assets fail to load — the page appears broken with no interactivity or styling.
+**If this file is removed**: the deployed site loads the HTML but all JavaScript, CSS, and assets fail to load — the page appears broken with no interactivity or styling.
 
 ## GitHub Actions Workflow
 

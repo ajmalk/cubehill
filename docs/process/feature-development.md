@@ -128,12 +128,14 @@ Final validation that the feature works as intended.
 After completing an epic or phase-level body of work, the **Architect** and **PM** must each review their docs before the work is considered done.
 
 ### Architect Review
+
 - Check all `docs/technical/` pages for accuracy against the new code
 - Verify code examples, config snippets, and file paths still match reality
 - Check architecture diagrams and data flow descriptions
 - Flag any new patterns that need documentation
 
 ### PM Review
+
 - Check all `docs/product/` pages for accuracy against what was built
 - Verify feature descriptions, UX flows, and screenshots
 - Update the roadmap with completed milestones

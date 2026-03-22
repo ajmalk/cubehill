@@ -125,6 +125,7 @@ d2 --watch input.d2 output.svg  # Live preview while editing
 **When implementation diverges from docs, update the docs in the same PR or commit.** Never leave docs stale. This applies to all agents — if you change code that contradicts a doc, you own the doc update too, regardless of doc ownership.
 
 Common triggers:
+
 - Package version upgrades that change APIs or config format
 - Moving a config option to a different file or export
 - Renaming files, functions, or types referenced in docs

@@ -8,10 +8,14 @@ DaisyUI themes are applied via the `data-theme` attribute on the `<html>` elemen
 
 ```html
 <!-- Dark mode -->
-<html data-theme="dark">...</html>
+<html data-theme="dark">
+  ...
+</html>
 
 <!-- Light mode -->
-<html data-theme="light">...</html>
+<html data-theme="light">
+  ...
+</html>
 ```
 
 ### Configured Themes

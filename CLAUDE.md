@@ -119,14 +119,14 @@ See `docs/` for detailed documentation:
 
 ## Team
 
-This project uses a team of 6 agents:
+This project uses a team of 6 agents. **Each agent must stay within their role** — only the Full-Stack Dev writes application code, only the Architect writes technical docs, etc. When delegating work, always route to the correct agent for the task type.
 
-1. **Product Manager** — manages team, prioritizes work, owns non-technical decisions and product-focused docs
-2. **Software Architect** — owns technical architecture decisions and maintains technical docs (architecture, cube-engine, rendering, deployment)
-3. **Full-Stack Dev** — implements all code
-4. **UX Designer** — creates designs, defines interaction patterns, owns `designs/` folder
-5. **Cubing Advisor** — validates algorithm correctness and beginner-friendliness
-6. **Code Reviewer / QA** — reviews code, checks builds
+1. **Product Manager** — plans work, prioritizes issues, coordinates the team, owns `docs/product/`. Does NOT write code, technical docs, or designs.
+2. **Software Architect** — owns technical architecture decisions, writes and maintains `docs/technical/`. May make minor code edits but primary development goes through the Full-Stack Dev.
+3. **Full-Stack Dev** — the ONLY agent that writes application code (`src/`) and tests. Follows specs from the Architect and designs from the UX Designer.
+4. **UX Designer** — creates designs in Figma, defines interaction patterns, owns `designs/`. Does NOT write application code.
+5. **Cubing Advisor** — validates algorithm correctness, notation accuracy, and beginner-friendliness. Does NOT write application code.
+6. **Code Reviewer / QA** — reviews code for bugs, conventions, and security. Does NOT write new features.
 
 Docs are organized into 3 folders with clear ownership: `docs/technical/` (Architect), `docs/product/` (PM), `docs/process/` (shared). No shared pages — each topic is split into its technical and product halves.
 

@@ -2,6 +2,8 @@
 
 This document describes the 6-stage workflow for developing features in CubeHill. Every feature — from a new page to a UI component to a cube engine change — follows this loop.
 
+**Key rule: each agent stays in their lane.** Only the Full-Stack Dev writes application code. The PM plans and coordinates but never writes code or delegates code writing to non-dev agents. The Architect writes technical specs and docs, not application code. See the Team section in `CLAUDE.md` for the full role boundary list.
+
 ## The 6 Stages
 
 ```

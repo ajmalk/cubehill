@@ -255,6 +255,106 @@ For this workflow to function, the repository must be configured:
 
 The `github-pages` environment is created automatically. Optional: add environment protection rules (e.g., require approval before deploy) in **Settings → Environments**.
 
+## CI Pipeline Strategy
+
+### Two Workflows
+
+The project uses two separate CI triggers with different purposes:
+
+| Trigger | What Runs | Purpose |
+|---------|-----------|---------|
+| Pull request to `main` | Lint, unit tests, build | Gate: must all pass before merge |
+| Push to `main` | Lint, unit tests, build, E2E tests, deploy | Full pipeline including deployment |
+
+PRs run a fast feedback loop (lint + test + build). The full E2E suite and deployment only run after merge to `main`, since E2E tests are slower and deployment should only happen from a known-good main branch.
+
+### PR Checks (CI Gate)
+
+Every pull request must pass these checks before merge:
+
+```yaml
+# .github/workflows/ci.yml
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint          # ESLint
+      - run: npm run format:check  # Prettier (check only, don't fix)
+      - run: npm test              # Vitest unit tests
+      - run: npm run build         # Build must succeed (catches type errors, missing entries())
+```
+
+If any step fails, the PR cannot be merged.
+
+### Push to Main (Deploy Pipeline)
+
+The deploy workflow (already documented above) is extended with a test gate:
+
+```yaml
+# .github/workflows/deploy.yml (updated)
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright install --with-deps
+      - run: npm run test:e2e    # E2E tests against production build
+
+  build:
+    needs: test               # Build only runs if tests pass
+    # ... (existing build job)
+
+  deploy:
+    needs: build              # Deploy only runs if build succeeds
+    # ... (existing deploy job)
+```
+
+The test job gates the build job, which gates the deploy job. A broken build is never deployed.
+
+### Branch Protection Rules
+
+Configure in **Settings → Branches → Branch protection rules** for `main`:
+
+- **Require pull request before merging**: No direct pushes to main (except for initial setup)
+- **Require status checks to pass**: Select the `check` job from the CI workflow
+- **Require branches to be up to date**: Ensures PRs are rebased on latest main before merge
+- **Do not allow bypassing**: Even admins must follow the process
+
+### Branches and Beads Issues
+
+Each beads issue maps to a feature branch and (usually) one PR:
+
+```
+cubehill-xyz  →  branch: cubehill-xyz  →  PR: "Title from issue"  →  merge to main
+```
+
+Conventions:
+- Branch names match the beads issue ID: `cubehill-xyz`
+- PR title matches the issue title
+- Close the beads issue when the PR is merged (not when the PR is opened)
+- If a PR addresses multiple issues, list all IDs in the PR description and close them all on merge
+- If an issue requires no code change (e.g., a docs-only update pushed directly), close the issue after the push
+
 ## Local Preview
 
 To test the production build locally before deploying:

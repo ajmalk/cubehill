@@ -39,9 +39,10 @@ See `docs/` for detailed documentation:
 - `architecture.md` — Project structure and data flow
 - `cube-engine.md` — Cube state model, moves, notation parsing
 - `rendering.md` — Three.js 3D rendering and animation
-- `deployment.md` — GitHub Pages deployment setup
+- `deployment.md` — GitHub Pages deployment, CI pipeline strategy, branch protection
 - `algorithm-data-model.md` — Algorithm TypeScript types and interfaces
 - `components.md` — Svelte component APIs, stores, keyboard controls, command palette
+- `linting.md` — ESLint + Prettier setup, configuration, CI integration
 - `testing.md` — Testing strategy, framework choices, what to test, CI integration
 - `theme-integration.md` — Theme store, FOUC prevention, CSS variable sync with Three.js
 

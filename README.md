@@ -37,9 +37,11 @@ Detailed documentation lives in [`docs/`](docs/):
 | [architecture.md](docs/technical/architecture.md) | Project structure and data flow |
 | [cube-engine.md](docs/technical/cube-engine.md) | Cube state model, moves, notation parser |
 | [rendering.md](docs/technical/rendering.md) | Three.js 3D rendering and animation |
-| [deployment.md](docs/technical/deployment.md) | GitHub Pages deployment setup |
+| [deployment.md](docs/technical/deployment.md) | GitHub Pages deployment, CI pipeline strategy |
 | [algorithm-data-model.md](docs/technical/algorithm-data-model.md) | Algorithm TypeScript types and interfaces |
 | [components.md](docs/technical/components.md) | Svelte components, stores, keyboard controls |
+| [linting.md](docs/technical/linting.md) | ESLint + Prettier setup and configuration |
+| [testing.md](docs/technical/testing.md) | Testing strategy, Vitest + Playwright |
 | [theme-integration.md](docs/technical/theme-integration.md) | Theme store, FOUC prevention, Three.js sync |
 
 **Product** (`docs/product/`):

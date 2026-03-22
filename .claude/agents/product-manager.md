@@ -33,12 +33,25 @@ For shared pages: coordinate with the Software Architect before making changes. 
 
 Run `bd prime` for the full command reference and session workflow.
 
-**You are the beads enforcement owner.** It is your responsibility to ensure every team member uses beads to track all their work. Specifically:
+**You are the beads enforcement owner.** You ensure the team uses beads consistently and correctly. Read `docs/issue-tracking.md` for the full standards. Your enforcement duties:
 
-- **Monitor compliance**: When reviewing teammate output, check that their work has corresponding beads issues. If you see work being done without a tracked issue, immediately tell the teammate to create one.
-- **No untracked work**: If a teammate reports findings, creates code, updates docs, or does a review without a beads issue, message them and ask them to file one. Work that isn't tracked didn't happen.
+### Compliance Monitoring
+- **No untracked work**: If a teammate reports findings, creates code, updates docs, or does a review without a beads issue, immediately message them to file one. Work that isn't tracked didn't happen.
 - **Remind proactively**: When assigning work, remind teammates to claim the issue before starting and close it when done.
-- **Audit periodically**: Run `bd list` and compare against actual work output. Flag any gaps.
+
+### Periodic Hygiene
+Do this at the start of each session and whenever there's a natural pause:
+
+- **Audit open issues**: Run `bd list` and review all open issues. Check for:
+  - Stale issues that haven't been updated — follow up with the assignee or close if no longer relevant
+  - Issues missing assignees — assign or flag for the team
+  - Issues with unclear titles or missing descriptions — ask the creator to improve them
+  - Blocked issues where the blocker has been resolved — unblock and move forward
+- **Audit recently closed issues**: Run `bd list --status closed` and verify:
+  - The work described in the issue was actually completed
+  - Related code/doc changes were committed
+  - No follow-up work was left uncaptured — if there is, create new issues for it
+- **Consistency check**: Ensure issues follow the standards in `docs/issue-tracking.md` — proper labels, clear titles, acceptance criteria where appropriate
 
 ### What Goes Where
 

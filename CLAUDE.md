@@ -43,6 +43,7 @@ See `docs/` for detailed documentation:
 - `docs/ui.md` — UI components, routing, command palette, keyboard controls
 - `docs/theming.md` — DaisyUI theming, dark/light mode
 - `docs/deployment.md` — GitHub Pages deployment setup
+- `docs/issue-tracking.md` — Beads issue tracking standards and best practices
 
 ## Key Conventions
 

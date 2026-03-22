@@ -16,6 +16,7 @@ flowchart TD
 ### Home (`src/routes/+page.svelte`)
 
 The landing page features:
+
 - An interactive 3D cube (via `CubeViewer`) that users can rotate with mouse/touch
 - A brief introduction to CubeHill and what it offers
 - Links/cards directing users to the OLL and PLL algorithm sets
@@ -25,6 +26,7 @@ The home page cube is a "hero" element — it's not tied to any specific algorit
 ### Algorithm Listing Pages (`src/routes/oll/+page.svelte`, `src/routes/pll/+page.svelte`)
 
 Grid layouts displaying all cases for a given algorithm set:
+
 - Uses `AlgorithmList` -> `AlgorithmCard[]` to render a categorized grid
 - Cases are grouped by their `group` field (e.g., "Dot Cases", "T-Shape" for OLL)
 - Each card shows the case name, a 2D pattern thumbnail, and the probability
@@ -33,6 +35,7 @@ Grid layouts displaying all cases for a given algorithm set:
 ### Algorithm Detail Pages (`src/routes/oll/[id]/+page.svelte`, `src/routes/pll/[id]/+page.svelte`)
 
 Individual algorithm visualization and playback:
+
 - `CubeViewer` showing the cube in the unsolved state for this case
 - `PlaybackControls` for stepping through the algorithm
 - The algorithm notation displayed as text
@@ -50,7 +53,7 @@ The `[id]` routes use SvelteKit's `entries()` export to enumerate all valid case
 import { ollCases } from '$lib/data/oll';
 
 export function entries() {
-  return ollCases.map(c => ({ id: c.id }));
+  return ollCases.map((c) => ({ id: c.id }));
 }
 
 export const prerender = true;
@@ -64,11 +67,11 @@ This tells `adapter-static` which pages to generate. Without `entries()`, Svelte
 
 The layout uses Tailwind CSS breakpoints (via DaisyUI) to adapt to different screen sizes:
 
-| Breakpoint | Width | Layout |
-|------------|-------|--------|
-| Mobile | < 640px | Single column, stacked layout |
-| Tablet | 640px-1024px | 2-column algorithm grid |
-| Desktop | > 1024px | 3-4 column algorithm grid |
+| Breakpoint | Width        | Layout                        |
+| ---------- | ------------ | ----------------------------- |
+| Mobile     | < 640px      | Single column, stacked layout |
+| Tablet     | 640px-1024px | 2-column algorithm grid       |
+| Desktop    | > 1024px     | 3-4 column algorithm grid     |
 
 ### Algorithm Listing Pages
 

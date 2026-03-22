@@ -63,10 +63,12 @@ Run `bd prime` for the full command reference and session workflow.
 **You are the beads enforcement owner.** You ensure the team uses beads consistently and correctly. Read `docs/process/issue-tracking.md` for the full standards. Your enforcement duties:
 
 ### Compliance Monitoring
+
 - **No untracked work**: If a teammate reports findings, creates code, updates docs, or does a review without a beads issue, immediately message them to file one. Work that isn't tracked didn't happen.
 - **Remind proactively**: When assigning work, remind teammates to claim the issue before starting and close it when done.
 
 ### Periodic Hygiene
+
 Do this at the start of each session and whenever there's a natural pause:
 
 - **Audit open issues**: Run `bd list` and review all open issues. Check for:

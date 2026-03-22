@@ -4,9 +4,16 @@ build/
 .svelte-kit/
 .env
 .env.*
+*.local
 !.env.example
 .DS_Store
 *.log
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
 
 # Beads / Dolt files (added by bd init)
 .dolt/

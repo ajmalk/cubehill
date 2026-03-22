@@ -20,6 +20,7 @@ The main entry point for the 3D scene.
 ### Constructor
 
 Takes an `HTMLCanvasElement` and sets up:
+
 - `THREE.Scene` with a background color (read from DaisyUI CSS variables)
 - `THREE.PerspectiveCamera` positioned at a 3/4 angle looking at the origin (e.g., position `(3, 3, 3)` looking at `(0, 0, 0)`)
 - `THREE.WebGLRenderer` bound to the provided canvas, with antialiasing enabled
@@ -47,6 +48,7 @@ A 3x3x3 grid of cubies, 26 in total (the invisible center cube is omitted). Each
 ### Cubie Positions
 
 Cubies are placed at integer coordinates from -1 to 1:
+
 - Corner at `(1, 1, 1)` = URF corner (Up-Right-Front)
 - Edge at `(0, 1, 1)` = UF edge (Up-Front)
 - Center at `(0, 1, 0)` = U center (Up)
@@ -54,12 +56,14 @@ Cubies are placed at integer coordinates from -1 to 1:
 ### Color Mapping
 
 The `updateColors(state: number[54])` method maps the 54-element state array to sticker materials:
+
 - Each sticker mesh knows its position on the cube (which face, which index)
 - The method reads the color value from the state array and sets the material color accordingly
 
 ### Face Grouping
 
 `getFaceCubies(face: Face): THREE.Object3D[]` returns the 9 cubies on a given face. Used by the animator to group cubies for rotation. A cubie "belongs to" a face based on its position:
+
 - U face: all cubies with `y === 1`
 - R face: all cubies with `x === 1`
 - F face: all cubies with `z === 1`
@@ -77,16 +81,17 @@ When a move is requested:
 2. **Create turn group**: Create a temporary `THREE.Group` at the origin. Reparent the 9 cubies into this group.
 3. **Tween rotation**: Animate the group's rotation around the appropriate axis. "Clockwise" is always defined as **looking at the face from the outside of the cube** (the standard Rubik's cube convention):
 
-   | Face | Axis | Clockwise direction (looking at face) | Angle sign |
-   |------|------|---------------------------------------|------------|
-   | U | Y | Looking down at the top → CW | -90° (negative Y rotation) |
-   | D | Y | Looking up at the bottom → CW | +90° (positive Y rotation) |
-   | R | X | Looking at the right side → CW | -90° (negative X rotation) |
-   | L | X | Looking at the left side → CW | +90° (positive X rotation) |
-   | F | Z | Looking at the front → CW | -90° (negative Z rotation) |
-   | B | Z | Looking at the back → CW | +90° (positive Z rotation) |
+   | Face | Axis | Clockwise direction (looking at face) | Angle sign                 |
+   | ---- | ---- | ------------------------------------- | -------------------------- |
+   | U    | Y    | Looking down at the top → CW          | -90° (negative Y rotation) |
+   | D    | Y    | Looking up at the bottom → CW         | +90° (positive Y rotation) |
+   | R    | X    | Looking at the right side → CW        | -90° (negative X rotation) |
+   | L    | X    | Looking at the left side → CW         | +90° (positive X rotation) |
+   | F    | Z    | Looking at the front → CW             | -90° (negative Z rotation) |
+   | B    | Z    | Looking at the back → CW              | +90° (positive Z rotation) |
 
    Counter-clockwise (prime moves) reverse the sign. Double moves use ±180° (sign doesn't matter for 180°).
+
 4. **Complete**: When the animation finishes (~300ms):
    - Reparent cubies back to the scene root
    - **Reset all cubie transforms** to their canonical grid positions
@@ -172,6 +177,7 @@ The key invariant: **the logical cube state and the visual state must always agr
 **States:** Idle, Animating, Paused
 
 **Transitions:**
+
 - `[start]` --> Idle
 - Idle --> Animating: play / step
 - Animating --> Idle: last move done
@@ -188,6 +194,7 @@ When transitioning out of Animating via reset or new algorithm, the in-progress 
 ## OrbitControls
 
 Wraps `THREE.OrbitControls` with these settings:
+
 - **Damping**: Enabled for smooth deceleration after dragging
 - **Auto-rotate**: Disabled by default (could be enabled on the home page for visual appeal)
 - **Zoom limits**: Min/max distance set so the cube stays a reasonable size on screen
@@ -224,6 +231,7 @@ When the theme changes (dark ↔ light), read the DaisyUI `--b1` (base backgroun
 ## Performance
 
 The cube is lightweight for Three.js:
+
 - 26 cubies × ~4 faces each = ~104 meshes
 - Well under 200 draw calls — no optimization needed
 - `requestAnimationFrame` loop should stop rendering when the tab is not visible (check `document.hidden`)

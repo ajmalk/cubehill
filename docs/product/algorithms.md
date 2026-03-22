@@ -8,23 +8,23 @@ This document contains the OLL/PLL case inventory, grouping tables, algorithm no
 
 Each OLL case belongs to exactly one group. Groups are based on the shape formed by the oriented (yellow) stickers on the top face. The groupings below follow the standard jperm.net convention and are non-overlapping (total = 57).
 
-| Group | Count | Top-Face Pattern | Cases |
-|-------|-------|------------------|-------|
-| All Edges Oriented (OCLL) | 7 | `#.# / .#. / #.#` | OLL 21 (H), 22 (Pi), 23 (Headlights), 24 (Chameleon), 25 (Bowtie), 26 (Anti-Sune), 27 (Sune) |
-| T-Shape | 2 | `.#. / ### / ...` | OLL 33, 45 |
-| Square | 2 | `##. / ##. / ...` | OLL 5, 6 |
-| P-Shape | 4 | `.#. / ##. / .#.` | OLL 31, 32, 43, 44 |
-| W-Shape | 2 | `#.. / ##. / .##` | OLL 36, 38 |
-| Fish | 4 | `.#. / .## / #..` | OLL 9, 10, 35, 37 |
-| Knight Move | 4 | `.#. / .#. / #..` | OLL 13, 14, 15, 16 |
-| Awkward | 4 | `.#. / .#. / .#.` | OLL 29, 30, 41, 42 |
-| Big Lightning | 4 | `.#. / ##. / ..#` | OLL 39, 40, 49, 50 |
-| Small Lightning | 4 | `..# / .## / .#.` | OLL 7, 8, 11, 12 |
-| C-Shape | 2 | `.#. / #.# / ...` | OLL 34, 46 |
-| I-Shape | 4 | `... / ### / ...` | OLL 51, 52, 55, 56 |
-| L-Shape | 6 | `... / .## / .#.` | OLL 47, 48, 53, 54, 28, 57 |
-| Dot | 8 | `... / .#. / ...` | OLL 1, 2, 3, 4, 17, 18, 19, 20 |
-| **Total** | **57** | | |
+| Group                     | Count  | Top-Face Pattern  | Cases                                                                                        |
+| ------------------------- | ------ | ----------------- | -------------------------------------------------------------------------------------------- |
+| All Edges Oriented (OCLL) | 7      | `#.# / .#. / #.#` | OLL 21 (H), 22 (Pi), 23 (Headlights), 24 (Chameleon), 25 (Bowtie), 26 (Anti-Sune), 27 (Sune) |
+| T-Shape                   | 2      | `.#. / ### / ...` | OLL 33, 45                                                                                   |
+| Square                    | 2      | `##. / ##. / ...` | OLL 5, 6                                                                                     |
+| P-Shape                   | 4      | `.#. / ##. / .#.` | OLL 31, 32, 43, 44                                                                           |
+| W-Shape                   | 2      | `#.. / ##. / .##` | OLL 36, 38                                                                                   |
+| Fish                      | 4      | `.#. / .## / #..` | OLL 9, 10, 35, 37                                                                            |
+| Knight Move               | 4      | `.#. / .#. / #..` | OLL 13, 14, 15, 16                                                                           |
+| Awkward                   | 4      | `.#. / .#. / .#.` | OLL 29, 30, 41, 42                                                                           |
+| Big Lightning             | 4      | `.#. / ##. / ..#` | OLL 39, 40, 49, 50                                                                           |
+| Small Lightning           | 4      | `..# / .## / .#.` | OLL 7, 8, 11, 12                                                                             |
+| C-Shape                   | 2      | `.#. / #.# / ...` | OLL 34, 46                                                                                   |
+| I-Shape                   | 4      | `... / ### / ...` | OLL 51, 52, 55, 56                                                                           |
+| L-Shape                   | 6      | `... / .## / .#.` | OLL 47, 48, 53, 54, 28, 57                                                                   |
+| Dot                       | 8      | `... / .#. / ...` | OLL 1, 2, 3, 4, 17, 18, 19, 20                                                               |
+| **Total**                 | **57** |                   |                                                                                              |
 
 > **Reading the patterns**: Each 3x3 grid shows the top face. `#` = oriented (yellow facing up), `.` = not oriented. Edges are the center cells of each side; corners are the four corner cells. The center is always oriented (`#`). Patterns show the defining shape of the group -- individual cases within a group differ in which corner/edge stickers are oriented on the sides.
 

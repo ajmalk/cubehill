@@ -35,7 +35,7 @@ D2 source files live in `docs/*/diagrams/`, rendered SVGs in `docs/*/images/`. S
 - **Beads (`bd`)** — tracks all work items: tasks, bugs, features, reviews. Short-lived, actionable. Run `bd prime` for full command reference.
 - **Wiki (`docs/`)** — stores long-term knowledge: architecture, design decisions, conventions, data models. Persistent reference.
 
-When in doubt: if it's something to *do*, put it in beads. If it's something to *know*, put it in docs.
+When in doubt: if it's something to _do_, put it in beads. If it's something to _know_, put it in docs.
 
 ### Agent Isolation
 
@@ -46,6 +46,7 @@ When agents work in parallel on code, use `isolation: "worktree"` to give each a
 See `docs/` for detailed documentation:
 
 **Technical** (`docs/technical/`):
+
 - `architecture.md` — Project structure and data flow
 - `cube-engine.md` — Cube state model, moves, notation parsing
 - `rendering.md` — Three.js 3D rendering and animation
@@ -57,6 +58,7 @@ See `docs/` for detailed documentation:
 - `theme-integration.md` — Theme store, FOUC prevention, CSS variable sync with Three.js
 
 **Product** (`docs/product/`):
+
 - `stack-decisions.md` — Stack choices and reasoning
 - `algorithms.md` — OLL/PLL case inventory, grouping tables, learning priority
 - `pages-and-layout.md` — Pages, responsive layout, navigation
@@ -64,6 +66,7 @@ See `docs/` for detailed documentation:
 - `roadmap.md` — 10-phase development roadmap, dependencies, critical path
 
 **Process** (`docs/process/`):
+
 - `feature-development.md` — 6-stage feature development loop
 - `browser-tools.md` — Playwright MCP browser tools for agents
 - `figma-tools.md` — Figma MCP tools for design creation and implementation
@@ -73,30 +76,36 @@ See `docs/` for detailed documentation:
 ## Key Conventions
 
 ### Cube State
+
 - Cube state is a `number[54]` array — each index maps to a sticker position, each value is a color
 - State is **immutable** — every move returns a new array, never mutate in place
 - This is the single source of truth; the 3D renderer reads from it
 
 ### Three.js + Svelte Integration
+
 - Three.js must only initialize client-side — always wrap in `onMount` or guard with `{#if browser}`
 - Three.js is treated as an imperative side-effect, not made reactive
 - After each animation, reset cubie transforms to canonical positions and re-color from logical state (prevents floating-point drift)
 
 ### Routing & Links
+
 - All internal links and `goto()` calls must use `base` from `$app/paths` as prefix
 - This is required for GitHub Pages where the app lives at `/cubehill/`
 
 ### SSR Safety
+
 - `ninja-keys` and `three` both require browser APIs
 - Use dynamic `import()` inside `onMount` or `{#if browser}` guards
 - Never import Three.js or ninja-keys at the top level of a `.svelte` file
 
 ### Keyboard Controls
+
 - Disable cube keyboard shortcuts when the command palette is open
 - Disable when any text input is focused
 - Check for these conditions before processing keystrokes
 
 ## Algorithm Data
+
 - OLL: 57 cases, PLL: 21 cases
 - Stored as static TypeScript arrays in `src/lib/data/`
 - Each case has: id, name, category, notation, pattern, group, probability
@@ -114,8 +123,8 @@ This project uses a team of 6 agents:
 
 Docs are organized into 3 folders with clear ownership: `docs/technical/` (Architect), `docs/product/` (PM), `docs/process/` (shared). No shared pages — each topic is split into its technical and product halves.
 
-
 <!-- BEGIN BEADS INTEGRATION v:1 profile:minimal hash:ca08a54f -->
+
 ## Beads Issue Tracker
 
 This project uses **bd (beads)** for issue tracking. Run `bd prime` to see full workflow context and commands.
@@ -156,6 +165,7 @@ bd close <id>         # Complete work
 7. **Hand off** - Provide context for next session
 
 **CRITICAL RULES:**
+
 - Work is NOT complete until `git push` succeeds
 - NEVER stop before pushing - that leaves work stranded locally
 - NEVER say "ready to push when you are" - YOU must push

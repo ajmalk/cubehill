@@ -8,14 +8,14 @@ The cube state is a `number[54]` array where each element represents one sticker
 
 ### Face Index Ranges
 
-| Face | Indices | Color (solved) |
-|------|---------|----------------|
-| U (Up/Top) | 0–8 | White (0) |
-| R (Right) | 9–17 | Red (1) |
-| F (Front) | 18–26 | Green (2) |
-| D (Down/Bottom) | 27–35 | Yellow (3) |
-| L (Left) | 36–44 | Orange (4) |
-| B (Back) | 45–53 | Blue (5) |
+| Face            | Indices | Color (solved) |
+| --------------- | ------- | -------------- |
+| U (Up/Top)      | 0–8     | White (0)      |
+| R (Right)       | 9–17    | Red (1)        |
+| F (Front)       | 18–26   | Green (2)      |
+| D (Down/Bottom) | 27–35   | Yellow (3)     |
+| L (Left)        | 36–44   | Orange (4)     |
+| B (Back)        | 45–53   | Blue (5)       |
 
 ### Sticker Layout Within a Face
 
@@ -67,12 +67,12 @@ So for the R face, index 9 is top-left of the R face, index 13 is the center, in
 
 ```typescript
 enum Color {
-  White  = 0,  // U face
-  Red    = 1,  // R face
-  Green  = 2,  // F face
-  Yellow = 3,  // D face
-  Orange = 4,  // L face
-  Blue   = 5,  // B face
+  White = 0, // U face
+  Red = 1, // R face
+  Green = 2, // F face
+  Yellow = 3, // D face
+  Orange = 4, // L face
+  Blue = 5, // B face
 }
 ```
 
@@ -91,6 +91,7 @@ function applyMove(state: number[], move: Move): number[] {
 ```
 
 This ensures:
+
 - Svelte 5 `$state` reactivity triggers on reassignment
 - Undo/history is trivial (keep previous state references)
 - No bugs from shared mutable references
@@ -102,18 +103,19 @@ Each move is defined as a set of **4-cycles** — groups of 4 sticker indices th
 ### Example: R Move
 
 The R move rotates the right face 90° clockwise (when looking at the R face). This cycles:
+
 - 4 sets of stickers around the R/U/F/D/B faces
 - Plus a rotation of the R face itself (corners and edges of the face)
 
 ```typescript
 const R_CYCLES: [number, number, number, number][] = [
   // Stickers that cycle around the R layer
-  [2, 20, 29, 47],   // corner stickers
-  [5, 23, 32, 50],   // edge stickers
-  [8, 26, 35, 53],   // corner stickers
+  [2, 20, 29, 47], // corner stickers
+  [5, 23, 32, 50], // edge stickers
+  [8, 26, 35, 53], // corner stickers
   // R face rotation (the face itself turns)
-  [9, 11, 17, 15],   // face corner stickers
-  [10, 14, 16, 12],  // face edge stickers
+  [9, 11, 17, 15], // face corner stickers
+  [10, 14, 16, 12], // face edge stickers
 ];
 ```
 
@@ -143,17 +145,20 @@ B, B', B2    (Back)
 ### Additional Moves
 
 **Slice moves** (middle layers):
+
 - `M` — Middle layer (between L and R, follows L direction)
 - `E` — Equatorial layer (between U and D, follows D direction)
 - `S` — Standing layer (between F and B, follows F direction)
 
 **Wide moves** (face + adjacent slice):
+
 - `Rw` (or `r`) — R + M' (right two layers)
 - `Lw` (or `l`) — L + M (left two layers)
 - `Uw` (or `u`) — U + E' (top two layers)
 - etc.
 
 **Whole-cube rotations**:
+
 - `x` — Rotate entire cube in the R direction
 - `y` — Rotate entire cube in the U direction
 - `z` — Rotate entire cube in the F direction
@@ -191,11 +196,12 @@ type Modifier = '' | "'" | '2';
 interface Move {
   base: MoveBase;
   modifier: Modifier;
-  wide: boolean;       // true for wide moves (Rw/r, Uw/u, etc.)
+  wide: boolean; // true for wide moves (Rw/r, Uw/u, etc.)
 }
 ```
 
 Wide moves (e.g., `Rw`, `r`) are represented with `base: 'R'` and `wide: true`, rather than adding separate base types for each wide variant. Internally, a wide move is executed as the face move plus the adjacent slice move:
+
 - `Rw` = `R` + `M'`
 - `Lw` = `L` + `M`
 - `Uw` = `U` + `E'`

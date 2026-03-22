@@ -82,6 +82,7 @@ Data flows down: static algorithm data is parsed by the cube engine into state, 
 ### Separation of Concerns
 
 The cube state engine (`src/lib/cube/`) is **pure TypeScript** with no dependencies on Three.js or Svelte. This means:
+
 - It can be unit tested in isolation
 - The state model is independent of how it's rendered
 - Different renderers could be swapped in without changing the state logic
@@ -101,6 +102,7 @@ This keeps the boundary clean and avoids fighting Svelte's reactivity model.
 ### Immutable Cube State
 
 Every move returns a new `number[54]` array rather than mutating in place. This:
+
 - Works naturally with Svelte 5's `$state` reactivity (assignment triggers updates)
 - Makes undo/history trivial (keep an array of past states)
 - Prevents bugs from shared mutable state between the store and renderer
@@ -108,19 +110,20 @@ Every move returns a new `number[54]` array rather than mutating in place. This:
 ### Static Algorithm Data
 
 Algorithm data is stored as TypeScript constants (not fetched from an API). This means:
+
 - Data is bundled at build time — no loading states or fetch errors
 - Full type safety on the algorithm data structure
 - All 78 algorithms are always available — the dataset is small enough to bundle entirely
 
 ## Routing
 
-| Route | Page | Description |
-|-------|------|-------------|
-| `/` | Home | Interactive cube hero, introduction, links to algorithm sets |
-| `/oll/` | OLL List | All 57 OLL cases in a categorized grid |
-| `/oll/[id]/` | OLL Detail | Single OLL case with 3D visualizer and playback |
-| `/pll/` | PLL List | All 21 PLL cases in a categorized grid |
-| `/pll/[id]/` | PLL Detail | Single PLL case with 3D visualizer and playback |
+| Route        | Page       | Description                                                  |
+| ------------ | ---------- | ------------------------------------------------------------ |
+| `/`          | Home       | Interactive cube hero, introduction, links to algorithm sets |
+| `/oll/`      | OLL List   | All 57 OLL cases in a categorized grid                       |
+| `/oll/[id]/` | OLL Detail | Single OLL case with 3D visualizer and playback              |
+| `/pll/`      | PLL List   | All 21 PLL cases in a categorized grid                       |
+| `/pll/[id]/` | PLL Detail | Single PLL case with 3D visualizer and playback              |
 
 All routes are statically prerendered at build time via `adapter-static`. Dynamic `[id]` routes use `entries()` to enumerate all valid IDs.
 

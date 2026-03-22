@@ -10,22 +10,22 @@ The data model uses a discriminated union so TypeScript can narrow the `pattern`
 
 ```typescript
 interface BaseAlgorithm {
-  id: string;             // Unique identifier, e.g., "oll-1", "pll-aa"
-  name: string;           // Display name, e.g., "OLL 1", "Aa Perm"
-  notation: string;       // Primary algorithm, e.g., "R U2 R2 F R F' U2 R' F R F'"
+  id: string; // Unique identifier, e.g., "oll-1", "pll-aa"
+  name: string; // Display name, e.g., "OLL 1", "Aa Perm"
+  notation: string; // Primary algorithm, e.g., "R U2 R2 F R F' U2 R' F R F'"
   altNotations?: string[]; // Alternative algorithms for the same case
-  group: string;          // Grouping label, e.g., "Dot Cases", "T-Shape"
-  probability: string;    // Probability of encountering, e.g., "1/54"
+  group: string; // Grouping label, e.g., "Dot Cases", "T-Shape"
+  probability: string; // Probability of encountering, e.g., "1/54"
 }
 
 interface OllAlgorithm extends BaseAlgorithm {
   category: 'oll';
-  pattern: boolean[];     // 9-element array: true = sticker oriented (yellow up)
+  pattern: boolean[]; // 9-element array: true = sticker oriented (yellow up)
 }
 
 interface PllAlgorithm extends BaseAlgorithm {
   category: 'pll';
-  pattern: PermutationArrow[];  // Arrow diagram data showing piece permutations
+  pattern: PermutationArrow[]; // Arrow diagram data showing piece permutations
 }
 
 type Algorithm = OllAlgorithm | PllAlgorithm;
@@ -44,6 +44,7 @@ This discriminated union means checking `algorithm.category === 'oll'` automatic
 **`altNotations`**: Optional array of alternative algorithms. Some cubers prefer different algorithms for the same case based on ergonomics or finger-trick efficiency.
 
 **`pattern`** (OLL): A 9-element boolean array representing the top face of the cube:
+
 - For OLL: `true` = the sticker is oriented correctly (yellow facing up), `false` = not oriented
 - This maps to the 3x3 grid in row-major order (top-left to bottom-right)
 - Used to render the 2D case thumbnail on algorithm cards
@@ -68,21 +69,22 @@ For PLL cases, all top stickers are already oriented (all yellow facing up). PLL
 
 ```typescript
 interface PermutationArrow {
-  from: PiecePosition;  // Source position on the top face
-  to: PiecePosition;    // Destination position
+  from: PiecePosition; // Source position on the top face
+  to: PiecePosition; // Destination position
 }
 
 // Positions are the 8 edge/corner slots around the top face (center is fixed)
-type PiecePosition = 0 | 1 | 2 | 3 | 5 | 6 | 7 | 8;  // indices in the 3x3 grid, excluding center (4)
+type PiecePosition = 0 | 1 | 2 | 3 | 5 | 6 | 7 | 8; // indices in the 3x3 grid, excluding center (4)
 ```
 
 PLL case thumbnails render **arrow diagrams** from this data — each arrow shows where a piece moves to. The `AlgorithmCard` component draws these as SVG arrows overlaid on a 3x3 grid.
 
 Example for Ua Perm (3 edges cycle):
+
 ```typescript
 pattern: [
-  { from: 1, to: 5 },  // top-center edge → right-center edge
-  { from: 5, to: 7 },  // right-center edge → bottom-center edge
-  { from: 7, to: 1 },  // bottom-center edge → top-center edge
-]
+  { from: 1, to: 5 }, // top-center edge → right-center edge
+  { from: 5, to: 7 }, // right-center edge → bottom-center edge
+  { from: 7, to: 1 }, // bottom-center edge → top-center edge
+];
 ```

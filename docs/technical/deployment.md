@@ -112,10 +112,10 @@ Every `handler` in the ninja-keys command data must use `base`:
 
 ### Common Mistakes
 
-| Mistake | Correct |
-|---------|---------|
-| `href="/oll/"` | `href="{base}/oll/"` |
-| `goto('/pll/pll-aa/')` | `goto(\`${base}/pll/pll-aa/\`)` |
+| Mistake                 | Correct                                              |
+| ----------------------- | ---------------------------------------------------- |
+| `href="/oll/"`          | `href="{base}/oll/"`                                 |
+| `goto('/pll/pll-aa/')`  | `goto(\`${base}/pll/pll-aa/\`)`                      |
 | `<img src="/logo.png">` | `<img src="{base}/logo.png">` or put it in `static/` |
 
 Static assets in the `static/` folder are automatically served with the correct base path by SvelteKit — but only when referenced through SvelteKit's asset handling, not via hardcoded absolute paths.
@@ -131,7 +131,7 @@ Each dynamic route must export an `entries()` function:
 import { ollCases } from '$lib/data/oll';
 
 export function entries() {
-  return ollCases.map(c => ({ id: c.id }));
+  return ollCases.map((c) => ({ id: c.id }));
 }
 
 export const prerender = true;
@@ -142,7 +142,7 @@ export const prerender = true;
 import { pllCases } from '$lib/data/pll';
 
 export function entries() {
-  return pllCases.map(c => ({ id: c.id }));
+  return pllCases.map((c) => ({ id: c.id }));
 }
 
 export const prerender = true;
@@ -261,10 +261,10 @@ The `github-pages` environment is created automatically. Optional: add environme
 
 The project uses two separate CI triggers with different purposes:
 
-| Trigger | What Runs | Purpose |
-|---------|-----------|---------|
-| Pull request to `main` | Lint, unit tests, build | Gate: must all pass before merge |
-| Push to `main` | Lint, unit tests, build, E2E tests, deploy | Full pipeline including deployment |
+| Trigger                | What Runs                                  | Purpose                            |
+| ---------------------- | ------------------------------------------ | ---------------------------------- |
+| Pull request to `main` | Lint, unit tests, build                    | Gate: must all pass before merge   |
+| Push to `main`         | Lint, unit tests, build, E2E tests, deploy | Full pipeline including deployment |
 
 PRs run a fast feedback loop (lint + test + build). The full E2E suite and deployment only run after merge to `main`, since E2E tests are slower and deployment should only happen from a known-good main branch.
 
@@ -303,10 +303,10 @@ jobs:
           node-version: 20
           cache: 'npm'
       - run: npm ci
-      - run: npm run lint          # ESLint
-      - run: npm run format:check  # Prettier (check only, don't fix)
-      - run: npm test              # Vitest unit tests
-      - run: npm run build         # Build must succeed (catches type errors, missing entries())
+      - run: npm run lint # ESLint
+      - run: npm run format:check # Prettier (check only, don't fix)
+      - run: npm test # Vitest unit tests
+      - run: npm run build # Build must succeed (catches type errors, missing entries())
 ```
 
 If any step fails, the PR cannot be merged.
@@ -331,14 +331,14 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npx playwright install --with-deps
-      - run: npm run test:e2e    # E2E tests against production build
+      - run: npm run test:e2e # E2E tests against production build
 
   build:
-    needs: test               # Build only runs if tests pass
+    needs: test # Build only runs if tests pass
     # ... (existing build job)
 
   deploy:
-    needs: build              # Deploy only runs if build succeeds
+    needs: build # Deploy only runs if build succeeds
     # ... (existing deploy job)
 ```
 
@@ -362,6 +362,7 @@ cubehill-xyz  →  branch: cubehill-xyz  →  PR: "Title from issue"  →  merge
 ```
 
 Conventions:
+
 - Branch names match the beads issue ID: `cubehill-xyz`
 - PR title matches the issue title
 - Close the beads issue when the PR is merged (not when the PR is opened)
@@ -378,6 +379,7 @@ npm run preview  # Serve the build/ directory locally
 ```
 
 Note: `npm run preview` serves from the root, so links will point to `/cubehill/...` which won't resolve locally. To verify routing, either:
+
 - Temporarily set `paths.base` to `''` and rebuild
 - Or use a local server that mounts `build/` at the `/cubehill/` path
 

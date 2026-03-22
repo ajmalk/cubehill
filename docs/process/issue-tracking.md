@@ -14,44 +14,44 @@ Run `bd prime` for the full command reference.
 
 ## Issue Types
 
-| Type | When to Use |
-|------|-------------|
-| `task` | General work item (default). Use for most things. |
-| `bug` | Something is broken or incorrect. |
-| `feature` | New functionality or enhancement. |
-| `chore` | Maintenance, cleanup, dependency updates. |
-| `epic` | A larger initiative spanning multiple issues. Use `bd epic create`. |
+| Type       | When to Use                                                            |
+| ---------- | ---------------------------------------------------------------------- |
+| `task`     | General work item (default). Use for most things.                      |
+| `bug`      | Something is broken or incorrect.                                      |
+| `feature`  | New functionality or enhancement.                                      |
+| `chore`    | Maintenance, cleanup, dependency updates.                              |
+| `epic`     | A larger initiative spanning multiple issues. Use `bd epic create`.    |
 | `decision` | An architecture or design decision that needs to be made and recorded. |
 
 ## Labels
 
 Use labels to categorize issues by area. Standard labels for this project:
 
-| Label | Area |
-|-------|------|
-| `architecture` | Project structure, data flow, technical design |
-| `cube-engine` | Cube state, moves, notation parser |
-| `rendering` | Three.js, animations, 3D visualization |
-| `ui` | Svelte components, pages, routing |
-| `ux` | User experience, interaction design, accessibility |
-| `cubing` | Algorithm accuracy, notation, domain correctness |
-| `theming` | DaisyUI, dark/light mode, styling |
-| `deployment` | GitHub Pages, CI/CD, build config |
-| `bug` | Defects and broken behavior |
-| `code-quality` | Code review findings, refactoring |
-| `critical` | Must fix — blocks progress or causes incorrect behavior |
+| Label          | Area                                                    |
+| -------------- | ------------------------------------------------------- |
+| `architecture` | Project structure, data flow, technical design          |
+| `cube-engine`  | Cube state, moves, notation parser                      |
+| `rendering`    | Three.js, animations, 3D visualization                  |
+| `ui`           | Svelte components, pages, routing                       |
+| `ux`           | User experience, interaction design, accessibility      |
+| `cubing`       | Algorithm accuracy, notation, domain correctness        |
+| `theming`      | DaisyUI, dark/light mode, styling                       |
+| `deployment`   | GitHub Pages, CI/CD, build config                       |
+| `bug`          | Defects and broken behavior                             |
+| `code-quality` | Code review findings, refactoring                       |
+| `critical`     | Must fix — blocks progress or causes incorrect behavior |
 
 Multiple labels can be applied to a single issue. Use `bd create -l "label1,label2"`.
 
 ## Statuses
 
-| Status | Meaning |
-|--------|---------|
-| `open` | Available to work on. Not yet started. |
-| `in_progress` | Someone has claimed it and is actively working. |
-| `blocked` | Cannot proceed — waiting on a dependency or decision. |
-| `deferred` | Intentionally postponed for later. |
-| `closed` | Work is complete and verified. |
+| Status        | Meaning                                               |
+| ------------- | ----------------------------------------------------- |
+| `open`        | Available to work on. Not yet started.                |
+| `in_progress` | Someone has claimed it and is actively working.       |
+| `blocked`     | Cannot proceed — waiting on a dependency or decision. |
+| `deferred`    | Intentionally postponed for later.                    |
+| `closed`      | Work is complete and verified.                        |
 
 ```mermaid
 stateDiagram-v2
@@ -68,16 +68,19 @@ stateDiagram-v2
 ## Writing Good Issues
 
 ### Titles
+
 - Start with a verb: "Add", "Fix", "Update", "Review", "Verify"
 - Be specific: "Fix Ua Perm algorithm notation" not "Fix algorithm"
 - Keep it short but descriptive — someone should understand the scope from the title alone
 
 ### Descriptions
+
 - **What**: What needs to be done
 - **Why**: Why it matters (skip for obvious tasks)
 - **Acceptance criteria**: How to know it's done (for non-trivial tasks)
 
 Example:
+
 ```
 bd create "Add touch gesture handling for mobile cube interaction" \
   -d "OrbitControls intercepts touch events, preventing page scroll on mobile. Need to implement two-finger rotate or a dedicated touch zone so scrolling works alongside cube rotation." \
@@ -85,6 +88,7 @@ bd create "Add touch gesture handling for mobile cube interaction" \
 ```
 
 ### When to Add Acceptance Criteria
+
 - Features and enhancements: always
 - Bug fixes: describe the expected behavior after the fix
 - Simple tasks (typos, config changes): not needed — the title is enough
@@ -118,17 +122,20 @@ Epics correspond to implementation phases. Each phase from the project plan shou
 The Product Manager is responsible for keeping the issue tracker healthy:
 
 ### Start of Session
+
 - Run `bd stats` for an overview
 - Run `bd ready` to see what's available
 - Run `bd stale` to find issues that haven't been updated recently
 
 ### Periodic Checks
+
 - **Open issues**: Are any stale, missing assignees, unclear, or blocked on resolved items?
 - **Recently closed issues**: Was the work actually completed? Are there uncaptured follow-ups?
 - **Consistency**: Do issues follow these standards — proper labels, clear titles, descriptions where needed?
 - **Compliance**: Is every teammate tracking their work? If not, message them.
 
 ### Useful Commands
+
 ```bash
 bd list                              # All open issues
 bd list --all                        # Including closed
@@ -143,10 +150,10 @@ bd stats                            # Overview and statistics
 
 This project uses two tracking systems at different levels of granularity:
 
-| System | Scope | Audience | Lifetime |
-|--------|-------|----------|----------|
-| **GitHub Issues** | High-level epics, milestones, significant bugs | Stakeholders, contributors, public | Long-lived |
-| **Beads** | Granular implementation tasks for agents | Development team (agents) | Short-lived |
+| System            | Scope                                          | Audience                           | Lifetime    |
+| ----------------- | ---------------------------------------------- | ---------------------------------- | ----------- |
+| **GitHub Issues** | High-level epics, milestones, significant bugs | Stakeholders, contributors, public | Long-lived  |
+| **Beads**         | Granular implementation tasks for agents       | Development team (agents)          | Short-lived |
 
 ### How They Relate
 
@@ -164,18 +171,18 @@ This project uses two tracking systems at different levels of granularity:
 
 ### Cross-Reference Table
 
-| GitHub Issue | Milestone | Beads Epic |
-|-------------|-----------|------------|
-| #1 Project Scaffolding | Phase 1 | `cubehill-at3` |
-| #2 Cube State Engine | Phase 2 | `cubehill-7kx` |
-| #3 Three.js 3D Renderer | Phase 3 | `cubehill-vak` |
-| #4 Svelte Integration | Phase 4 | `cubehill-1wv` |
-| #5 Algorithm Data & Browse UI | Phase 5 | `cubehill-3j2` |
-| #6 Command Palette | Phase 6 | `cubehill-cpj` |
-| #7 Keyboard Controls | Phase 7 | `cubehill-ppi` |
-| #8 Theming | Phase 8 | `cubehill-n6o` |
-| #9 Navbar & Navigation | Phase 9 | `cubehill-3ur` |
-| #10 Deployment & Final QA | Phase 10 | `cubehill-8fz` |
+| GitHub Issue                  | Milestone | Beads Epic     |
+| ----------------------------- | --------- | -------------- |
+| #1 Project Scaffolding        | Phase 1   | `cubehill-at3` |
+| #2 Cube State Engine          | Phase 2   | `cubehill-7kx` |
+| #3 Three.js 3D Renderer       | Phase 3   | `cubehill-vak` |
+| #4 Svelte Integration         | Phase 4   | `cubehill-1wv` |
+| #5 Algorithm Data & Browse UI | Phase 5   | `cubehill-3j2` |
+| #6 Command Palette            | Phase 6   | `cubehill-cpj` |
+| #7 Keyboard Controls          | Phase 7   | `cubehill-ppi` |
+| #8 Theming                    | Phase 8   | `cubehill-n6o` |
+| #9 Navbar & Navigation        | Phase 9   | `cubehill-3ur` |
+| #10 Deployment & Final QA     | Phase 10  | `cubehill-8fz` |
 
 ## Session Workflow (All Agents)
 

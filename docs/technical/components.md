@@ -9,6 +9,7 @@ This document describes the Svelte component APIs, reactive stores, keyboard con
 The 3D cube canvas mount point. See `rendering.md` for full details on the Three.js integration.
 
 Key responsibilities:
+
 - Creates a `<canvas>` element sized to fit its container
 - Instantiates `CubeScene` in `onMount` (Three.js must not run server-side)
 - Attaches a `ResizeObserver` for responsive canvas sizing
@@ -18,6 +19,7 @@ Key responsibilities:
 ### AlgorithmList (`src/lib/components/AlgorithmList.svelte`)
 
 Renders a grid of `AlgorithmCard` components:
+
 - Accepts an array of `Algorithm` objects
 - Groups them by their `group` field and renders section headers
 - Responsive grid: adjusts column count based on viewport width
@@ -25,6 +27,7 @@ Renders a grid of `AlgorithmCard` components:
 ### AlgorithmCard (`src/lib/components/AlgorithmCard.svelte`)
 
 A clickable card representing a single algorithm case:
+
 - Displays the case name (e.g., "OLL 1", "T Perm")
 - Renders a 2D thumbnail of the case pattern (a 3x3 grid showing oriented vs. unoriented stickers)
 - Shows the probability of encountering the case
@@ -34,18 +37,19 @@ A clickable card representing a single algorithm case:
 
 Transport controls for stepping through an algorithm:
 
-| Button | Action |
-|--------|--------|
+| Button       | Action                                        |
+| ------------ | --------------------------------------------- |
 | Play / Pause | Start or pause auto-playback of the algorithm |
-| Step Forward | Advance one move and animate it |
-| Step Back | Revert one move (apply the inverse) |
-| Reset | Return the cube to the initial unsolved state |
+| Step Forward | Advance one move and animate it               |
+| Step Back    | Revert one move (apply the inverse)           |
+| Reset        | Return the cube to the initial unsolved state |
 
 Playback state is managed by `cubeStore.svelte.ts`, which tracks the current algorithm, the step index, and the play/pause flag.
 
 ### Navbar (`src/lib/components/Navbar.svelte`)
 
 Top navigation bar using DaisyUI's `navbar` component:
+
 - Logo/title linking to home
 - Navigation links to OLL and PLL pages
 - `ThemeToggle` component for dark/light mode switching
@@ -54,6 +58,7 @@ Top navigation bar using DaisyUI's `navbar` component:
 ### ThemeToggle (`src/lib/components/ThemeToggle.svelte`)
 
 A toggle switch for dark/light mode:
+
 - Reads and writes the theme preference via `themeStore.svelte.ts`
 - Sets the `data-theme` attribute on the `<html>` element
 - Persists the user's choice to `localStorage`
@@ -111,6 +116,7 @@ Root
 ```
 
 Each command includes:
+
 - `id`: Unique identifier
 - `title`: Display text (e.g., "OLL 1 — Dot Cases")
 - `parent`: ID of parent menu for nesting (e.g., OLL cases have `parent: 'oll'`)
@@ -120,6 +126,7 @@ Each command includes:
 ### Search
 
 ninja-keys provides built-in fuzzy search. The `keywords` field on each command enhances discoverability:
+
 - Searching "T Perm" finds the T Perm PLL case
 - Searching "R U R'" finds algorithms that contain those moves
 - Searching "dot" finds OLL cases in the "Dot Cases" group
@@ -134,13 +141,13 @@ The command palette dispatches events when it opens and closes. These events are
 
 When viewing an algorithm detail page, keyboard shortcuts allow quick interaction:
 
-| Key | Action |
-|-----|--------|
-| Space | Play / Pause |
-| → (Right Arrow) | Step forward one move |
-| ← (Left Arrow) | Step back one move |
-| R | Reset to initial state |
-| Escape | Close command palette (if open) |
+| Key             | Action                          |
+| --------------- | ------------------------------- |
+| Space           | Play / Pause                    |
+| → (Right Arrow) | Step forward one move           |
+| ← (Left Arrow)  | Step back one move              |
+| R               | Reset to initial state          |
+| Escape          | Close command palette (if open) |
 
 ### Safety Guards
 
@@ -189,14 +196,15 @@ The keydown listener is added in `onMount` and removed in `onDestroy` to prevent
 Manages the cube state and playback using Svelte 5 runes:
 
 ```typescript
-let cubeState = $state(solved());       // Current cube state (number[54])
-let algorithm = $state<Move[]>([]);      // Current algorithm being played
-let stepIndex = $state(0);               // Current step in the algorithm
-let isPlaying = $state(false);           // Whether auto-playback is active
-let history = $state<number[][]>([]);    // State history for undo/step-back
+let cubeState = $state(solved()); // Current cube state (number[54])
+let algorithm = $state<Move[]>([]); // Current algorithm being played
+let stepIndex = $state(0); // Current step in the algorithm
+let isPlaying = $state(false); // Whether auto-playback is active
+let history = $state<number[][]>([]); // State history for undo/step-back
 ```
 
 Key operations:
+
 - **loadAlgorithm(notation: string)**: Parse the notation, compute the inverse to get the unsolved state, reset playback
 - **stepForward()**: Apply the next move, push current state to history, advance index
 - **stepBack()**: Pop the last state from history, decrement index

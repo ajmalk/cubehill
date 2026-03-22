@@ -32,36 +32,36 @@ Detailed documentation lives in [`docs/`](docs/):
 
 **Technical** (`docs/technical/`):
 
-| Page | Description |
-|------|-------------|
-| [architecture.md](docs/technical/architecture.md) | Project structure and data flow |
-| [cube-engine.md](docs/technical/cube-engine.md) | Cube state model, moves, notation parser |
-| [rendering.md](docs/technical/rendering.md) | Three.js 3D rendering and animation |
-| [deployment.md](docs/technical/deployment.md) | GitHub Pages deployment, CI pipeline strategy |
-| [algorithm-data-model.md](docs/technical/algorithm-data-model.md) | Algorithm TypeScript types and interfaces |
-| [components.md](docs/technical/components.md) | Svelte components, stores, keyboard controls |
-| [linting.md](docs/technical/linting.md) | ESLint + Prettier setup and configuration |
-| [testing.md](docs/technical/testing.md) | Testing strategy, Vitest + Playwright |
-| [theme-integration.md](docs/technical/theme-integration.md) | Theme store, FOUC prevention, Three.js sync |
+| Page                                                              | Description                                   |
+| ----------------------------------------------------------------- | --------------------------------------------- |
+| [architecture.md](docs/technical/architecture.md)                 | Project structure and data flow               |
+| [cube-engine.md](docs/technical/cube-engine.md)                   | Cube state model, moves, notation parser      |
+| [rendering.md](docs/technical/rendering.md)                       | Three.js 3D rendering and animation           |
+| [deployment.md](docs/technical/deployment.md)                     | GitHub Pages deployment, CI pipeline strategy |
+| [algorithm-data-model.md](docs/technical/algorithm-data-model.md) | Algorithm TypeScript types and interfaces     |
+| [components.md](docs/technical/components.md)                     | Svelte components, stores, keyboard controls  |
+| [linting.md](docs/technical/linting.md)                           | ESLint + Prettier setup and configuration     |
+| [testing.md](docs/technical/testing.md)                           | Testing strategy, Vitest + Playwright         |
+| [theme-integration.md](docs/technical/theme-integration.md)       | Theme store, FOUC prevention, Three.js sync   |
 
 **Product** (`docs/product/`):
 
-| Page | Description |
-|------|-------------|
-| [stack-decisions.md](docs/product/stack-decisions.md) | Stack choices and reasoning |
-| [algorithms.md](docs/product/algorithms.md) | OLL/PLL case inventory and learning priority |
-| [pages-and-layout.md](docs/product/pages-and-layout.md) | Pages, responsive layout, navigation |
-| [theming.md](docs/product/theming.md) | DaisyUI theme system, theme-aware components |
+| Page                                                    | Description                                  |
+| ------------------------------------------------------- | -------------------------------------------- |
+| [stack-decisions.md](docs/product/stack-decisions.md)   | Stack choices and reasoning                  |
+| [algorithms.md](docs/product/algorithms.md)             | OLL/PLL case inventory and learning priority |
+| [pages-and-layout.md](docs/product/pages-and-layout.md) | Pages, responsive layout, navigation         |
+| [theming.md](docs/product/theming.md)                   | DaisyUI theme system, theme-aware components |
 
 **Process** (`docs/process/`):
 
-| Page | Description |
-|------|-------------|
-| [feature-development.md](docs/process/feature-development.md) | 6-stage feature development loop |
-| [browser-tools.md](docs/process/browser-tools.md) | Playwright MCP browser tools for agents |
-| [figma-tools.md](docs/process/figma-tools.md) | Figma MCP tools for design creation and implementation |
-| [contributing.md](docs/process/contributing.md) | Best practices for contributing to the wiki |
-| [issue-tracking.md](docs/process/issue-tracking.md) | Issue tracking standards |
+| Page                                                          | Description                                            |
+| ------------------------------------------------------------- | ------------------------------------------------------ |
+| [feature-development.md](docs/process/feature-development.md) | 6-stage feature development loop                       |
+| [browser-tools.md](docs/process/browser-tools.md)             | Playwright MCP browser tools for agents                |
+| [figma-tools.md](docs/process/figma-tools.md)                 | Figma MCP tools for design creation and implementation |
+| [contributing.md](docs/process/contributing.md)               | Best practices for contributing to the wiki            |
+| [issue-tracking.md](docs/process/issue-tracking.md)           | Issue tracking standards                               |
 
 ## Contributing
 

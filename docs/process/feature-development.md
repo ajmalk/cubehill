@@ -49,6 +49,7 @@ The UX Designer creates a design for the feature before any code is written. Fig
 - Follow the mandatory visual validation workflow: create, screenshot, analyze, iterate
 
 **Design artifacts** may include:
+
 - Figma designs (frames, components, auto-layout, design tokens)
 - Figma screenshots exported to `designs/` as reference artifacts
 - Text-based layout descriptions (component placement, sizing, spacing)
@@ -99,6 +100,7 @@ The developer implements the feature following the design and technical notes.
 **Focus**: Code quality, not product correctness (that's Stage 6)
 
 The Code Reviewer checks the implementation for:
+
 - Correctness: logic errors, edge cases, off-by-one errors
 - Conventions: follows CLAUDE.md rules (immutability, SSR safety, base paths, etc.)
 - Code quality: no dead code, no unused imports, types correct
@@ -125,18 +127,19 @@ Final validation that the feature works as intended.
 
 Not every task needs all 6 stages. Use this guide:
 
-| Task Type | Stages |
-|-----------|--------|
-| UI feature (new page, component) | All 6 |
-| UI refinement (styling, layout tweak) | 1, 2, 4, 5, 6 |
-| Engine/renderer (cube state, Three.js) | 1, 3, 4, 5 |
-| Data (algorithm entries) | 1, 4, 5, 6 (Cubing Advisor validates) |
-| Config/infra (CI, linting, deploy) | 1, 4, 5 |
-| Docs-only | 1, 4 (write), 5 (review) |
+| Task Type                              | Stages                                |
+| -------------------------------------- | ------------------------------------- |
+| UI feature (new page, component)       | All 6                                 |
+| UI refinement (styling, layout tweak)  | 1, 2, 4, 5, 6                         |
+| Engine/renderer (cube state, Three.js) | 1, 3, 4, 5                            |
+| Data (algorithm entries)               | 1, 4, 5, 6 (Cubing Advisor validates) |
+| Config/infra (CI, linting, deploy)     | 1, 4, 5                               |
+| Docs-only                              | 1, 4 (write), 5 (review)              |
 
 ## Beads Integration
 
 Each feature flows through beads:
+
 1. PM creates the issue (Stage 1)
 2. Issue is assigned to UX Designer, then Architect, then Dev as it moves through stages
 3. Review and validation feedback is added as issue notes
@@ -146,10 +149,10 @@ For multi-task features, create a beads epic with child tasks. Each child task c
 
 ## Folder Ownership
 
-| Folder | Owner | Purpose |
-|--------|-------|---------|
-| `designs/` | UX Designer | Design artifacts for features |
-| `docs/technical/` | Software Architect | Technical documentation |
-| `docs/product/` | Product Manager | Product documentation |
-| `docs/process/` | Shared (PM + Architect) | Process documentation |
-| `src/` | Full-Stack Developer | All application code |
+| Folder            | Owner                   | Purpose                       |
+| ----------------- | ----------------------- | ----------------------------- |
+| `designs/`        | UX Designer             | Design artifacts for features |
+| `docs/technical/` | Software Architect      | Technical documentation       |
+| `docs/product/`   | Product Manager         | Product documentation         |
+| `docs/process/`   | Shared (PM + Architect) | Process documentation         |
+| `src/`            | Full-Stack Developer    | All application code          |

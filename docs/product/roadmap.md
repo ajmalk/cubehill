@@ -35,6 +35,7 @@ flowchart TD
 SvelteKit setup with all dependencies, configuration, and infrastructure in place before any feature work begins.
 
 **Key deliverables:**
+
 - SvelteKit project with `adapter-static`, TypeScript, Tailwind, DaisyUI
 - ESLint + Prettier configuration
 - Vitest testing infrastructure
@@ -52,6 +53,7 @@ SvelteKit setup with all dependencies, configuration, and infrastructure in plac
 Pure TypeScript cube state model with no rendering — the logical foundation that everything else builds on.
 
 **Key deliverables:**
+
 - `CubeState` type — immutable `number[54]` array
 - Move functions for all face turns (U, D, L, R, F, B) with modifiers (prime, double)
 - Algorithm notation parser (string to move sequence)
@@ -69,6 +71,7 @@ Pure TypeScript cube state model with no rendering — the logical foundation th
 The 3D rendering layer — takes cube state and displays it as an interactive 3D cube.
 
 **Key deliverables:**
+
 - `CubeScene` — Three.js scene setup (lighting, camera, background)
 - `CubeMesh` — 26 cubies with correct face colors from state
 - `CubeAnimator` — smooth face-turn animations with drift prevention
@@ -85,6 +88,7 @@ The 3D rendering layer — takes cube state and displays it as an interactive 3D
 Connects the cube engine and 3D renderer to Svelte's component model and reactivity system.
 
 **Key deliverables:**
+
 - `CubeViewer` component — wraps Three.js canvas with SSR-safe mounting
 - `cubeStore` — reactive cube state with playback controls (play, pause, step, reset)
 - `themeStore` — theme preference with persistence and FOUC prevention
@@ -101,6 +105,7 @@ Connects the cube engine and 3D renderer to Svelte's component model and reactiv
 The algorithm content and browsing experience — the core user-facing feature of the app.
 
 **Key deliverables:**
+
 - OLL data file (57 cases) and PLL data file (21 cases)
 - `AlgorithmCard` component with case name, pattern thumbnail, probability
 - `AlgorithmList` component with category grouping
@@ -118,6 +123,7 @@ The algorithm content and browsing experience — the core user-facing feature o
 ninja-keys integration for fast algorithm search and navigation via Cmd+K / Ctrl+K.
 
 **Key deliverables:**
+
 - ninja-keys web component integration (SSR-safe)
 - Algorithm search across all OLL and PLL cases
 - Nested menus (OLL > category > case, PLL > category > case)
@@ -135,6 +141,7 @@ ninja-keys integration for fast algorithm search and navigation via Cmd+K / Ctrl
 Keyboard shortcuts for cube manipulation and algorithm playback.
 
 **Key deliverables:**
+
 - Key mappings for playback controls (space for play/pause, arrow keys for stepping)
 - Safety guards: disable shortcuts when command palette is open
 - Safety guards: disable shortcuts when text inputs are focused
@@ -151,6 +158,7 @@ Keyboard shortcuts for cube manipulation and algorithm playback.
 Full theme support across the entire app, including the 3D cube.
 
 **Key deliverables:**
+
 - CSS variable sync between DaisyUI themes and Three.js scene (background, lighting)
 - ninja-keys styling to match the active DaisyUI theme
 - Theme persistence via localStorage
@@ -168,6 +176,7 @@ Full theme support across the entire app, including the 3D cube.
 Persistent navigation across all pages.
 
 **Key deliverables:**
+
 - `Navbar` component with links to Home, OLL, PLL
 - Mobile-responsive dropdown menu (hamburger icon on small screens)
 - Integration into the root layout (`+layout.svelte`)
@@ -185,6 +194,7 @@ Persistent navigation across all pages.
 Final quality pass and production deployment.
 
 **Key deliverables:**
+
 - Production build verification (`npm run build` succeeds, all routes prerender)
 - E2E tests for critical user flows (browse algorithms, play animation, switch theme)
 - Code review of the full codebase

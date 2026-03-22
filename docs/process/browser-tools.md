@@ -22,80 +22,80 @@ Note: In development, `paths.base` is empty, so routes are at `/oll/`, `/pll/`, 
 
 ### Navigation & Inspection
 
-| Tool | Purpose |
-|------|---------|
-| `browser_navigate(url)` | Navigate to a URL |
-| `browser_snapshot()` | Get the accessibility tree of the current page — structured text representation of all visible elements |
-| `browser_take_screenshot()` | Capture a pixel-level screenshot of the current viewport |
-| `browser_console_messages()` | Read console output (logs, warnings, errors) |
+| Tool                         | Purpose                                                                                                 |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `browser_navigate(url)`      | Navigate to a URL                                                                                       |
+| `browser_snapshot()`         | Get the accessibility tree of the current page — structured text representation of all visible elements |
+| `browser_take_screenshot()`  | Capture a pixel-level screenshot of the current viewport                                                |
+| `browser_console_messages()` | Read console output (logs, warnings, errors)                                                            |
 
 ### Interaction
 
-| Tool | Purpose |
-|------|---------|
-| `browser_click(selector)` | Click an element (CSS selector or accessibility label) |
-| `browser_type(selector, text)` | Type text into an input field |
+| Tool                           | Purpose                                                |
+| ------------------------------ | ------------------------------------------------------ |
+| `browser_click(selector)`      | Click an element (CSS selector or accessibility label) |
+| `browser_type(selector, text)` | Type text into an input field                          |
 
 ### JavaScript Execution
 
-| Tool | Purpose |
-|------|---------|
+| Tool                       | Purpose                                                                           |
+| -------------------------- | --------------------------------------------------------------------------------- |
 | `browser_evaluate(script)` | Run arbitrary JavaScript in the page context — access DOM, stores, Three.js scene |
 
 Use `browser_evaluate` to inspect runtime state that isn't visible in the DOM:
 
 ```javascript
 // Check cube state
-browser_evaluate("document.querySelector('canvas').__scene?.cubeMesh?.state")
+browser_evaluate("document.querySelector('canvas').__scene?.cubeMesh?.state");
 
 // Read a Svelte store value
-browser_evaluate("window.__cubeStore?.stepIndex")
+browser_evaluate('window.__cubeStore?.stepIndex');
 
 // Check the current theme
-browser_evaluate("document.documentElement.getAttribute('data-theme')")
+browser_evaluate("document.documentElement.getAttribute('data-theme')");
 
 // Get computed CSS variables
-browser_evaluate("getComputedStyle(document.documentElement).getPropertyValue('--b1')")
+browser_evaluate("getComputedStyle(document.documentElement).getPropertyValue('--b1')");
 ```
 
 ### Network
 
-| Tool | Purpose |
-|------|---------|
-| `browser_network_requests()` | View network requests made by the page |
+| Tool                               | Purpose                                                                               |
+| ---------------------------------- | ------------------------------------------------------------------------------------- |
+| `browser_network_requests()`       | View network requests made by the page                                                |
 | `browser_route(pattern, response)` | Mock network responses — intercept requests matching a pattern and return custom data |
 
 CubeHill is fully static (no API calls), so network tools are mainly useful for verifying that no unexpected requests are made, or for testing error states during development of any future API integrations.
 
 ### Storage
 
-| Tool | Purpose |
-|------|---------|
+| Tool          | Purpose                                          |
+| ------------- | ------------------------------------------------ |
 | Storage tools | Read/write localStorage, sessionStorage, cookies |
 
 Useful for inspecting or manipulating the persisted theme preference (`localStorage.getItem('theme')`).
 
 ### DevTools
 
-| Tool | Purpose |
-|------|---------|
+| Tool          | Purpose                              |
+| ------------- | ------------------------------------ |
 | Tracing tools | Record and export performance traces |
-| Video tools | Record video of interactions |
+| Video tools   | Record video of interactions         |
 
 Useful for capturing animation sequences or documenting UI behavior.
 
 ### Vision (Pixel-Level)
 
-| Tool | Purpose |
-|------|---------|
+| Tool               | Purpose                                                       |
+| ------------------ | ------------------------------------------------------------- |
 | Vision mouse tools | Click at exact pixel coordinates based on screenshot analysis |
 
 Useful when elements lack good selectors or for interacting with the Three.js canvas (which doesn't have DOM elements for individual cubies).
 
 ### Testing Assertions
 
-| Tool | Purpose |
-|------|---------|
+| Tool            | Purpose                                                             |
+| --------------- | ------------------------------------------------------------------- |
 | Assertion tools | Verify element state — visibility, text content, attributes, counts |
 
 Use for automated verification of UI state after interactions.

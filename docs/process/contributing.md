@@ -4,11 +4,11 @@ Best practices for writing and maintaining the CubeHill `docs/` wiki. Owned by t
 
 ## Folder Structure & Ownership
 
-| Folder | Owner | Scope |
-|--------|-------|-------|
-| `docs/technical/` | **Architect** | Architecture, implementation details, data models, rendering, deployment |
-| `docs/product/` | **PM** | Stack decisions, algorithm inventory, pages/layout, theming UX |
-| `docs/process/` | **Architect** (contributing.md, browser-tools.md), **UX Designer** (figma-tools.md, shared with Architect + PM), **PM** (issue-tracking.md) | Workflows and team conventions |
+| Folder            | Owner                                                                                                                                       | Scope                                                                    |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `docs/technical/` | **Architect**                                                                                                                               | Architecture, implementation details, data models, rendering, deployment |
+| `docs/product/`   | **PM**                                                                                                                                      | Stack decisions, algorithm inventory, pages/layout, theming UX           |
+| `docs/process/`   | **Architect** (contributing.md, browser-tools.md), **UX Designer** (figma-tools.md, shared with Architect + PM), **PM** (issue-tracking.md) | Workflows and team conventions                                           |
 
 Each page has exactly one owner. The owner writes and maintains the page. Other team members can suggest changes, but the owner has final say.
 
@@ -27,7 +27,7 @@ Each page has exactly one owner. The owner writes and maintains the page. Other 
 - Use tables for structured data (move definitions, component lists, route maps)
 - Use ASCII diagrams for data flow and hierarchy — keep them simple enough to read in a terminal
 - Write in present tense ("The store manages..." not "The store will manage...")
-- Document the *why* behind decisions, not just the *what*
+- Document the _why_ behind decisions, not just the _what_
 - **Diagrams**: D2 is the preferred tool for technical diagrams (see "Diagrams with D2" below). Mermaid is fine for simple inline diagrams. After creating or modifying any diagram, visually verify the rendered output before merging. Keep node labels to 2-5 words and edge labels to 1-3 words. See the "Diagram Quality" section in each agent's instruction file for the full checklist.
 
 ### Naming
@@ -50,11 +50,13 @@ Checklist before committing a docs change that adds, removes, or renames a page:
 ## When to Create a New Page vs. Update an Existing One
 
 **Create a new page** when:
+
 - A wholly new architectural area is introduced (e.g., a new subsystem)
 - The topic doesn't fit naturally into any existing page
 - An existing page would become unwieldy by absorbing the new content
 
 **Update an existing page** when:
+
 - The change refines, extends, or corrects existing content
 - The topic is already covered — even partially — on a current page
 - The new content is a natural subsection of an existing page
@@ -86,12 +88,12 @@ For theme selection UX, see [Product: Theming](../product/theming.md).
 
 ### Current Cross-Reference Pairs
 
-| Technical | Product |
-|-----------|---------|
-| `architecture.md` | `stack-decisions.md` |
-| `algorithm-data-model.md` | `algorithms.md` |
-| `components.md` | `pages-and-layout.md` |
-| `theme-integration.md` | `theming.md` |
+| Technical                 | Product               |
+| ------------------------- | --------------------- |
+| `architecture.md`         | `stack-decisions.md`  |
+| `algorithm-data-model.md` | `algorithms.md`       |
+| `components.md`           | `pages-and-layout.md` |
+| `theme-integration.md`    | `theming.md`          |
 
 ## Diagrams with D2
 

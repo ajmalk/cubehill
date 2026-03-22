@@ -56,7 +56,7 @@ An inline `<script>` in `src/app.html` runs **before** the page paints, setting 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script>
       // Runs before paint — prevents FOUC
-      (function() {
+      (function () {
         const saved = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const theme = saved || (prefersDark ? 'dark' : 'light');
@@ -130,6 +130,7 @@ The black cubie body color is also fixed — it represents the physical black pl
 ### When to Sync
 
 Theme-to-scene sync runs:
+
 1. **On mount**: When the `CubeViewer` first initializes, read the current theme
 2. **On theme toggle**: When the user switches themes, update the scene background
 

@@ -6,114 +6,114 @@ How agents use Figma MCP tools to create, edit, and read designs for CubeHill. O
 
 CubeHill connects two Figma MCP servers with distinct purposes:
 
-| Server | Purpose | Primary Users |
-|--------|---------|----------------|
-| **figma-console** | Full design creation and editing in Figma — create shapes, text, frames, components, variables, take screenshots, execute code. Also has FigJam tools for diagramming. | UX Designer, Architect, PM |
-| **plugin:figma:figma** | Read designs from Figma, generate FigJam diagrams, Code Connect mappings, get design context for implementation | Full-Stack Dev, Architect, PM |
+| Server                 | Purpose                                                                                                                                                                | Primary Users                 |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| **figma-console**      | Full design creation and editing in Figma — create shapes, text, frames, components, variables, take screenshots, execute code. Also has FigJam tools for diagramming. | UX Designer, Architect, PM    |
+| **plugin:figma:figma** | Read designs from Figma, generate FigJam diagrams, Code Connect mappings, get design context for implementation                                                        | Full-Stack Dev, Architect, PM |
 
 ## figma-console Tools
 
 ### Design Creation
 
-| Tool | Purpose |
-|------|---------|
-| `figma_execute(code)` | Run arbitrary Figma plugin API code — create frames, shapes, text, auto-layout, set styles |
-| `figma_create_child(parentId, type, props)` | Create a child node (frame, text, rectangle, etc.) inside a parent |
-| `figma_clone_node(nodeId)` | Duplicate an existing node |
-| `figma_move_node(nodeId, x, y)` | Reposition a node |
-| `figma_resize_node(nodeId, width, height)` | Resize a node |
-| `figma_set_fills(nodeId, fills)` | Set fill colors on a node |
-| `figma_set_strokes(nodeId, strokes)` | Set stroke styles on a node |
-| `figma_set_text(nodeId, text)` | Set text content on a text node |
-| `figma_set_image_fill(nodeId, imageUrl)` | Set an image as a node's fill |
-| `figma_rename_node(nodeId, name)` | Rename a node |
-| `figma_delete_node(nodeId)` | Delete a node |
+| Tool                                        | Purpose                                                                                    |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `figma_execute(code)`                       | Run arbitrary Figma plugin API code — create frames, shapes, text, auto-layout, set styles |
+| `figma_create_child(parentId, type, props)` | Create a child node (frame, text, rectangle, etc.) inside a parent                         |
+| `figma_clone_node(nodeId)`                  | Duplicate an existing node                                                                 |
+| `figma_move_node(nodeId, x, y)`             | Reposition a node                                                                          |
+| `figma_resize_node(nodeId, width, height)`  | Resize a node                                                                              |
+| `figma_set_fills(nodeId, fills)`            | Set fill colors on a node                                                                  |
+| `figma_set_strokes(nodeId, strokes)`        | Set stroke styles on a node                                                                |
+| `figma_set_text(nodeId, text)`              | Set text content on a text node                                                            |
+| `figma_set_image_fill(nodeId, imageUrl)`    | Set an image as a node's fill                                                              |
+| `figma_rename_node(nodeId, name)`           | Rename a node                                                                              |
+| `figma_delete_node(nodeId)`                 | Delete a node                                                                              |
 
 ### Components
 
-| Tool | Purpose |
-|------|---------|
-| `figma_search_components(query)` | Search for existing components by name |
-| `figma_instantiate_component(componentId)` | Create an instance of a component |
-| `figma_get_component(nodeId)` | Get component details |
-| `figma_get_component_details(nodeId)` | Get detailed component info including properties |
-| `figma_add_component_property(...)` | Add a property to a component |
-| `figma_edit_component_property(...)` | Edit a component property |
-| `figma_delete_component_property(...)` | Remove a component property |
-| `figma_arrange_component_set(...)` | Auto-arrange a component set grid |
+| Tool                                       | Purpose                                          |
+| ------------------------------------------ | ------------------------------------------------ |
+| `figma_search_components(query)`           | Search for existing components by name           |
+| `figma_instantiate_component(componentId)` | Create an instance of a component                |
+| `figma_get_component(nodeId)`              | Get component details                            |
+| `figma_get_component_details(nodeId)`      | Get detailed component info including properties |
+| `figma_add_component_property(...)`        | Add a property to a component                    |
+| `figma_edit_component_property(...)`       | Edit a component property                        |
+| `figma_delete_component_property(...)`     | Remove a component property                      |
+| `figma_arrange_component_set(...)`         | Auto-arrange a component set grid                |
 
 ### Design Tokens & Variables
 
-| Tool | Purpose |
-|------|---------|
-| `figma_setup_design_tokens(...)` | Create a complete token system (collection + modes + variables) atomically |
-| `figma_batch_create_variables(...)` | Create up to 100 variables in one call |
-| `figma_batch_update_variables(...)` | Update up to 100 variable values in one call |
-| `figma_create_variable(...)` | Create a single variable |
-| `figma_update_variable(...)` | Update a single variable value |
-| `figma_get_variables()` | List all variables |
-| `figma_get_token_values(...)` | Get resolved token values |
-| `figma_browse_tokens(...)` | Browse the token hierarchy |
+| Tool                                | Purpose                                                                    |
+| ----------------------------------- | -------------------------------------------------------------------------- |
+| `figma_setup_design_tokens(...)`    | Create a complete token system (collection + modes + variables) atomically |
+| `figma_batch_create_variables(...)` | Create up to 100 variables in one call                                     |
+| `figma_batch_update_variables(...)` | Update up to 100 variable values in one call                               |
+| `figma_create_variable(...)`        | Create a single variable                                                   |
+| `figma_update_variable(...)`        | Update a single variable value                                             |
+| `figma_get_variables()`             | List all variables                                                         |
+| `figma_get_token_values(...)`       | Get resolved token values                                                  |
+| `figma_browse_tokens(...)`          | Browse the token hierarchy                                                 |
 
 ### Screenshots & Inspection
 
-| Tool | Purpose |
-|------|---------|
-| `figma_take_screenshot()` | Capture a screenshot of the current Figma viewport |
-| `figma_capture_screenshot(...)` | Capture a specific node or area |
-| `figma_get_selection()` | Get the currently selected nodes |
-| `figma_get_file_data()` | Get the full file structure |
-| `figma_get_styles()` | Get all styles in the file |
-| `figma_navigate(nodeId)` | Navigate to and zoom into a specific node |
+| Tool                            | Purpose                                            |
+| ------------------------------- | -------------------------------------------------- |
+| `figma_take_screenshot()`       | Capture a screenshot of the current Figma viewport |
+| `figma_capture_screenshot(...)` | Capture a specific node or area                    |
+| `figma_get_selection()`         | Get the currently selected nodes                   |
+| `figma_get_file_data()`         | Get the full file structure                        |
+| `figma_get_styles()`            | Get all styles in the file                         |
+| `figma_navigate(nodeId)`        | Navigate to and zoom into a specific node          |
 
 ### File & Page Management
 
-| Tool | Purpose |
-|------|---------|
-| `figma_list_open_files()` | List currently open Figma files |
-| `figma_get_status()` | Check connection status |
-| `figma_reconnect()` | Reconnect if the connection drops |
+| Tool                      | Purpose                           |
+| ------------------------- | --------------------------------- |
+| `figma_list_open_files()` | List currently open Figma files   |
+| `figma_get_status()`      | Check connection status           |
+| `figma_reconnect()`       | Reconnect if the connection drops |
 
 ## plugin:figma:figma Tools
 
 ### Reading Designs (for implementation)
 
-| Tool | Purpose |
-|------|---------|
+| Tool                                  | Purpose                                                                                        |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------- |
 | `get_design_context(fileKey, nodeId)` | Get code, screenshot, and contextual hints for a design node — primary tool for design-to-code |
-| `get_screenshot(fileKey, nodeId)` | Get a screenshot of a specific design node |
-| `get_metadata(fileKey)` | Get file metadata (name, pages, components) |
-| `get_variable_defs(fileKey)` | Get variable/token definitions from the file |
+| `get_screenshot(fileKey, nodeId)`     | Get a screenshot of a specific design node                                                     |
+| `get_metadata(fileKey)`               | Get file metadata (name, pages, components)                                                    |
+| `get_variable_defs(fileKey)`          | Get variable/token definitions from the file                                                   |
 
 ### Code Connect
 
-| Tool | Purpose |
-|------|---------|
-| `get_code_connect_map(fileKey)` | Get existing Code Connect mappings between Figma components and code components |
-| `get_code_connect_suggestions(fileKey)` | Get suggestions for new Code Connect mappings |
-| `add_code_connect_map(...)` | Add a mapping between a Figma component and a Svelte component |
-| `send_code_connect_mappings(...)` | Push Code Connect mappings to Figma |
+| Tool                                    | Purpose                                                                         |
+| --------------------------------------- | ------------------------------------------------------------------------------- |
+| `get_code_connect_map(fileKey)`         | Get existing Code Connect mappings between Figma components and code components |
+| `get_code_connect_suggestions(fileKey)` | Get suggestions for new Code Connect mappings                                   |
+| `add_code_connect_map(...)`             | Add a mapping between a Figma component and a Svelte component                  |
+| `send_code_connect_mappings(...)`       | Push Code Connect mappings to Figma                                             |
 
 ### FigJam (plugin:figma:figma)
 
-| Tool | Purpose |
-|------|---------|
+| Tool                    | Purpose                                              |
+| ----------------------- | ---------------------------------------------------- |
 | `generate_diagram(...)` | Generate a diagram in FigJam from a text description |
-| `get_figjam(fileKey)` | Read contents of a FigJam board |
+| `get_figjam(fileKey)`   | Read contents of a FigJam board                      |
 
 ### FigJam (figma-console)
 
-| Tool | Purpose |
-|------|---------|
-| `figjam_create_shape_with_text(...)` | Create a shape with text label — building block for diagrams |
-| `figjam_create_connector(...)` | Create a connector between two shapes — for data flow and relationships |
-| `figjam_create_stickies(...)` | Create multiple sticky notes — for brainstorming and planning |
-| `figjam_create_sticky(...)` | Create a single sticky note |
-| `figjam_create_table(...)` | Create a table — for structured comparisons and inventories |
-| `figjam_create_code_block(...)` | Create a code block — for documenting interfaces and type signatures |
-| `figjam_auto_arrange(...)` | Auto-arrange items on the board for clean layout |
-| `figjam_get_board_contents(...)` | Read all contents of a FigJam board |
-| `figjam_get_connections(...)` | Get all connections between shapes on a board |
+| Tool                                 | Purpose                                                                 |
+| ------------------------------------ | ----------------------------------------------------------------------- |
+| `figjam_create_shape_with_text(...)` | Create a shape with text label — building block for diagrams            |
+| `figjam_create_connector(...)`       | Create a connector between two shapes — for data flow and relationships |
+| `figjam_create_stickies(...)`        | Create multiple sticky notes — for brainstorming and planning           |
+| `figjam_create_sticky(...)`          | Create a single sticky note                                             |
+| `figjam_create_table(...)`           | Create a table — for structured comparisons and inventories             |
+| `figjam_create_code_block(...)`      | Create a code block — for documenting interfaces and type signatures    |
+| `figjam_auto_arrange(...)`           | Auto-arrange items on the board for clean layout                        |
+| `figjam_get_board_contents(...)`     | Read all contents of a FigJam board                                     |
+| `figjam_get_connections(...)`        | Get all connections between shapes on a board                           |
 
 ## Common Workflows
 
@@ -130,7 +130,7 @@ CubeHill connects two Figma MCP servers with distinct purposes:
        section.x = 0;
        section.y = 0;
      }
-   `)
+   `);
    ```
 3. Create frames, shapes, text using `figma_execute` or `figma_create_child`
 4. Apply auto-layout for responsive behavior
@@ -188,6 +188,7 @@ FigJam is one option for technical diagrams — not the only one. For simple dia
 4. **Read existing boards**: Use `figjam_get_board_contents` and `figjam_get_connections` to review and extend existing diagrams
 
 Common use cases:
+
 - **Component hierarchy**: Svelte component tree with data flow arrows
 - **Cube state data flow**: `number[54]` state array through moves, store, and renderer
 - **Three.js rendering pipeline**: Scene setup, animation loop, drift prevention cycle
@@ -205,6 +206,7 @@ FigJam is one option for planning artifacts — not the only one. For simple flo
 5. **Auto-arrange**: Use `figjam_auto_arrange` after building out a board to clean up layout
 
 Common use cases:
+
 - **Feature development loop**: Visual diagram of the 6-stage loop from `docs/process/feature-development.md`
 - **User flow diagrams**: How users navigate algorithm browsing, playback, and theme switching
 - **Project roadmap boards**: Feature priorities with sticky notes grouped by milestone

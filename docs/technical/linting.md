@@ -9,6 +9,7 @@ This document describes the linting and formatting setup for CubeHill — tools,
 **Chosen over**: Biome, TSLint (deprecated)
 
 ESLint is the standard JavaScript/TypeScript linter with first-class Svelte support:
+
 - `eslint` — core linter
 - `@eslint/js` — recommended JS rules
 - `typescript-eslint` — TypeScript-aware rules (type-checked)
@@ -22,6 +23,7 @@ Why not Biome: Biome is fast but lacks Svelte support. Since most of our code is
 **Chosen over**: ESLint for formatting, Biome formatter
 
 Prettier handles all formatting — ESLint handles only correctness/quality rules:
+
 - `prettier` — core formatter
 - `prettier-plugin-svelte` — formats `.svelte` files (template expressions, script blocks, style blocks)
 - `prettier-plugin-tailwindcss` — auto-sorts Tailwind CSS class names (must be loaded last)
@@ -64,11 +66,12 @@ export default ts.config(
   },
   {
     ignores: ['build/', '.svelte-kit/', 'node_modules/'],
-  }
+  },
 );
 ```
 
 Key points:
+
 - TypeScript rules apply to all `.ts` files
 - Svelte files use `svelte-eslint-parser` with the TypeScript parser for `<script lang="ts">` blocks
 - `build/`, `.svelte-kit/`, and `node_modules/` are ignored
@@ -84,10 +87,7 @@ Key points:
   "printWidth": 100,
   "tabWidth": 2,
   "useTabs": false,
-  "plugins": [
-    "prettier-plugin-svelte",
-    "prettier-plugin-tailwindcss"
-  ],
+  "plugins": ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
   "overrides": [
     {
       "files": "*.svelte",
@@ -100,6 +100,7 @@ Key points:
 ```
 
 Key choices:
+
 - **Single quotes**: Consistent with SvelteKit's scaffolded defaults
 - **Semicolons**: Explicit over implicit — fewer ASI edge cases
 - **100 char print width**: Wider than Prettier's default 80, which avoids excessive wrapping in template expressions and Tailwind class strings
@@ -137,9 +138,10 @@ package-lock.json
 Both linting and formatting checks run as gates in the CI pipeline. See the CI Pipeline Strategy section in [deployment.md](deployment.md) for the full workflow.
 
 In the PR check job:
+
 ```yaml
-- run: npm run lint          # ESLint — catches bugs, unused vars, Svelte issues
-- run: npm run format:check  # Prettier — ensures consistent formatting
+- run: npm run lint # ESLint — catches bugs, unused vars, Svelte issues
+- run: npm run format:check # Prettier — ensures consistent formatting
 ```
 
 Both must pass before a PR can be merged. `format:check` (not `format`) is used in CI — it reports violations without modifying files.
@@ -149,6 +151,7 @@ Both must pass before a PR can be merged. `format:check` (not `format`) is used 
 ### VS Code (Recommended)
 
 Install these extensions:
+
 - **ESLint** (`dbaeumer.vscode-eslint`) — inline lint errors
 - **Prettier** (`esbenp.prettier-vscode`) — format on save
 - **Svelte for VS Code** (`svelte.svelte-vscode`) — Svelte language support

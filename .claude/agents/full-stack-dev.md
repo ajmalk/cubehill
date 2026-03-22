@@ -33,25 +33,30 @@ Follow the design artifacts in `designs/` and the Architect's implementation not
 Read `CLAUDE.md` for full conventions. Key rules:
 
 ### Cube State
+
 - Use `number[54]` array as the state representation
 - State is **immutable** — always return a new array from move functions
 - This is the single source of truth for the cube
 
 ### Three.js
+
 - Initialize only in `onMount` — never at module level
 - After each animation, reset cubies to canonical positions and re-color from logical state
 - Use `ResizeObserver` for canvas sizing
 - Read DaisyUI CSS variables for canvas background color
 
 ### SSR Safety
+
 - `three` and `ninja-keys` require browser APIs — use `onMount` or `{#if browser}` guards
 - Never import them at the top level of `.svelte` files
 
 ### Routing
+
 - Prefix all links and `goto()` calls with `base` from `$app/paths`
 - Export `entries()` from `[id]/+page.ts` for static prerendering
 
 ### Svelte 5
+
 - Use `$state` runes in `.svelte.ts` files for reactive state
 - Prefer runes over legacy `writable`/`readable` store API
 

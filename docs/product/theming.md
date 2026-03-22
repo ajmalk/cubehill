@@ -7,8 +7,12 @@ This document describes the DaisyUI theme system, theme selection, and theme-awa
 DaisyUI themes are applied via the `data-theme` attribute on the `<html>` element. Switching themes is as simple as changing this attribute — no JavaScript runtime, no CSS-in-JS, no class toggling on individual elements.
 
 ```html
-<html data-theme="dark">  <!-- All DaisyUI components render in dark mode -->
-<html data-theme="light"> <!-- All DaisyUI components render in light mode -->
+<html data-theme="dark">
+  <!-- All DaisyUI components render in dark mode -->
+  <html data-theme="light">
+    <!-- All DaisyUI components render in light mode -->
+  </html>
+</html>
 ```
 
 ### Configured Themes
@@ -34,9 +38,9 @@ The `ninja-keys` web component supports theming via CSS custom properties. It ca
 
 ```css
 ninja-keys {
-  --ninja-accent-color: oklch(var(--p));      /* DaisyUI primary */
-  --ninja-text-color: oklch(var(--bc));        /* DaisyUI base content */
-  --ninja-modal-background: oklch(var(--b1));  /* DaisyUI base background */
+  --ninja-accent-color: oklch(var(--p)); /* DaisyUI primary */
+  --ninja-text-color: oklch(var(--bc)); /* DaisyUI base content */
+  --ninja-modal-background: oklch(var(--b1)); /* DaisyUI base background */
 }
 ```
 

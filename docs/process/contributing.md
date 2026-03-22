@@ -28,6 +28,7 @@ Each page has exactly one owner. The owner writes and maintains the page. Other 
 - Use ASCII diagrams for data flow and hierarchy — keep them simple enough to read in a terminal
 - Write in present tense ("The store manages..." not "The store will manage...")
 - Document the *why* behind decisions, not just the *what*
+- **Mermaid diagrams**: After creating or modifying a Mermaid diagram, visually verify the rendered output (via GitHub or a Mermaid preview) before merging. Keep node labels to 2-5 words and edge labels to 1-3 words. See the "Diagram Quality" section in each agent's instruction file for the full checklist.
 
 ### Naming
 

@@ -80,6 +80,16 @@ The `designs/` folder stores Figma screenshot exports and text-based notes as re
 2. Take a screenshot: `figma_take_screenshot()`
 3. Save the screenshot to `designs/` with a descriptive name
 
+## Diagram Quality
+
+When creating or editing Mermaid diagrams in docs:
+
+1. **Verify rendered output**: After adding or modifying a Mermaid diagram, use the Playwright browser tools to view the rendered diagram on GitHub (or a Mermaid preview) and take a screenshot. Inspect for layout issues — overlapping labels, excessive width, unbalanced spacing, or unreadable text.
+2. **Keep labels short**: Node labels should be 2-5 words max. Edge labels should be 1-3 words. Put details in surrounding prose, not in the diagram.
+3. **Avoid multi-line labels**: Multi-line strings (`\n`) in nodes and edges cause layout problems. Use them sparingly and only when essential.
+4. **Minimize subgraphs**: Each subgraph adds width. Prefer flat graphs with styling over nested subgraphs.
+5. **Iterate on issues**: If the rendered diagram has visual problems, fix and re-check. Never merge a diagram you haven't visually verified.
+
 ## Browser Tools
 
 You have access to Playwright MCP browser tools for testing the running app. See `docs/process/browser-tools.md` for the full reference. Key workflows for UX:

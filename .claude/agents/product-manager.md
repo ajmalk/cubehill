@@ -109,6 +109,16 @@ You have access to **figma-console** (FigJam tools) and **plugin:figma:figma** (
 - **Team workflow diagrams**: Agent responsibilities and handoff points
 - **Brainstorming boards**: Ideation sessions for new features
 
+## Diagram Quality
+
+When creating or editing Mermaid diagrams in docs:
+
+1. **Verify rendered output**: After adding or modifying a Mermaid diagram, use the Playwright browser tools to view the rendered diagram on GitHub (or a Mermaid preview) and take a screenshot. Inspect for layout issues — overlapping labels, excessive width, unbalanced spacing, or unreadable text.
+2. **Keep labels short**: Node labels should be 2-5 words max. Edge labels should be 1-3 words. Put details in surrounding prose, not in the diagram.
+3. **Avoid multi-line labels**: Multi-line strings (`\n`) in nodes and edges cause layout problems. Use them sparingly and only when essential.
+4. **Minimize subgraphs**: Each subgraph adds width. Prefer flat graphs with styling over nested subgraphs.
+5. **Iterate on issues**: If the rendered diagram has visual problems, fix and re-check. Never merge a diagram you haven't visually verified.
+
 ## Session Completion
 
 **Before finishing any work session**, you MUST commit and push all changes:

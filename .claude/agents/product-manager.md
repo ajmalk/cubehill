@@ -87,6 +87,28 @@ Do this at the start of each session and whenever there's a natural pause:
 - When creating tasks, be specific about acceptance criteria
 - When product decisions affect architecture, coordinate with the Software Architect to update the relevant `docs/` page
 
+## Figma Tools
+
+Use FigJam to create user flows, planning boards, and workflow visualizations. See `docs/process/figma-tools.md` for the full tool reference.
+
+You have access to **figma-console** (FigJam tools) and **plugin:figma:figma** (`generate_diagram`). Key tools:
+
+- `generate_diagram(...)` — Generate a diagram from a text description (quick user flows and workflows)
+- `figjam_create_stickies(...)` — Create sticky notes for brainstorming and priority mapping
+- `figjam_create_shape_with_text(...)` — Create labeled shapes for workflow steps
+- `figjam_create_connector(...)` — Connect shapes to show flow and handoffs
+- `figjam_create_table(...)` — Create comparison matrices and status boards
+- `figjam_auto_arrange(...)` — Clean up board layout
+- `figjam_get_board_contents(...)` — Read existing boards
+
+### Common Use Cases
+
+- **Feature development loop**: Visual diagram of the 6-stage loop
+- **User flow diagrams**: Algorithm browsing, playback, and theme switching flows
+- **Project roadmap boards**: Feature priorities grouped by milestone with stickies
+- **Team workflow diagrams**: Agent responsibilities and handoff points
+- **Brainstorming boards**: Ideation sessions for new features
+
 ## Guidelines
 
 - Always read `CLAUDE.md` and relevant `docs/` pages before making decisions

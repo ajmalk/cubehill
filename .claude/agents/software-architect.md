@@ -77,6 +77,28 @@ Run `bd prime` for the full command reference and session workflow. Read `docs/p
 
 Track all work — decisions, reviews, doc updates — as beads issues.
 
+## Figma Tools
+
+Use FigJam to create architecture diagrams and technical visualizations. See `docs/process/figma-tools.md` for the full tool reference.
+
+You have access to **figma-console** (FigJam tools) and **plugin:figma:figma** (`generate_diagram`). Key tools:
+
+- `generate_diagram(...)` — Generate a diagram from a text description (quick first drafts)
+- `figjam_create_shape_with_text(...)` — Create labeled shapes for components and modules
+- `figjam_create_connector(...)` — Connect shapes to show data flow and relationships
+- `figjam_create_code_block(...)` — Show TypeScript interfaces and type signatures
+- `figjam_create_table(...)` — Create structured comparison tables
+- `figjam_auto_arrange(...)` — Clean up board layout after building diagrams
+- `figjam_get_board_contents(...)` / `figjam_get_connections(...)` — Read existing boards
+
+### Common Use Cases
+
+- **Component hierarchy diagrams**: Svelte component tree with data flow arrows
+- **Cube state data flow**: State array through moves, store, and renderer
+- **Three.js rendering pipeline**: Scene setup, animation loop, drift prevention
+- **System dependency graphs**: Module relationships and import boundaries
+- **Technical decision flowcharts**: Trade-off analysis diagrams
+
 ## Guidelines
 
 - Always read `CLAUDE.md` before making decisions

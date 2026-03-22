@@ -28,20 +28,23 @@ The PM decides what to build next based on project goals, user needs, and team c
 **Owner**: UX Designer
 **Collaborator**: Cubing Advisor (for domain-specific UX)
 
-The UX Designer creates a design for the feature before any code is written.
+The UX Designer creates a design for the feature before any code is written. Figma is the primary design tool.
 
-- Create design artifacts in the `designs/` folder (the UX Designer owns this folder)
+- Create designs in Figma using the figma-console MCP tools (see `docs/process/figma-tools.md`)
 - Design covers: layout, interaction patterns, responsive behavior, accessibility
 - Consult the Cubing Advisor for domain-specific decisions (e.g., how to display algorithms, what information beginners need)
 - Use Playwright MCP browser tools for visual reference if iterating on existing UI
+- Follow the mandatory visual validation workflow: create, screenshot, analyze, iterate
 
 **Design artifacts** may include:
+- Figma designs (frames, components, auto-layout, design tokens)
+- Figma screenshots exported to `designs/` as reference artifacts
 - Text-based layout descriptions (component placement, sizing, spacing)
 - Interaction flow descriptions (what happens on click, hover, keyboard)
 - Responsive breakpoint behavior (mobile vs desktop layout)
 - Accessibility notes (keyboard navigation, screen reader labels)
 
-**Handoff artifact**: Design file(s) in `designs/` linked from the beads issue.
+**Handoff artifact**: Figma designs with screenshots exported to `designs/`, linked from the beads issue.
 
 **When to skip**: Pure backend/engine tasks with no UI component (e.g., notation parser, move permutation cycles).
 
@@ -58,7 +61,7 @@ The Architect reviews the design and works out the technical approach.
 - Update relevant technical docs (`docs/technical/`) if the approach introduces new patterns
 - Add implementation notes to the beads issue describing the technical approach
 
-**Handoff artifact**: Implementation notes on the beads issue (components to create/modify, data flow, dependencies). Updated technical docs if needed.
+**Handoff artifact**: Updated `docs/technical/` page with the implementation approach (component interfaces, data flow, state changes, any new types). The wiki is the source of truth — not comments or separate design docs. For simple features with no new patterns, a beads issue comment confirming "no technical concerns" is sufficient.
 
 **When to skip**: Simple tasks where the technical approach is obvious from the design and existing docs.
 
@@ -70,7 +73,7 @@ The Architect reviews the design and works out the technical approach.
 The developer implements the feature following the design and technical notes.
 
 - Claim the beads issue (`bd update <id> --claim`)
-- Follow the design artifacts in `designs/`
+- Follow the design artifacts in `designs/` and Figma designs (use plugin:figma:figma MCP tools to read designs — see `docs/process/figma-tools.md`)
 - Follow the technical approach from Stage 3
 - Write tests alongside the code (unit tests for engine, validation tests for data)
 - Ask the Architect if implementation reveals a design gap — create a beads issue for the gap

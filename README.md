@@ -59,6 +59,7 @@ Detailed documentation lives in [`docs/`](docs/):
 |------|-------------|
 | [feature-development.md](docs/process/feature-development.md) | 6-stage feature development loop |
 | [browser-tools.md](docs/process/browser-tools.md) | Playwright MCP browser tools for agents |
+| [figma-tools.md](docs/process/figma-tools.md) | Figma MCP tools for design creation and implementation |
 | [contributing.md](docs/process/contributing.md) | Best practices for contributing to the wiki |
 | [issue-tracking.md](docs/process/issue-tracking.md) | Issue tracking standards |
 

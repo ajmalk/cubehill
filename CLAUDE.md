@@ -55,6 +55,7 @@ See `docs/` for detailed documentation:
 **Process** (`docs/process/`):
 - `feature-development.md` — 6-stage feature development loop
 - `browser-tools.md` — Playwright MCP browser tools for agents
+- `figma-tools.md` — Figma MCP tools for design creation and implementation
 - `contributing.md` — Best practices for contributing to the wiki
 - `issue-tracking.md` — Beads issue tracking standards and best practices
 

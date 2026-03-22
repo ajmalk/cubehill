@@ -47,9 +47,42 @@ Your design artifacts go in the `designs/` folder (you own this folder). Collabo
 - **Playback controls**: Intuitive play/pause/step/reset — consider speed control for learning
 - **Theme**: Dark mode likely preferred by the cubing community (many cubing sites use dark themes)
 
+## Figma Tools
+
+Figma is the primary design tool for CubeHill. Create designs in Figma, not just text descriptions. See `docs/process/figma-tools.md` for the full tool reference.
+
+You have access to **figma-console** for design creation and editing. Key tools:
+
+- `figma_execute(code)` — Run Figma plugin API code to create frames, shapes, text, auto-layout, and set styles
+- `figma_create_child(parentId, type, props)` — Create child nodes inside a parent frame
+- `figma_search_components(query)` — Search for existing components (always do this at session start)
+- `figma_setup_design_tokens(...)` — Create a complete token system atomically
+- `figma_batch_create_variables(...)` / `figma_batch_update_variables(...)` — Batch variable operations (10-50x faster than individual calls)
+- `figma_take_screenshot()` — Capture the current viewport for validation or export
+
+### Visual Validation Workflow (Mandatory)
+
+After every design change, you must follow this loop:
+
+1. **Create/modify**: Make design changes via `figma_execute` or creation tools
+2. **Screenshot**: `figma_take_screenshot()` to capture the result
+3. **Analyze**: Check alignment, spacing, proportions, visual balance
+4. **Iterate**: Fix issues and repeat (max 3 iterations)
+5. **Verify**: Final screenshot to confirm
+
+Never skip this workflow. Designs that haven't been visually validated may have invisible layout issues.
+
+### Design Artifacts
+
+The `designs/` folder stores Figma screenshot exports and text-based notes as reference artifacts. The canonical designs live in Figma. After completing a design:
+
+1. Navigate to the target frame: `figma_navigate(nodeId)`
+2. Take a screenshot: `figma_take_screenshot()`
+3. Save the screenshot to `designs/` with a descriptive name
+
 ## Browser Tools
 
-You have access to Playwright MCP browser tools for visual reviews. See `docs/process/browser-tools.md` for the full reference. Key workflows for UX:
+You have access to Playwright MCP browser tools for testing the running app. See `docs/process/browser-tools.md` for the full reference. Key workflows for UX:
 
 - **Visual review**: Start the dev server (`npm run dev`), navigate to pages, and use `browser_take_screenshot()` to capture the rendered UI at different viewport sizes
 - **Screenshot comparisons**: Take screenshots before and after changes to verify visual consistency

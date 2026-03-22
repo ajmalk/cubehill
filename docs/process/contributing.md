@@ -35,6 +35,17 @@ Each page has exactly one owner. The owner writes and maintains the page. Other 
 - Reference files with their path from the project root (e.g., `src/lib/cube/CubeState.ts`)
 - Use standard cubing notation names (OLL, PLL, Sune, T Perm) — don't invent abbreviations
 
+## Keeping Docs Listings in Sync
+
+**Whenever a doc page is added, removed, or renamed, you MUST update the docs listings in both `CLAUDE.md` and `README.md` in the same commit.** This has been missed multiple times — treat it as a hard rule, not a nice-to-have.
+
+Checklist before committing a docs change that adds, removes, or renames a page:
+
+1. Update the `Project Architecture` section in `CLAUDE.md`
+2. Update the corresponding section in `README.md`
+3. Update the cross-reference pairs table in this file (if the change involves a technical/product pair)
+4. All three updates go in the same commit as the new/renamed/removed page
+
 ## When to Create a New Page vs. Update an Existing One
 
 **Create a new page** when:

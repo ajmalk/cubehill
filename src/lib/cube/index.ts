@@ -28,3 +28,6 @@ export { solved } from './CubeState.js';
 
 // Moves
 export { applyMove, applyAlgorithm, invertAlgorithm } from './moves.js';
+
+// Notation
+export { parseNotation } from './notation.js';

@@ -4,7 +4,7 @@ This document describes the project structure, data flow, and key architectural 
 
 ## Project Structure
 
-The tree below shows the **target** structure. Items marked with `*` exist after Phase 1 scaffolding; unmarked items are planned for later phases.
+The tree below shows the **target** structure. Items marked with `*` exist after Phase 2 (Cube State Engine); unmarked items are planned for later phases.
 
 ```
 cubehill/
@@ -23,11 +23,13 @@ cubehill/
 │   │   ├── index.ts *                  # $lib barrel file
 │   │   ├── assets/
 │   │   │   └── favicon.svg *           # Site favicon
-│   │   ├── cube/                       # Cube state engine (pure TypeScript)
-│   │   │   ├── CubeState.ts            # 54-sticker state model
-│   │   │   ├── notation.ts             # Algorithm notation parser
-│   │   │   ├── moves.ts               # Move definitions (permutation cycles)
-│   │   │   └── colors.ts              # Color enum and constants
+│   │   ├── cube/ *                      # Cube state engine (pure TypeScript)
+│   │   │   ├── index.ts *              # Public API barrel file
+│   │   │   ├── types.ts *              # Move, Algorithm, and PLL pattern types
+│   │   │   ├── CubeState.ts *          # 54-sticker state model (solved())
+│   │   │   ├── notation.ts *           # Algorithm notation parser
+│   │   │   ├── moves.ts *             # Move definitions (permutation cycles)
+│   │   │   └── colors.ts *            # Color enum, hex constants, face indices
 │   │   ├── three/                      # Three.js rendering layer
 │   │   │   ├── CubeScene.ts           # Scene, camera, lights, renderer
 │   │   │   ├── CubeMesh.ts            # 26 cubies with sticker faces
@@ -36,7 +38,7 @@ cubehill/
 │   │   ├── data/                       # Static algorithm data
 │   │   │   ├── oll.ts                 # 57 OLL cases
 │   │   │   └── pll.ts                 # 21 PLL cases
-│   │   ├── types.ts                   # Shared TypeScript types
+│   │   ├── types.ts                   # Shared TypeScript types (if needed beyond cube/types.ts)
 │   │   ├── stores/                     # Reactive state (Svelte 5 runes)
 │   │   │   ├── cubeStore.svelte.ts    # Cube state + playback
 │   │   │   └── themeStore.svelte.ts   # Dark/light mode preference

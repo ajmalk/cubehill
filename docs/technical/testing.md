@@ -56,8 +56,9 @@ High-value targets in the cube engine — all pure TypeScript, no DOM or framewo
 
 | Area              | What to Test                                                                                                                                                                                                                       |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `colors.ts`       | Color enum values match face indices; COLOR_HEX and COLOR_CSS have entries for all 6 colors; FACE_INDICES ranges are correct and non-overlapping; FACE_COLOR maps each face to the right color                                     |
 | `CubeState.ts`    | `solved()` returns correct initial state; state is a 54-element array; color values are correct                                                                                                                                    |
-| `moves.ts`        | Each face move produces the correct permutation; prime moves reverse clockwise moves; double moves equal two clockwise moves; `applyMove` returns a new array (immutability)                                                       |
+| `moves.ts`        | Each face move produces the correct permutation; prime moves reverse clockwise moves; double moves equal two clockwise moves; `applyMove` returns a new array (immutability); slice moves; wide moves; whole-cube rotations        |
 | `notation.ts`     | Parses basic moves (R, U, F); parses modifiers (R', R2); parses wide moves (Rw, r); parses slices (M, E, S); parses rotations (x, y, z); handles whitespace; throws on invalid tokens                                              |
 | `invertAlgorithm` | Inverse of inverse equals original; applying algorithm then inverse returns to solved state                                                                                                                                        |
 | Algorithm data    | All 57 OLL cases present with valid fields; all 21 PLL cases present; no duplicate IDs; all IDs are URL-safe; all notations parse without error; OLL patterns are boolean[9] with center true; PLL patterns are PermutationArrow[] |
@@ -83,12 +84,21 @@ E2E tests run against `npm run build && npm run preview` to test the production 
 
 Unit tests are co-located with their source files (`*.test.ts` next to the module). E2E tests live in a top-level `tests/e2e/` directory. Vitest is configured inside `vite.config.ts` (not a separate `vitest.config.ts`).
 
-### Current State (Post-Phase 1)
+### Current State (Post-Phase 2)
 
 ```
 cubehill/
 ├── src/lib/
-│   └── smoke.test.ts                  # Smoke unit test (trivial assertions)
+│   ├── smoke.test.ts                  # Smoke unit test (trivial assertions)
+│   └── cube/
+│       ├── CubeState.ts
+│       ├── CubeState.test.ts          # Cube state unit tests
+│       ├── colors.ts
+│       ├── colors.test.ts             # Color enum and constants tests
+│       ├── moves.ts
+│       ├── moves.test.ts              # Move permutation and algorithm tests
+│       ├── notation.ts
+│       └── notation.test.ts           # Notation parser tests
 ├── tests/e2e/
 │   └── smoke.test.ts                  # E2E smoke test (page loads)
 ├── vite.config.ts                     # Vitest configured here
@@ -102,14 +112,12 @@ cubehill/
 ├── src/lib/
 │   ├── smoke.test.ts                  # Smoke unit test
 │   └── cube/
-│       ├── CubeState.ts
-│       ├── CubeState.test.ts          # Co-located unit tests
-│       ├── moves.ts
-│       ├── moves.test.ts
-│       ├── notation.ts
-│       └── notation.test.ts
+│       ├── CubeState.test.ts          # (exists)
+│       ├── colors.test.ts             # (exists)
+│       ├── moves.test.ts              # (exists)
+│       └── notation.test.ts           # (exists)
 ├── tests/e2e/
-│   ├── smoke.test.ts                  # E2E: basic page load
+│   ├── smoke.test.ts                  # E2E: basic page load (exists)
 │   ├── navigation.test.ts            # E2E: page navigation and routing
 │   ├── algorithm-browse.test.ts      # E2E: algorithm listing and detail pages
 │   ├── playback.test.ts              # E2E: 3D viewer playback controls

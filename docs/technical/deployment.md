@@ -387,7 +387,7 @@ After `npm run build`, the `build/` directory will contain (target structure wit
 
 ```
 build/
-├── .nojekyll                         # Must add static/.nojekyll first
+├── .nojekyll                         # Copied from static/.nojekyll
 ├── index.html                    # Home page
 ├── 404.html                      # Fallback 404 page
 ├── oll/

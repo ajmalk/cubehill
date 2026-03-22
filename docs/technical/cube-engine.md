@@ -78,6 +78,13 @@ enum Color {
 
 This follows the standard Western color scheme with White on top and Green facing the solver.
 
+The `colors.ts` module also exports:
+
+- **`COLOR_HEX`**: `Record<Color, number>` — hex color values for Three.js sticker rendering (e.g., `0xc41e3a` for Red)
+- **`COLOR_CSS`**: `Record<Color, string>` — CSS hex strings for 2D rendering (e.g., `'#c41e3a'` for Red)
+- **`FACE_INDICES`**: Maps each face letter to its `{ start, end }` index range in the state array
+- **`FACE_COLOR`**: `Record<string, Color>` — maps each face letter to its solved color
+
 ## Immutability
 
 The cube state is **immutable**. Every function that modifies the state returns a **new** array:
@@ -159,9 +166,11 @@ B, B', B2    (Back)
 
 **Whole-cube rotations**:
 
-- `x` — Rotate entire cube in the R direction
-- `y` — Rotate entire cube in the U direction
-- `z` — Rotate entire cube in the F direction
+- `x` — Rotate entire cube in the R direction (`R` + `M'` + `L'`)
+- `y` — Rotate entire cube in the U direction (`U` + `E'` + `D'`)
+- `z` — Rotate entire cube in the F direction (`F` + `S` + `B'`)
+
+Rotation cycles are computed at module load time by composing the constituent face and slice moves on an identity permutation and extracting the resulting 4-cycles. This avoids manually specifying all 12+ cycles for each rotation.
 
 ## Notation Parser
 
@@ -211,7 +220,7 @@ Wide moves (e.g., `Rw`, `r`) are represented with `base: 'R'` and `wide: true`, 
 
 ### Edge Cases
 
-- **`R2'` (multi-char modifier)**: The modifier `2'` means "double move, then reverse" — which is equivalent to `R2` (since a 180° turn is its own inverse). The parser handles this by checking for both `2` and `'` after the base: if both are present (`2'` or `2'`), normalize to modifier `'2'`. The `Modifier` type only stores `'2'` — the prime is redundant and dropped.
+- **`R2'` (multi-char modifier)**: The modifier `2'` means "double move, then reverse" — which is equivalent to `R2` (since a 180° turn is its own inverse). The parser handles this by checking for both `2` and `'` after the base: if both are present (`2'` or `2'`), normalize to modifier `2`. The prime is redundant and dropped.
 - **Lowercase letters**: `r`, `u`, `f`, etc. are interpreted as wide moves. The parser normalizes `r` → `{ base: 'R', modifier: '', wide: true }`.
 - **Unknown tokens**: Throw a clear error with the invalid token string, e.g., `"Unknown move token: 'Q'"`.
 - **Whitespace tolerance**: Multiple spaces between tokens are handled by splitting on `/\s+/`.

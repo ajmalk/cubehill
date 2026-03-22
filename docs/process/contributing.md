@@ -28,7 +28,7 @@ Each page has exactly one owner. The owner writes and maintains the page. Other 
 - Use ASCII diagrams for data flow and hierarchy — keep them simple enough to read in a terminal
 - Write in present tense ("The store manages..." not "The store will manage...")
 - Document the *why* behind decisions, not just the *what*
-- **Mermaid diagrams**: After creating or modifying a Mermaid diagram, visually verify the rendered output (via GitHub or a Mermaid preview) before merging. Keep node labels to 2-5 words and edge labels to 1-3 words. See the "Diagram Quality" section in each agent's instruction file for the full checklist.
+- **Diagrams**: D2 is the preferred tool for technical diagrams (see "Diagrams with D2" below). Mermaid is fine for simple inline diagrams. After creating or modifying any diagram, visually verify the rendered output before merging. Keep node labels to 2-5 words and edge labels to 1-3 words. See the "Diagram Quality" section in each agent's instruction file for the full checklist.
 
 ### Naming
 
@@ -92,6 +92,31 @@ For theme selection UX, see [Product: Theming](../product/theming.md).
 | `algorithm-data-model.md` | `algorithms.md` |
 | `components.md` | `pages-and-layout.md` |
 | `theme-integration.md` | `theming.md` |
+
+## Diagrams with D2
+
+[D2](https://d2lang.com/) is the preferred tool for technical diagrams embedded in docs. Mermaid is still fine for simple inline diagrams, and FigJam for brainstorming and spatial work, but D2 produces cleaner rendered output for anything committed to the wiki.
+
+### Workflow
+
+1. Create D2 source files in `docs/technical/diagrams/` (or `docs/*/diagrams/` for other doc areas)
+2. Render to SVG in `docs/*/images/`: `d2 input.d2 output.svg`
+3. Commit both the `.d2` source and the rendered `.svg`
+4. Embed in markdown: `![Alt text](images/filename.svg)`
+
+### Commands
+
+```bash
+d2 input.d2 output.svg          # Render diagram to SVG
+d2 --watch input.d2 output.svg  # Live preview while editing
+```
+
+### Style Guidelines
+
+- Keep node labels to 2-5 words and edge labels to 1-3 words
+- Put details in surrounding prose, not in the diagram
+- Add a source note below the image: `> Source: \`diagrams/filename.d2\``
+- Visually verify the rendered SVG before committing
 
 ## How to Flag Docs That Need Updates
 

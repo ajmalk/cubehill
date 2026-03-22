@@ -10,6 +10,7 @@ A speedcubing algorithm visualizer — a static web app with a 3D Rubik's cube, 
 - **Command Palette**: ninja-keys (web component)
 - **Styling**: DaisyUI + Tailwind CSS
 - **Language**: TypeScript
+- **Diagrams**: D2
 - **Hosting**: GitHub Pages
 
 ## Commands
@@ -19,6 +20,15 @@ npm run dev          # Start dev server
 npm run build        # Build static site to build/
 npm run preview      # Preview production build locally
 ```
+
+### Diagrams (D2)
+
+```bash
+d2 input.d2 output.svg          # Render D2 diagram to SVG
+d2 --watch input.d2 output.svg  # Live preview while editing
+```
+
+D2 source files live in `docs/*/diagrams/`, rendered SVGs in `docs/*/images/`. See `docs/process/contributing.md` for the full workflow.
 
 ## Knowledge Management
 

@@ -1,0 +1,32 @@
+direction: right
+
+start: {
+  shape: circle
+  style.fill: black
+  width: 30
+  height: 30
+}
+
+Idle: {
+  shape: rectangle
+  style.border-radius: 8
+}
+
+Animating: {
+  shape: rectangle
+  style.border-radius: 8
+}
+
+Paused: {
+  shape: rectangle
+  style.border-radius: 8
+}
+
+start -> Idle
+
+Idle -> Animating: play / step
+Animating -> Idle: done / reset / new alg
+Animating -> Animating: next move
+Animating -> Paused: pause
+Paused -> Animating: play / step
+Paused -> Idle: reset / new alg

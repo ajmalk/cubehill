@@ -42,6 +42,7 @@ See `docs/` for detailed documentation:
 - `deployment.md` — GitHub Pages deployment setup
 - `algorithm-data-model.md` — Algorithm TypeScript types and interfaces
 - `components.md` — Svelte component APIs, stores, keyboard controls, command palette
+- `testing.md` — Testing strategy, framework choices, what to test, CI integration
 - `theme-integration.md` — Theme store, FOUC prevention, CSS variable sync with Three.js
 
 **Product** (`docs/product/`):

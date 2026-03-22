@@ -61,6 +61,7 @@ See `docs/` for detailed documentation:
 - `algorithms.md` — OLL/PLL case inventory, grouping tables, learning priority
 - `pages-and-layout.md` — Pages, responsive layout, navigation
 - `theming.md` — DaisyUI theme system, theme-aware components
+- `roadmap.md` — 10-phase development roadmap, dependencies, critical path
 
 **Process** (`docs/process/`):
 - `feature-development.md` — 6-stage feature development loop

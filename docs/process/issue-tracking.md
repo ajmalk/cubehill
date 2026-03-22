@@ -83,8 +83,7 @@ bd create "Add touch gesture handling for mobile cube interaction" \
 Use dependencies to sequence work:
 
 ```bash
-bd dep add <id> --blocks <other-id>    # This issue blocks another
-bd dep add <id> --relates-to <other-id> # Related but not blocking
+bd dep add <issue> <depends-on>    # issue depends on depends-on
 ```
 
 `bd ready` only shows issues with no open blockers — so dependencies automatically control what's available to work on.
@@ -107,7 +106,7 @@ Epics correspond to implementation phases. Each phase from the project plan shou
 The Product Manager is responsible for keeping the issue tracker healthy:
 
 ### Start of Session
-- Run `bd status` for an overview
+- Run `bd stats` for an overview
 - Run `bd ready` to see what's available
 - Run `bd stale` to find issues that haven't been updated recently
 
@@ -125,7 +124,7 @@ bd list -a "full-stack-dev"          # Issues by assignee
 bd list -l "critical"               # Issues by label
 bd list --status in_progress         # What's being worked on
 bd stale                             # Issues not updated recently
-bd status                            # Overview and statistics
+bd stats                            # Overview and statistics
 ```
 
 ## Session Workflow (All Agents)
@@ -135,4 +134,4 @@ bd status                            # Overview and statistics
 3. Do the work
 4. `bd close <id>` — mark done
 5. If you discover additional work, `bd create` new issues
-6. End of session: `bd sync`, `git push`
+6. End of session: `bd dolt push`, `git push`

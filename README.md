@@ -48,4 +48,4 @@ Read [`CLAUDE.md`](CLAUDE.md) for project conventions, key architectural decisio
 
 ## License
 
-TBD
+[MIT](LICENSE)

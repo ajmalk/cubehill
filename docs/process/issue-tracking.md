@@ -139,6 +139,44 @@ bd stale                             # Issues not updated recently
 bd stats                            # Overview and statistics
 ```
 
+## GitHub Issues + Beads
+
+This project uses two tracking systems at different levels of granularity:
+
+| System | Scope | Audience | Lifetime |
+|--------|-------|----------|----------|
+| **GitHub Issues** | High-level epics, milestones, significant bugs | Stakeholders, contributors, public | Long-lived |
+| **Beads** | Granular implementation tasks for agents | Development team (agents) | Short-lived |
+
+### How They Relate
+
+- Each **milestone** in GitHub corresponds to a project phase (Phase 1-10)
+- Each **epic issue** in GitHub corresponds to a beads epic and references it by ID
+- Each **beads epic** should note its GitHub Issue number in its notes field
+- Granular child tasks live only in beads -- they are too fine-grained for GitHub Issues
+
+### Responsibilities
+
+- **PM** creates and maintains GitHub Issues for new epics and significant bugs
+- **PM** keeps milestone progress up to date (close issues when epics complete)
+- Each GitHub Issue body includes a `Granular tasks tracked in beads under cubehill-XXX` note
+- Each beads epic should have `gh#N` in its notes (use `bd update <id> --notes "gh#N"`)
+
+### Cross-Reference Table
+
+| GitHub Issue | Milestone | Beads Epic |
+|-------------|-----------|------------|
+| #1 Project Scaffolding | Phase 1 | `cubehill-at3` |
+| #2 Cube State Engine | Phase 2 | `cubehill-7kx` |
+| #3 Three.js 3D Renderer | Phase 3 | `cubehill-vak` |
+| #4 Svelte Integration | Phase 4 | `cubehill-1wv` |
+| #5 Algorithm Data & Browse UI | Phase 5 | `cubehill-3j2` |
+| #6 Command Palette | Phase 6 | `cubehill-cpj` |
+| #7 Keyboard Controls | Phase 7 | `cubehill-ppi` |
+| #8 Theming | Phase 8 | `cubehill-n6o` |
+| #9 Navbar & Navigation | Phase 9 | `cubehill-3ur` |
+| #10 Deployment & Final QA | Phase 10 | `cubehill-8fz` |
+
 ## Session Workflow (All Agents)
 
 1. `bd ready` — find available work

@@ -138,5 +138,5 @@ This document explains the technology choices for CubeHill and the reasoning beh
 ### Configuration required
 
 - `paths.base` set to `/cubehill` in production (GitHub Pages serves from a subpath).
-- `trailingSlash: 'always'` for correct route resolution.
+- `trailingSlash: 'always'` exported from `src/routes/+layout.ts` (a route-level setting, not a `svelte.config.js` option) for correct route resolution.
 - `adapter-static` with `fallback: '404.html'`.

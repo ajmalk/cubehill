@@ -17,18 +17,15 @@ DaisyUI themes are applied via the `data-theme` attribute on the `<html>` elemen
 
 ### Configured Themes
 
-The `tailwind.config.js` configures exactly two themes:
+With Tailwind v4 and DaisyUI v5, there is no `tailwind.config.js`. Tailwind and plugins are configured via CSS in `src/app.css`:
 
-```javascript
-module.exports = {
-  // ...
-  daisyui: {
-    themes: ['light', 'dark'],
-  },
-};
+```css
+@import 'tailwindcss';
+@plugin 'daisyui';
+@plugin '@tailwindcss/typography';
 ```
 
-DaisyUI ships with 35+ themes, but CubeHill uses only `light` and `dark` to keep the UI focused. These themes define CSS custom properties (e.g., `--b1` for base background, `--bc` for base content/text, `--p` for primary color) that all DaisyUI components consume.
+DaisyUI v5 includes `light` and `dark` themes by default -- no explicit theme configuration is needed. CubeHill uses only these two built-in themes to keep the UI focused. The themes define CSS custom properties (e.g., `--b1` for base background, `--bc` for base content/text, `--p` for primary color) that all DaisyUI components consume.
 
 ## Theme-Aware Components
 

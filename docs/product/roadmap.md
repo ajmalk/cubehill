@@ -28,7 +28,7 @@ flowchart TD
 
 ## Current Status
 
-**Phase 1 is complete.** Phases 2, 3, and 6 are now unblocked and can start in parallel.
+**Phases 1 and 2 are complete.** Phase 4 is now blocked only on Phase 3. Phases 3 and 6 are unblocked and can start in parallel.
 
 ## Phases
 
@@ -50,7 +50,7 @@ SvelteKit setup with all dependencies, configuration, and infrastructure in plac
 
 ---
 
-### Phase 2: Cube State Engine
+### Phase 2: Cube State Engine -- COMPLETE
 
 **Issue**: `cubehill-7kx` / [#2](https://github.com/ajmalk/cubehill/issues/2)
 
@@ -58,11 +58,15 @@ Pure TypeScript cube state model with no rendering — the logical foundation th
 
 **Key deliverables:**
 
-- `CubeState` type — immutable `number[54]` array
+- `CubeState` as immutable `number[54]` array with `solved()` constructor
+- `Color` enum with hex constants for Three.js and CSS rendering
 - Move functions for all face turns (U, D, L, R, F, B) with modifiers (prime, double)
-- Algorithm notation parser (string to move sequence)
-- Inverse algorithm generation
-- Comprehensive unit tests
+- Slice moves (M, E, S) and wide moves (Rw, Uw, etc.)
+- Whole-cube rotations (x, y, z)
+- Algorithm notation parser (string to move sequence, including lowercase wide shorthand)
+- Inverse algorithm generation (`invertAlgorithm`)
+- Algorithm data model types (`BaseAlgorithm`, `OllAlgorithm`, `PllAlgorithm`, `PermutationArrow`)
+- 135 unit tests across 5 test files
 
 **Dependencies:** Phase 1.
 

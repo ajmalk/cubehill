@@ -35,15 +35,23 @@ When agents work in parallel on code, use `isolation: "worktree"` to give each a
 
 See `docs/` for detailed documentation:
 
-- `docs/stack.md` — Stack choices and reasoning
-- `docs/architecture.md` — Project structure and data flow
-- `docs/cube-engine.md` — Cube state model, moves, notation parsing
-- `docs/rendering.md` — Three.js 3D rendering and animation
-- `docs/algorithms.md` — Algorithm data model, OLL/PLL cases
-- `docs/ui.md` — UI components, routing, command palette, keyboard controls
-- `docs/theming.md` — DaisyUI theming, dark/light mode
-- `docs/deployment.md` — GitHub Pages deployment setup
-- `docs/issue-tracking.md` — Beads issue tracking standards and best practices
+**Technical** (`docs/technical/`):
+- `architecture.md` — Project structure and data flow
+- `cube-engine.md` — Cube state model, moves, notation parsing
+- `rendering.md` — Three.js 3D rendering and animation
+- `deployment.md` — GitHub Pages deployment setup
+- `algorithm-data-model.md` — Algorithm TypeScript types and interfaces
+- `components.md` — Svelte component APIs, stores, keyboard controls, command palette
+- `theme-integration.md` — Theme store, FOUC prevention, CSS variable sync with Three.js
+
+**Product** (`docs/product/`):
+- `stack-decisions.md` — Stack choices and reasoning
+- `algorithms.md` — OLL/PLL case inventory, grouping tables, learning priority
+- `pages-and-layout.md` — Pages, responsive layout, navigation
+- `theming.md` — DaisyUI theme system, theme-aware components
+
+**Process** (`docs/process/`):
+- `issue-tracking.md` — Beads issue tracking standards and best practices
 
 ## Key Conventions
 
@@ -87,7 +95,7 @@ This project uses a team of 6 agents:
 5. **Cubing Advisor** — validates algorithm correctness and beginner-friendliness
 6. **Code Reviewer / QA** — reviews code, checks builds
 
-Shared doc pages (stack, algorithms, ui, theming) are co-owned by the PM and Architect — PM owns product aspects, Architect owns technical aspects.
+Docs are organized into 3 folders with clear ownership: `docs/technical/` (Architect), `docs/product/` (PM), `docs/process/` (shared). No shared pages — each topic is split into its technical and product halves.
 
 
 <!-- BEGIN BEADS INTEGRATION v:1 profile:minimal hash:ca08a54f -->

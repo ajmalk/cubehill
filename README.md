@@ -30,17 +30,32 @@ npm run preview   # Preview production build
 
 Detailed documentation lives in [`docs/`](docs/):
 
+**Technical** (`docs/technical/`):
+
 | Page | Description |
 |------|-------------|
-| [stack.md](docs/stack.md) | Stack choices and reasoning |
-| [architecture.md](docs/architecture.md) | Project structure and data flow |
-| [cube-engine.md](docs/cube-engine.md) | Cube state model, moves, notation parser |
-| [rendering.md](docs/rendering.md) | Three.js 3D rendering and animation |
-| [algorithms.md](docs/algorithms.md) | Algorithm data model, OLL/PLL cases |
-| [ui.md](docs/ui.md) | UI components, routing, command palette, keyboard controls |
-| [theming.md](docs/theming.md) | DaisyUI theming, dark/light mode |
-| [deployment.md](docs/deployment.md) | GitHub Pages deployment setup |
-| [issue-tracking.md](docs/issue-tracking.md) | Issue tracking standards |
+| [architecture.md](docs/technical/architecture.md) | Project structure and data flow |
+| [cube-engine.md](docs/technical/cube-engine.md) | Cube state model, moves, notation parser |
+| [rendering.md](docs/technical/rendering.md) | Three.js 3D rendering and animation |
+| [deployment.md](docs/technical/deployment.md) | GitHub Pages deployment setup |
+| [algorithm-data-model.md](docs/technical/algorithm-data-model.md) | Algorithm TypeScript types and interfaces |
+| [components.md](docs/technical/components.md) | Svelte components, stores, keyboard controls |
+| [theme-integration.md](docs/technical/theme-integration.md) | Theme store, FOUC prevention, Three.js sync |
+
+**Product** (`docs/product/`):
+
+| Page | Description |
+|------|-------------|
+| [stack-decisions.md](docs/product/stack-decisions.md) | Stack choices and reasoning |
+| [algorithms.md](docs/product/algorithms.md) | OLL/PLL case inventory and learning priority |
+| [pages-and-layout.md](docs/product/pages-and-layout.md) | Pages, responsive layout, navigation |
+| [theming.md](docs/product/theming.md) | DaisyUI theme system, theme-aware components |
+
+**Process** (`docs/process/`):
+
+| Page | Description |
+|------|-------------|
+| [issue-tracking.md](docs/process/issue-tracking.md) | Issue tracking standards |
 
 ## Contributing
 

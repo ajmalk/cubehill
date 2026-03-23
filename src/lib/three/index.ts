@@ -8,5 +8,5 @@
 export { CubeScene, resolveDaisyColor } from './CubeScene.js';
 export { CubeMesh } from './CubeMesh.js';
 export { CubeAnimator, ANIMATION_DURATION } from './CubeAnimator.js';
-export { createOrbitControls, OrbitControls } from './controls.js';
+export { createOrbitControls } from './controls.js';
 export type { AnimationSpeed, AnimationState } from './CubeAnimator.js';

@@ -151,7 +151,13 @@ export class CubeScene {
 
   /** Update the scene background. Accepts any CSS color string (including oklch). */
   setBackgroundColor(color: string): void {
-    this.scene.background = new THREE.Color(color);
+    try {
+      this.scene.background = new THREE.Color(color);
+    } catch {
+      // THREE.Color cannot parse oklch() or other modern CSS color functions.
+      // Fall back to re-reading from the DaisyUI theme via canvas pixel readback.
+      this.syncBackground();
+    }
   }
 
   /** Re-read the DaisyUI theme color and update the scene background. */

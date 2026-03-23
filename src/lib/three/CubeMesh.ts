@@ -315,10 +315,13 @@ export class CubeMesh {
    */
   dispose(): void {
     for (const cubie of this.cubies) {
-      // Dispose body
-      const body = cubie.group.children[0] as THREE.Mesh;
-      body.geometry.dispose();
-      (body.material as THREE.Material).dispose();
+      // Dispose body — children[0] is always the body mesh by construction,
+      // but guard with instanceof to avoid errors if the group is in an unexpected state.
+      const body = cubie.group.children[0];
+      if (body instanceof THREE.Mesh) {
+        body.geometry.dispose();
+        (body.material as THREE.Material).dispose();
+      }
 
       // Dispose stickers
       for (const sticker of cubie.stickers) {

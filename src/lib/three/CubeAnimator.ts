@@ -181,6 +181,12 @@ export class CubeAnimator {
    *   moves and can diverge (e.g. due to onMount ordering or initialization differences).
    */
   animate(move: Move, targetState?: number[]): Promise<void> {
+    // Reject concurrent calls: if an animation is already in progress, resolve
+    // immediately without starting a new one. Callers that need queuing should
+    // use loadAlgorithm() + play() instead.
+    if (this.animFrameId !== null) {
+      return Promise.resolve();
+    }
     return this.animateMove(move, targetState);
   }
 

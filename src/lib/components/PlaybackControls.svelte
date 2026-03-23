@@ -226,6 +226,7 @@
         <button
           class="btn btn-sm join-item"
           class:btn-active={cubeStore.speed === s}
+          class:btn-primary={cubeStore.speed === s}
           aria-pressed={cubeStore.speed === s}
           title={s === 'slow'
             ? '500ms per move'

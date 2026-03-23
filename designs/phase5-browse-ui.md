@@ -8,20 +8,15 @@ Design spec for the three core browse UI surfaces: `AlgorithmCard` + `AlgorithmL
 
 **Figma file**: Design (`fiCCEbCrIIZqYVIm9XTjiD`), page: **Phase 5 — Browse UI**
 
-Wireframe frames to create in that Figma page (Desktop Bridge plugin required):
+### Figma Frames
 
-| Frame Name | Description |
-|-----------|-------------|
-| `WF-Home-Desktop` | Home page, >1024px |
-| `WF-Home-Mobile` | Home page, <640px |
-| `WF-List-Desktop` | OLL/PLL listing, >1024px |
-| `WF-List-Mobile` | OLL/PLL listing, <640px |
-| `WF-Detail-Desktop` | Detail page, >1024px (extends Phase 4) |
-| `WF-Detail-Mobile` | Detail page, <640px (extends Phase 4) |
+| Frame | Node ID | Figma Link |
+|-------|---------|------------|
+| Home Page | `25:553` | [Open in Figma](https://www.figma.com/design/fiCCEbCrIIZqYVIm9XTjiD?node-id=25-553) |
+| OLL Listing | `25:564` | [Open in Figma](https://www.figma.com/design/fiCCEbCrIIZqYVIm9XTjiD?node-id=25-564) |
+| Algorithm Detail | `25:591` | [Open in Figma](https://www.figma.com/design/fiCCEbCrIIZqYVIm9XTjiD?node-id=25-591) |
 
-Note: Figma frames will be created when the Desktop Bridge plugin is available. The wireframe screenshots below (rendered from HTML prototypes) are the current visual reference.
-
-**Wireframe screenshots** (rendered from HTML wireframe prototypes):
+**Wireframe screenshots** (exported from Figma):
 
 ### Home Page Wireframe
 

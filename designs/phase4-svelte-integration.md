@@ -2,6 +2,12 @@
 
 Design spec for `CubeViewer` and `PlaybackControls` components. All values are implementation-ready. This document builds on Phase 3's visual parameters — the 3D cube itself (cubie geometry, colors, camera, lighting, animation timing) is already specced there. Phase 4 is about how the cube and playback controls sit in the page.
 
+### Phase 4 Scope
+
+**In scope**: CubeViewer layout and sizing, PlaybackControls (notation strip, transport buttons, speed selector), algorithm detail page layout (desktop + mobile), loading/error states, accessibility, keyboard shortcuts, camera interaction.
+
+**Out of scope for Phase 4**: Alternative algorithm notations. Each algorithm case has one canonical notation string in Phase 4. Displaying alternative notations (e.g., mirror variants, different move orders that produce the same case) is deferred to a later phase. The current data model and UI do not need to accommodate multiple notation variants yet.
+
 ---
 
 ## 1. CubeViewer Layout
@@ -102,8 +108,9 @@ The `flex-col` on the page container is already the default before `lg:flex-row`
 Mobile cube sizing:
 - Width: 100% of the content container minus page padding
 - Max width: 480px (`max-w-[480px]`)
+- Max height: 50vh (`max-h-[50vh]`) — caps the cube on short mobile screens so the Play button is not pushed off-screen
 - Centered: `mx-auto`
-- Aspect ratio: 1:1
+- Aspect ratio: 1:1 (the `max-h-[50vh]` cap overrides the aspect ratio on short screens, producing a slightly non-square canvas — acceptable at that size)
 
 On small screens (< 360px), the cube shrinks naturally with the viewport — no hard minimum below 280px because at that width the page itself has very little margin.
 
@@ -221,6 +228,10 @@ From Phase 3: the canvas background matches the page background (`--b1` DaisyUI 
 
 These are always in this vertical order regardless of screen size.
 
+**State ownership**: `PlaybackControls` is a read-only consumer of `cubeStore`. It does not drive step logic directly. Instead, it dispatches intent (e.g., user pressed Step Forward) and the store — which mirrors the animator's state — applies the transition. This keeps the component stateless with respect to playback position.
+
+**`stepBack` implementation note**: The animator only moves forward. `stepBack` is implemented by the store rewinding through a state history array (snapshots of cube state at each step boundary), not by running the animator in reverse. The component is unaware of this distinction — it simply calls the store action.
+
 ### Algorithm Notation Display
 
 The notation strip shows the full algorithm as a sequence of move tokens, with the current move highlighted. This is the primary visual connection between the controls and what the cube is doing.
@@ -253,6 +264,36 @@ Token spacing: `gap-1.5` (6px). Dense enough to feel like a sequence, not a list
 
 Scroll behavior: `scroll-behavior: smooth` on the container, with a `scrollIntoView` call on the current token whenever `stepIndex` changes.
 
+#### Notation Strip Loading State
+
+Before the algorithm data arrives (store is loading), replace the token row with a skeleton placeholder:
+
+```html
+{#if loading}
+  <div class="flex gap-1.5 py-2">
+    {#each Array(8) as _}
+      <span class="badge badge-lg badge-ghost animate-pulse w-10">&nbsp;</span>
+    {/each}
+  </div>
+{/if}
+```
+
+Eight placeholder badges at fixed width give a realistic approximation of a short algorithm. The `animate-pulse` opacity cycle signals loading without a spinner.
+
+#### Notation Strip Error State
+
+If no algorithm is loaded (e.g., the algorithm ID in the URL is invalid), display a message in place of the token row:
+
+```html
+{#if error || moves.length === 0}
+  <div class="flex items-center gap-2 py-2 text-sm text-base-content/50 italic">
+    <span>No algorithm loaded</span>
+  </div>
+{/if}
+```
+
+This state also disables the Play and Step Forward buttons (covered under Disabled States below).
+
 ### Transport Buttons
 
 Five buttons arranged in a single `join` (DaisyUI button group):
@@ -271,7 +312,7 @@ Layout:
 
 ```html
 <div class="join">
-  <button class="btn btn-square join-item" title="Reset (R)" aria-label="Reset">
+  <button class="btn btn-ghost btn-square join-item" title="Reset (R)" aria-label="Reset">
     <!-- reset icon -->
   </button>
   <button class="btn btn-square join-item" title="Step back (←)" aria-label="Step back">
@@ -298,14 +339,44 @@ Use SVG icons from the Heroicons set (MIT license, commonly used with Tailwind p
 | Pause | Pause | `pause` |
 | Step forward | Forward step | `forward` |
 
-The Play/Pause button swaps icons based on `isPlaying` state. Use `btn-primary` for this button only — it is the primary action and should stand out visually. All other buttons use the default `btn` style (inherits from theme, no color accent).
+The Play/Pause button swaps icons based on `isPlaying` state. Use `btn-primary` for this button only — it is the primary action and should stand out visually.
+
+The step back and step forward buttons use the default `btn` style (solid, same visual weight as each other).
+
+The Reset button uses `btn-ghost` — lower visual weight than the step buttons to signal that it is a different kind of action (destructive/restorative rather than sequential). Ghost style keeps it available without competing for attention during normal step-through usage.
+
+#### Text Labels on Mobile (Step Back / Step Forward)
+
+On mobile, step back and step forward buttons display a short text label beneath the icon. Icon-only controls are ambiguous for beginners who may not recognise the skip-backward/skip-forward icons as single-step actions.
+
+Implementation: replace `btn-square` with a fixed-width button that stacks icon and label vertically on small screens.
+
+```html
+<!-- Step back — mobile shows label, desktop icon-only -->
+<button class="btn join-item flex flex-col items-center gap-0.5 px-3 sm:btn-square sm:px-0"
+        title="Step back (←)" aria-label="Step back">
+  <!-- backward icon, w-5 h-5 -->
+  <span class="text-[10px] leading-none sm:hidden">Back</span>
+</button>
+
+<!-- Step forward — same pattern -->
+<button class="btn join-item flex flex-col items-center gap-0.5 px-3 sm:btn-square sm:px-0"
+        title="Step forward (→)" aria-label="Step forward">
+  <!-- forward icon, w-5 h-5 -->
+  <span class="text-[10px] leading-none sm:hidden">Fwd</span>
+</button>
+```
+
+`sm:hidden` hides the label at tablet and above. `sm:btn-square` restores the square shape on desktop. The Reset and Play/Pause buttons remain icon-only at all sizes — Reset is a recognizable circular-arrow icon and Play/Pause is universally understood.
 
 #### Button Sizes
 
 - Desktop: `btn-md` (default, ~40px height)
 - Mobile: `btn-md` as well — do not reduce size on mobile, these are touch targets and need to be at least 44px
 
-All buttons are `btn-square` so width equals height.
+Step back and step forward buttons expand slightly wider on mobile to accommodate the text label. `btn-square` is removed on mobile for these two buttons only (see above).
+
+All other buttons (`btn-square`) keep equal width and height.
 
 #### Disabled States
 
@@ -433,24 +504,31 @@ This shows how CubeViewer and PlaybackControls combine on the detail page.
 
 ┌─ main.container ──────────────────────────────────────────────────────┐
 │                                                                       │
-│  OLL 21 — T-Shape                                      [← OLL 20]    │
-│                                                        [OLL 22 →]    │
-│                                                                       │
 │  ┌─ Left column (lg:w-1/2, max 500px) ────┐  ┌─ Right column ──────┐ │
 │  │                                        │  │                     │ │
-│  │                                        │  │  R U R' U R U2 R'   │ │
-│  │        [ 3D CUBE VIEWER ]              │  │  ○ ○ ● ○ ○ ○ ○      │ │
-│  │        (square, floats on bg)          │  │                     │ │
+│  │                                        │  │  OLL 21 — T-Shape   │ │
+│  │        [ 3D CUBE VIEWER ]              │  │                     │ │
+│  │        (square, floats on bg)          │  │  R U R' U R U2 R'   │ │
+│  │                                        │  │  ○ ○ ● ○ ○ ○ ○      │ │
+│  │                                        │  │                     │ │
 │  │                                        │  │  [ ⏮ ][ ◀ ][ ▶ ][ ▶ ] │ │
 │  │                                        │  │                     │ │
 │  │                                        │  │  Speed: Slow Normal Fast │ │
 │  │                                        │  │                     │ │
 │  │                                        │  │  R  ←  Space  →     │ │
 │  └────────────────────────────────────────┘  │                     │ │
-│                                              │  Alt: R' F R U...   │ │
+│                                              │  [← OLL 20] [OLL 22 →] │ │
 │                                              └─────────────────────┘ │
 └───────────────────────────────────────────────────────────────────────┘
 ```
+
+Right column content order (top to bottom):
+1. Case title and ID (e.g., "OLL 21 — T-Shape")
+2. Algorithm notation strip
+3. Transport button group
+4. Speed selector
+5. Keyboard shortcut hints
+6. Prev/Next case navigation links
 
 ### Mobile Layout
 
@@ -490,7 +568,7 @@ Note on prev/next navigation: on desktop, prev/next links appear top-right of th
 
 | Element | DaisyUI class(es) | Notes |
 |---------|-------------------|-------|
-| Transport button group | `join`, `btn btn-square join-item` | Play button gets `btn-primary` |
+| Transport button group | `join`, `btn btn-square join-item` | Play gets `btn-primary`; Reset gets `btn-ghost`; step buttons get default `btn` |
 | Speed selector | `join`, `btn btn-sm join-item`, `btn-active` | 3 items: Slow, Normal, Fast |
 | Move token (future) | `badge badge-lg badge-outline font-mono` | |
 | Move token (current) | `badge badge-lg badge-primary font-bold font-mono` | |
@@ -549,7 +627,7 @@ CUBE VIEWER
   home hero size:       min(60vw, 60vh, 500px), aspect-square
   home hero min:        280px
   detail desktop:       lg:w-1/2, lg:max-w-[500px], aspect-square
-  detail mobile/tablet: w-full, max-w-[480px], aspect-square, mx-auto
+  detail mobile/tablet: w-full, max-w-[480px], max-h-[50vh], aspect-square, mx-auto
   canvas touch:         touch-action: none
   cursor:               grab / grabbing
   loading:              DaisyUI loading-spinner, loading-lg, text-primary
@@ -560,9 +638,13 @@ PLAYBACK CONTROLS
     past:               badge-ghost, opacity-50
     current:            badge-primary, font-bold
     future:             badge-outline
+    loading:            animate-pulse placeholder badges (8×)
+    error/empty:        "No algorithm loaded" italic muted text
   transport group:      join, btn btn-square join-item
     play/pause:         btn-primary (accent)
-    others:             btn (default)
+    reset:              btn-ghost (lower visual weight, different action type)
+    step back/fwd:      btn (default)
+  step labels (mobile): "Back" / "Fwd" text below icon, sm:hidden on desktop
   button size:          btn-md (both desktop and mobile, 44px+ touch target)
   speed selector:       btn btn-sm join-item, btn-active for selected
     slow:               500ms

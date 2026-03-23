@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>Phase 5 Wireframe — OLL Listing Page</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+         background: #1a1a2e; color: #e0e0e0; min-height: 100vh; }
+
+  .navbar {
+    background: #16213e; padding: 0 24px; height: 56px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid #2a2a4a;
+  }
+  .navbar-brand { font-weight: 700; font-size: 18px; color: #a78bfa; }
+  .navbar-links { display: flex; gap: 24px; align-items: center; }
+  .navbar-links a { color: #c4b5fd; text-decoration: none; font-size: 14px; }
+  .theme-btn { background: #2a2a4a; border: 1px solid #3a3a5a; color: #c4b5fd;
+               padding: 4px 12px; border-radius: 6px; font-size: 12px; }
+
+  main { padding: 24px; max-width: 1280px; margin: 0 auto; }
+
+  /* Page header */
+  .page-header { margin-bottom: 24px; }
+  .page-header h1 { font-size: 24px; font-weight: 700; color: #e0e0e0; }
+  .page-header p { font-size: 14px; color: #7080a0; margin-top: 4px; }
+
+  /* Grid */
+  .algo-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  /* Group header */
+  .group-header {
+    grid-column: 1 / -1;
+    margin-top: 28px; margin-bottom: 4px;
+  }
+  .group-header:first-child { margin-top: 0; }
+  .group-header-row {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 8px;
+  }
+  .group-title {
+    font-size: 12px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em; color: #7080a0; white-space: nowrap;
+  }
+  .group-rule { flex: 1; height: 1px; background: #2a2a4a; }
+
+  /* Algorithm card */
+  .algo-card {
+    background: #16213e; border: 1px solid #2a2a4a;
+    border-radius: 10px; overflow: hidden; cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .algo-card:hover { border-color: #7c3aed; }
+
+  .card-thumb {
+    padding: 10px 10px 6px;
+  }
+  .thumb-oll {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2px; background: #0a0a1a; border-radius: 4px;
+    padding: 2px; width: 100%; aspect-ratio: 1;
+  }
+  .cell { border-radius: 1px; }
+  .cell.on  { background: #eab308; }
+  .cell.off { background: #374151; }
+
+  .card-body { padding: 6px 10px 10px; }
+  .card-name { font-size: 13px; font-weight: 600; color: #e0e0e0; }
+  .card-prob { font-size: 11px; color: #606080; font-family: monospace; }
+  .card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
+
+  .badge-2look {
+    background: #78350f; color: #fbbf24; border: 1px solid #92400e;
+    font-size: 10px; padding: 1px 6px; border-radius: 4px; font-weight: 600;
+  }
+
+  /* Annotation */
+  .annotation { font-size: 10px; color: #5a5a7a; font-style: italic; }
+
+  .layout-note {
+    margin-top: 32px; border-top: 1px dashed #2a2a4a; padding-top: 16px;
+    font-size: 11px; color: #5a5a7a; line-height: 2;
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <span class="navbar-brand">CubeHill</span>
+  <div class="navbar-links">
+    <a href="#" style="color: #a78bfa; font-weight:600;">OLL</a>
+    <a href="#">PLL</a>
+    <button class="theme-btn">☀ Theme</button>
+  </div>
+</nav>
+
+<main>
+
+  <div class="page-header">
+    <h1>OLL <span style="color:#7080a0; font-weight:400; font-size:18px;">— Orientation of Last Layer</span></h1>
+    <p>57 cases · grouped by top-face shape</p>
+  </div>
+
+  <div class="algo-grid">
+
+    <!-- GROUP: OCLL / All Edges Oriented (first — 2-look cases) -->
+    <div class="group-header">
+      <div class="group-header-row">
+        <span class="group-title">All Edges Oriented (OCLL)</span>
+        <span style="font-size:11px; color:#5a5a7a;">(7)</span>
+        <div class="group-rule"></div>
+        <span class="annotation">shown first — 2-look OLL cases</span>
+      </div>
+    </div>
+
+    <!-- OLL 21 -->
+    <div class="algo-card">
+      <div class="card-thumb">
+        <div class="thumb-oll">
+          <div class="cell on"></div><div class="cell on"></div><div class="cell on"></div>
+          <div class="cell on"></div><div class="cell on"></div><div class="cell on"></div>
+          <div class="cell on"></div><div class="cell on"></div><div class="cell on"></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-footer">
+          <span class="card-name">OLL 21</span>
+          <span class="card-prob">1/54</span>
+        </div>
+        <div style="margin-top: 4px;">
+          <span class="badge-2look">2-Look</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- OLL 22 -->
+    <div class="algo-card">
+      <div class="card-thumb">
+        <div class="thumb-oll">
+          <div class="cell off"></div><div class="cell on"></div><div class="cell off"></div>
+          <div class="cell on"></div><div class="cell on"></div><div class="cell on"></div>
+          <div class="cell off"></div><div class="cell on"></div><div class="cell off"></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-footer">
+          <span class="card-name">OLL 22</span>
+          <span class="card-prob">1/54</span>
+        </div>
+        <div style="margin-top: 4px;">
+          <span class="badge-2look">2-Look</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- OLL 26 -->
+    <div class="algo-card">
+      <div class="card-thumb">
+        <div class="thumb-oll">
+          <div class="cell on"></div><div class="cell on"></div><div class="cell off"></div>
+          <div class="cell off"></div><div class="cell on"></div><div class="cell on"></div>
+          <div class="cell off"></div><div class="cell off"></div><div class="cell on"></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-footer">
+          <span class="card-name">OLL 26</span>
+          <span class="card-prob">1/54</span>
+        </div>
+        <div style="margin-top: 4px;">
+          <span class="badge-2look">2-Look</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- OLL 27 — Sune -->
+    <div class="algo-card" style="border-color: #7c3aed;">
+      <div class="card-thumb">
+        <div class="thumb-oll">
+          <div class="cell off"></div><div class="cell on"></div><div class="cell off"></div>
+          <div class="cell off"></div><div class="cell on"></div><div class="cell on"></div>
+          <div class="cell on"></div><div class="cell on"></div><div class="cell off"></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-footer">
+          <span class="card-name">OLL 27</span>
+          <span class="card-prob">1/54</span>
+        </div>
+        <div style="margin-top: 4px;">
+          <span class="badge-2look">2-Look</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 more OCLL placeholders -->
+    <div class="algo-card" style="opacity: 0.5;">
+      <div class="card-thumb"><div class="thumb-oll">
+        <div class="cell on"></div><div class="cell on"></div><div class="cell on"></div>
+        <div class="cell on"></div><div class="cell on"></div><div class="cell off"></div>
+        <div class="cell off"></div><div class="cell on"></div><div class="cell on"></div>
+      </div></div>
+      <div class="card-body"><div class="card-footer">
+        <span class="card-name">OLL 23</span><span class="card-prob">1/54</span>
+      </div><div style="margin-top:4px;"><span class="badge-2look">2-Look</span></div></div>
+    </div>
+    <div class="algo-card" style="opacity: 0.5;">
+      <div class="card-thumb"><div class="thumb-oll">
+        <div class="cell on"></div><div class="cell off"></div><div class="cell on"></div>
+        <div class="cell on"></div><div class="cell on"></div><div class="cell on"></div>
+        <div class="cell on"></div><div class="cell off"></div><div class="cell on"></div>
+      </div></div>
+      <div class="card-body"><div class="card-footer">
+        <span class="card-name">OLL 24</span><span class="card-prob">1/54</span>
+      </div><div style="margin-top:4px;"><span class="badge-2look">2-Look</span></div></div>
+    </div>
+    <div class="algo-card" style="opacity: 0.5;">
+      <div class="card-thumb"><div class="thumb-oll">
+        <div class="cell on"></div><div class="cell off"></div><div class="cell on"></div>
+        <div class="cell off"></div><div class="cell on"></div><div class="cell off"></div>
+        <div class="cell on"></div><div class="cell off"></div><div class="cell on"></div>
+      </div></div>
+      <div class="card-body"><div class="card-footer">
+        <span class="card-name">OLL 25</span><span class="card-prob">1/54</span>
+      </div><div style="margin-top:4px;"><span class="badge-2look">2-Look</span></div></div>
+    </div>
+
+    <!-- GROUP: T-Shape -->
+    <div class="group-header">
+      <div class="group-header-row">
+        <span class="group-title">T-Shape</span>
+        <span style="font-size:11px; color:#5a5a7a;">(2)</span>
+        <div class="group-rule"></div>
+      </div>
+    </div>
+    <div class="algo-card">
+      <div class="card-thumb"><div class="thumb-oll">
+        <div class="cell off"></div><div class="cell on"></div><div class="cell off"></div>
+        <div class="cell on"></div><div class="cell on"></div><div class="cell on"></div>
+        <div class="cell off"></div><div class="cell off"></div><div class="cell off"></div>
+      </div></div>
+      <div class="card-body"><div class="card-footer">
+        <span class="card-name">OLL 33</span><span class="card-prob">1/54</span>
+      </div></div>
+    </div>
+    <div class="algo-card">
+      <div class="card-thumb"><div class="thumb-oll">
+        <div class="cell off"></div><div class="cell on"></div><div class="cell off"></div>
+        <div class="cell on"></div><div class="cell on"></div><div class="cell on"></div>
+        <div class="cell off"></div><div class="cell off"></div><div class="cell off"></div>
+      </div></div>
+      <div class="card-body"><div class="card-footer">
+        <span class="card-name">OLL 45</span><span class="card-prob">1/54</span>
+      </div></div>
+    </div>
+
+    <!-- Continuation note -->
+    <div class="group-header" style="grid-column: 1/-1;">
+      <div style="font-size: 11px; color: #5a5a7a; padding: 8px 0; font-style: italic;">
+        ... 12 more groups (Square, P-Shape, W-Shape, Fish, Knight Move, Awkward,
+        Big Lightning, Small Lightning, C-Shape, I-Shape, L-Shape, Dot) ···
+      </div>
+    </div>
+
+  </div><!-- /algo-grid -->
+
+  <div class="layout-note">
+    <strong>Layout notes:</strong><br>
+    Grid: <code>grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3</code><br>
+    Group headers: <code>col-span-full · text-sm uppercase tracking-wide text-base-content/60</code><br>
+    Group order: canonical (OCLL first · Dot last) — GROUP_ORDER constant, not alphabetical<br>
+    Card: <code>card card-compact bg-base-200 hover:bg-base-300 border hover:border-primary</code><br>
+    Thumbnail: SVG viewBox="0 0 3 3" · oriented=oklch(85% 0.2 95) · not-oriented=oklch(40% 0 0)<br>
+    2-Look badge: <code>badge badge-warning badge-xs</code>
+  </div>
+
+</main>
+</body>
+</html>

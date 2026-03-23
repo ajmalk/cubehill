@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>Phase 5 Wireframe — Algorithm Detail Page</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+         background: #1a1a2e; color: #e0e0e0; min-height: 100vh; }
+
+  .navbar {
+    background: #16213e; padding: 0 24px; height: 56px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid #2a2a4a;
+  }
+  .navbar-brand { font-weight: 700; font-size: 18px; color: #a78bfa; }
+  .navbar-links { display: flex; gap: 24px; align-items: center; }
+  .navbar-links a { color: #c4b5fd; text-decoration: none; font-size: 14px; }
+  .theme-btn { background: #2a2a4a; border: 1px solid #3a3a5a; color: #c4b5fd;
+               padding: 4px 12px; border-radius: 6px; font-size: 12px; }
+
+  main {
+    padding: 24px; max-width: 1280px; margin: 0 auto;
+  }
+
+  /* Two-column layout (Phase 4 pattern) */
+  .detail-layout {
+    display: flex; flex-direction: row; gap: 32px; align-items: flex-start;
+  }
+
+  /* Left column: cube */
+  .cube-col {
+    width: 50%; max-width: 500px; flex-shrink: 0; aspect-ratio: 1;
+  }
+  .cube-placeholder {
+    width: 100%; height: 100%; background: #0f3460;
+    border: 2px dashed #4a4a7a; border-radius: 12px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    color: #8888aa; gap: 8px;
+  }
+  .cube-placeholder .cube-icon { font-size: 48px; }
+  .cube-label { font-size: 14px; color: #6666aa; }
+  .cube-sublabel { font-size: 11px; color: #4a4a7a; text-align: center; }
+
+  /* Right column: info + controls */
+  .info-col { flex: 1; min-width: 0; }
+
+  /* Case header */
+  .case-header { margin-bottom: 16px; }
+  .case-title-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap; }
+  .case-title { font-size: 20px; font-weight: 700; color: #e0e0e0; }
+  .badge-2look {
+    background: #78350f; color: #fbbf24; border: 1px solid #92400e;
+    font-size: 11px; padding: 2px 8px; border-radius: 5px; font-weight: 600;
+  }
+  .case-group { font-size: 13px; color: #7080a0; margin-bottom: 2px; }
+  .case-prob { font-size: 13px; color: #7080a0; font-family: monospace; }
+
+  /* Notation strip */
+  .notation-strip {
+    display: flex; flex-wrap: wrap; gap: 6px; padding: 10px;
+    background: #16213e; border: 1px solid #2a2a4a; border-radius: 8px;
+    margin-bottom: 12px;
+  }
+  .move-badge {
+    font-family: monospace; font-size: 13px; padding: 3px 8px;
+    border-radius: 5px; border: 1px solid transparent;
+  }
+  .move-past   { background: transparent; color: #5060a0; border-color: #2a2a5a; opacity: 0.6; }
+  .move-curr   { background: #5b21b6; color: #e0d7ff; border-color: #7c3aed; font-weight: 700; }
+  .move-future { background: transparent; color: #a0a0c0; border-color: #3a3a6a; }
+
+  /* Divider */
+  .divider { height: 1px; background: #2a2a4a; margin: 12px 0; }
+
+  /* Transport buttons */
+  .transport-label { font-size: 11px; color: #5a5a7a; text-transform: uppercase;
+                     letter-spacing: 0.08em; margin-bottom: 6px; }
+  .transport { display: flex; gap: 0; margin-bottom: 12px; }
+  .btn {
+    padding: 0 14px; height: 40px; font-size: 14px; cursor: pointer;
+    border: 1px solid #3a3a6a; background: #16213e; color: #c4b5fd;
+    display: flex; align-items: center; justify-content: center;
+    min-width: 40px;
+  }
+  .btn:first-child { border-radius: 8px 0 0 8px; }
+  .btn:last-child  { border-radius: 0 8px 8px 0; }
+  .btn + .btn { border-left: none; }
+  .btn-primary { background: #5b21b6; border-color: #7c3aed; color: #e0d7ff; }
+  .btn-ghost { background: transparent; color: #6080a0; }
+
+  /* Speed selector */
+  .speed-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .speed-label { font-size: 13px; color: #6080a0; }
+  .speed-btns { display: flex; gap: 0; }
+  .speed-btn {
+    padding: 4px 14px; font-size: 12px; cursor: pointer;
+    border: 1px solid #3a3a6a; background: #16213e; color: #a0a0c0;
+  }
+  .speed-btn:first-child { border-radius: 6px 0 0 6px; }
+  .speed-btn:last-child  { border-radius: 0 6px 6px 0; }
+  .speed-btn + .speed-btn { border-left: none; }
+  .speed-btn.active { background: #2a2a6a; color: #c4b5fd; border-color: #5a5a9a; }
+
+  /* Keyboard hints */
+  .kbd-hints { display: flex; gap: 16px; font-size: 11px; color: #4a4a7a;
+               margin-bottom: 12px; }
+  .kbd {
+    background: #1e1e3a; border: 1px solid #3a3a5a; border-radius: 4px;
+    padding: 1px 5px; font-size: 10px; font-family: monospace; color: #6a6a9a;
+  }
+
+  /* Alternate notations */
+  .alt-section { padding-top: 12px; }
+  .alt-title { font-size: 13px; font-weight: 600; color: #a0a0c0; margin-bottom: 8px; }
+  .alt-item { font-size: 12px; font-family: monospace; color: #7080a0; padding: 3px 0; }
+  .alt-num { color: #5a5a7a; margin-right: 8px; }
+
+  /* Prev/Next */
+  .prev-next {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 16px; margin-top: 16px;
+    border-top: 1px solid #2a2a4a;
+  }
+  .nav-link {
+    padding: 6px 14px; font-size: 13px; color: #8090c0;
+    background: transparent; border: 1px solid #2a2a4a;
+    border-radius: 6px; text-decoration: none; cursor: pointer;
+  }
+  .nav-link:hover { color: #c4b5fd; border-color: #5a5a9a; }
+
+  .layout-note {
+    margin-top: 32px; border-top: 1px dashed #2a2a4a; padding-top: 16px;
+    font-size: 11px; color: #5a5a7a; line-height: 2;
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <span class="navbar-brand">CubeHill</span>
+  <div class="navbar-links">
+    <a href="#" style="color:#a78bfa; font-weight:600;">OLL</a>
+    <a href="#">PLL</a>
+    <button class="theme-btn">☀ Theme</button>
+  </div>
+</nav>
+
+<main>
+  <div class="detail-layout">
+
+    <!-- Left: Cube -->
+    <div class="cube-col">
+      <div class="cube-placeholder">
+        <div class="cube-icon">⬛</div>
+        <span class="cube-label">3D Cube Viewer</span>
+        <span class="cube-sublabel">Unsolved state for OLL 21<br>(inverse of algorithm applied)</span>
+        <span class="cube-sublabel" style="margin-top:8px;">lg:w-1/2 · max-w-[500px]<br>aspect-square · cursor: grab</span>
+      </div>
+    </div>
+
+    <!-- Right: Info + Controls -->
+    <div class="info-col">
+
+      <!-- Case Header (Phase 5 addition) -->
+      <div class="case-header">
+        <div class="case-title-row">
+          <span class="case-title">OLL 21</span>
+          <span class="badge-2look">2-Look</span>
+        </div>
+        <div class="case-group">OCLL — All Edges Oriented</div>
+        <div class="case-prob">1/54 probability · 1 in 54 solves</div>
+      </div>
+
+      <!-- Notation Strip (Phase 4) -->
+      <div class="notation-strip">
+        <span class="move-badge move-past">R</span>
+        <span class="move-badge move-past">U</span>
+        <span class="move-badge move-curr">R'</span>
+        <span class="move-badge move-future">U</span>
+        <span class="move-badge move-future">R</span>
+        <span class="move-badge move-future">U2</span>
+        <span class="move-badge move-future">R'</span>
+      </div>
+
+      <!-- Transport (Phase 4) -->
+      <div class="transport-label">Playback Controls</div>
+      <div class="transport">
+        <button class="btn btn-ghost" title="Reset (R)">↺</button>
+        <button class="btn" title="Step back (←)">◀</button>
+        <button class="btn btn-primary" title="Play / Pause (Space)">▶</button>
+        <button class="btn" title="Step forward (→)">▶▶</button>
+      </div>
+
+      <!-- Speed selector (Phase 4) -->
+      <div class="speed-row">
+        <span class="speed-label">Speed</span>
+        <div class="speed-btns">
+          <button class="speed-btn">Slow</button>
+          <button class="speed-btn active">Normal ✓</button>
+          <button class="speed-btn">Fast</button>
+        </div>
+      </div>
+
+      <!-- Keyboard hints (Phase 4, desktop only) -->
+      <div class="kbd-hints">
+        <span><span class="kbd">R</span> Reset</span>
+        <span><span class="kbd">←</span> Back</span>
+        <span><span class="kbd">Space</span> Play</span>
+        <span><span class="kbd">→</span> Fwd</span>
+      </div>
+
+      <!-- Alternative notations (Phase 5 addition) -->
+      <div class="divider"></div>
+      <div class="alt-section">
+        <div class="alt-title">Alternative algorithms</div>
+        <div class="alt-item"><span class="alt-num">1.</span>F R U R' U' F'</div>
+        <div class="alt-item"><span class="alt-num">2.</span>F' L' U' L U F</div>
+      </div>
+
+      <!-- Prev / Next (Phase 5 functional, Phase 4 structural) -->
+      <div class="prev-next">
+        <a class="nav-link" href="#">← OLL 20</a>
+        <a class="nav-link" href="#">OLL 22 →</a>
+      </div>
+
+    </div><!-- /info-col -->
+  </div><!-- /detail-layout -->
+
+  <div class="layout-note">
+    <strong>Layout notes (extends Phase 4):</strong><br>
+    Two-column: <code>flex flex-col lg:flex-row gap-8 items-start</code><br>
+    Left col: <code>w-full lg:w-1/2 lg:max-w-[500px] aspect-square flex-shrink-0</code><br>
+    Right col: <code>flex-1 min-w-0</code><br>
+    <strong>Phase 5 additions in right col</strong> (above notation strip): case h1, group, probability, 2-look badge<br>
+    <strong>Phase 5 additions below speed/kbd</strong>: alt notations (text-only, border-t), prev/next (border-t)<br>
+    Browser title: <code>&lt;title&gt;OLL 21 — OLL — CubeHill&lt;/title&gt;</code><br>
+    Prev/next hrefs: <code>resolve(`/oll/{id}/`)</code> from $app/paths · order: OLL numeric 1–57
+  </div>
+
+</main>
+</body>
+</html>

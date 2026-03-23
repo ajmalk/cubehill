@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>Phase 5 Wireframe — Home Page</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+         background: #1a1a2e; color: #e0e0e0; min-height: 100vh; }
+
+  /* Navbar */
+  .navbar {
+    background: #16213e; padding: 0 24px; height: 56px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid #2a2a4a;
+  }
+  .navbar-brand { font-weight: 700; font-size: 18px; color: #a78bfa; }
+  .navbar-links { display: flex; gap: 24px; align-items: center; }
+  .navbar-links a { color: #c4b5fd; text-decoration: none; font-size: 14px; }
+  .theme-btn { background: #2a2a4a; border: 1px solid #3a3a5a; color: #c4b5fd;
+               padding: 4px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; }
+
+  /* Main content */
+  main { padding: 0 24px; max-width: 1280px; margin: 0 auto; }
+
+  /* Hero */
+  .hero { display: flex; flex-direction: column; align-items: center;
+          gap: 24px; padding: 24px 0 32px; text-align: center; }
+
+  .cube-placeholder {
+    width: min(60vw, 60vh, 500px); min-width: 280px;
+    aspect-ratio: 1;
+    background: #0f3460; border: 2px dashed #4a4a7a; border-radius: 12px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: #8888aa; font-size: 14px; gap: 8px;
+  }
+  .cube-placeholder .cube-icon {
+    width: 64px; height: 64px; background: #2a2a6a; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+  }
+  .cube-label { font-size: 13px; color: #6666aa; }
+  .cube-sublabel { font-size: 11px; color: #4a4a7a; }
+
+  .hero-tagline {
+    font-size: 16px; color: #9090b0; max-width: 420px; line-height: 1.6;
+  }
+
+  /* Nav cards */
+  .nav-cards {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px; max-width: 680px; margin: 0 auto; width: 100%;
+  }
+  .nav-card {
+    background: #16213e; border: 1px solid #2a2a4a;
+    border-radius: 12px; padding: 0; overflow: hidden;
+    text-decoration: none; color: inherit;
+    transition: border-color 0.15s;
+  }
+  .nav-card:hover { border-color: #7c3aed; }
+
+  .nav-card-figure {
+    padding: 20px 20px 12px;
+    display: flex; justify-content: center;
+  }
+
+  /* OLL thumbnail sample — Sune (OLL 27) pattern */
+  .thumb-oll {
+    width: 72px; height: 72px; display: grid;
+    grid-template-columns: repeat(3, 1fr); gap: 2px;
+    background: #0a0a1a; border-radius: 4px; padding: 2px;
+  }
+  .cell { border-radius: 2px; }
+  .cell.on  { background: #eab308; } /* yellow — oriented */
+  .cell.off { background: #374151; } /* grey — not oriented */
+
+  /* PLL thumbnail sample — T Perm arrows */
+  .thumb-pll {
+    width: 72px; height: 72px; position: relative;
+    background: #0a0a1a; border-radius: 4px; padding: 2px;
+  }
+  .pll-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2px; width: 100%; height: 100%;
+  }
+  .pll-cell { background: #374151; border-radius: 2px; }
+  .pll-arrows {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  }
+
+  .nav-card-body { padding: 0 16px 16px; }
+  .nav-card-title { font-size: 18px; font-weight: 700; color: #e0e0e0; margin-bottom: 4px; }
+  .nav-card-sub { font-size: 13px; color: #8090a0; margin-bottom: 8px; }
+  .nav-card-cta { font-size: 13px; color: #a78bfa; font-weight: 500; text-align: right; }
+
+  /* Cmd+K hint */
+  .cmdk-hint {
+    text-align: center; font-size: 12px; color: #4a4a6a; margin-top: 16px;
+  }
+  .kbd {
+    background: #1e1e3a; border: 1px solid #3a3a5a; border-radius: 4px;
+    padding: 1px 5px; font-size: 11px; font-family: monospace; color: #7070a0;
+  }
+
+  /* Annotation labels */
+  .annotation {
+    font-size: 10px; color: #6a6a8a; font-style: italic;
+    border: 1px dashed #3a3a5a; padding: 2px 6px; border-radius: 4px;
+    display: inline-block; margin-left: 8px;
+  }
+  .section-label {
+    font-size: 11px; color: #5a5a7a; text-transform: uppercase;
+    letter-spacing: 0.1em; font-weight: 600;
+    margin-bottom: 8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <span class="navbar-brand">CubeHill</span>
+  <div class="navbar-links">
+    <a href="#">OLL</a>
+    <a href="#">PLL</a>
+    <button class="theme-btn">☀ Theme</button>
+  </div>
+</nav>
+
+<main>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <p class="section-label" style="color:#5a5a8a; font-size:10px; letter-spacing:0.1em;">HERO SECTION</p>
+
+    <div class="cube-placeholder">
+      <div class="cube-icon">⬛</div>
+      <span class="cube-label">3D Cube Viewer</span>
+      <span class="cube-sublabel">Solved state · orbitable by user</span>
+      <span class="cube-sublabel">min(60vw, 60vh, 500px) · aspect-square</span>
+    </div>
+
+    <p class="hero-tagline">
+      Learn speedcubing algorithms with an interactive 3D cube.
+    </p>
+  </div>
+
+  <!-- Nav Cards -->
+  <div style="text-align:center; margin-bottom: 10px;">
+    <span class="section-label">NAVIGATION CARDS</span>
+  </div>
+  <div class="nav-cards">
+
+    <!-- OLL Card -->
+    <a class="nav-card" href="#">
+      <div class="nav-card-figure">
+        <!-- OLL 27 (Sune) pattern: [F,F,F / F,T,T / F,T,F] roughly -->
+        <div class="thumb-oll">
+          <div class="cell off"></div>
+          <div class="cell on"></div>
+          <div class="cell off"></div>
+          <div class="cell off"></div>
+          <div class="cell on"></div>
+          <div class="cell on"></div>
+          <div class="cell on"></div>
+          <div class="cell on"></div>
+          <div class="cell off"></div>
+        </div>
+      </div>
+      <div class="nav-card-body">
+        <div class="nav-card-title">OLL</div>
+        <div class="nav-card-sub">57 cases — Orient the Last Layer</div>
+        <div class="nav-card-cta">Browse →</div>
+      </div>
+    </a>
+
+    <!-- PLL Card -->
+    <a class="nav-card" href="#">
+      <div class="nav-card-figure">
+        <div class="thumb-pll">
+          <div class="pll-grid">
+            <div class="pll-cell"></div><div class="pll-cell"></div><div class="pll-cell"></div>
+            <div class="pll-cell"></div><div class="pll-cell"></div><div class="pll-cell"></div>
+            <div class="pll-cell"></div><div class="pll-cell"></div><div class="pll-cell"></div>
+          </div>
+          <svg class="pll-arrows" viewBox="0 0 3 3" style="color:#a78bfa;">
+            <!-- T Perm: top-right corner and right-back corner swap; top edge cycles -->
+            <defs>
+              <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5"
+                      markerWidth="3" markerHeight="3" orient="auto">
+                <path d="M0 0 L10 5 L0 10z" fill="currentColor"/>
+              </marker>
+            </defs>
+            <!-- Edge: top → right, right → bottom -->
+            <line x1="1.5" y1="0.5" x2="2.5" y2="1.5"
+                  stroke="currentColor" stroke-width="0.18"
+                  marker-end="url(#arr)"/>
+            <line x1="2.5" y1="1.5" x2="1.5" y2="0.5"
+                  stroke="currentColor" stroke-width="0.18" stroke-dasharray="0.15"
+                  marker-end="url(#arr)"/>
+            <!-- Corner swap: top-right ↔ right-bottom -->
+            <line x1="2.5" y1="0.5" x2="2.5" y2="2.5"
+                  stroke="currentColor" stroke-width="0.14" opacity="0.7"
+                  marker-end="url(#arr)"/>
+          </svg>
+        </div>
+      </div>
+      <div class="nav-card-body">
+        <div class="nav-card-title">PLL</div>
+        <div class="nav-card-sub">21 cases — Permute the Last Layer</div>
+        <div class="nav-card-cta">Browse →</div>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- Cmd+K hint -->
+  <p class="cmdk-hint" style="margin-top: 14px;">
+    Press <span class="kbd">⌘K</span> to jump to any algorithm.
+    <span class="annotation">hidden on mobile</span>
+  </p>
+
+  <!-- Layout annotations -->
+  <div style="margin-top: 32px; border-top: 1px dashed #2a2a4a; padding-top: 16px;">
+    <div style="font-size: 11px; color: #5a5a7a; line-height: 2;">
+      <strong>Layout notes:</strong><br>
+      Hero: <code>flex-col items-center gap-6 py-6 sm:py-10 text-center</code><br>
+      Nav card grid: <code>grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto</code><br>
+      Cube wrapper: <code>w-[min(60vw,60vh,500px)] min-w-[280px] aspect-square</code><br>
+      No PlaybackControls on home page. No auto-rotation. Cube shows solved state.
+    </div>
+  </div>
+
+</main>
+
+</body>
+</html>

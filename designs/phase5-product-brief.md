@@ -6,6 +6,8 @@
 
 This brief is the input document for the UX Designer (design tasks 3j2.11–3j2.13) and the Software Architect (data model and routing decisions). It defines what users see, how they navigate, and what "done" looks like for each design task.
 
+**UX Design output**: See `designs/phase5-browse-ui.md` for the complete design spec, wireframe screenshots, and DaisyUI implementation details.
+
 ---
 
 ## 1. What Phase 5 Delivers

@@ -28,7 +28,7 @@ flowchart TD
 
 ## Current Status
 
-**Phases 1, 2, 3, and 4 are complete.** Phases 5, 6, 7, 8, and 9 are all unblocked and can proceed in parallel (Phase 7 also requires Phase 6 to be complete first).
+**Phases 1–5 are complete.** Phase 6 design is done (spec in `designs/phase6-command-palette.md`) and implementation is ready to begin. Phases 6, 7, 8, and 9 are all unblocked and can proceed in parallel (Phase 7 also requires Phase 6 to be complete first).
 
 ## Phases
 
@@ -106,7 +106,7 @@ Connects the cube engine and 3D renderer to Svelte's component model and reactiv
 
 ---
 
-### Phase 5: Algorithm Data & Browse UI
+### Phase 5: Algorithm Data & Browse UI -- COMPLETE
 
 **Issue**: `cubehill-3j2` / [#5](https://github.com/ajmalk/cubehill/issues/5)
 
@@ -124,7 +124,7 @@ The algorithm content and browsing experience — the core user-facing feature o
 
 ---
 
-### Phase 6: Command Palette
+### Phase 6: Command Palette -- DESIGN COMPLETE
 
 **Issue**: `cubehill-cpj` / [#6](https://github.com/ajmalk/cubehill/issues/6)
 
@@ -137,6 +137,8 @@ ninja-keys integration for fast algorithm search and navigation via Cmd+K / Ctrl
 - Nested menus (OLL > category > case, PLL > category > case)
 - Theme switching commands
 - Navigation commands (Home, OLL, PLL)
+
+**Design artifacts:** `designs/phase6-command-palette.md` — covers trigger mechanics, visual design, command structure, search behaviour, keyboard navigation, mobile, animation, and CSS custom properties.
 
 **Dependencies:** Phase 1.
 

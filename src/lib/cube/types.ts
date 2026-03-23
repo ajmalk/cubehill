@@ -34,6 +34,8 @@ export interface BaseAlgorithm {
   altNotations?: string[];
   group: string;
   probability: string;
+  /** True if this case is part of the 2-look OLL/PLL learning path. */
+  isTwoLook: boolean;
 }
 
 export interface OllAlgorithm extends BaseAlgorithm {

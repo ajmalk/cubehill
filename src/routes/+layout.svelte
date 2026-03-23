@@ -3,6 +3,7 @@
   import favicon from '$lib/assets/favicon.svg';
   import { onMount } from 'svelte';
   import { themeStore } from '$lib/stores/themeStore.svelte.js';
+  import Navbar from '$lib/components/Navbar.svelte';
 
   let { children } = $props();
 
@@ -15,6 +16,6 @@
   <link rel="icon" href={favicon} />
 </svelte:head>
 
-<!-- TODO: Navbar component -->
-<!-- TODO: CommandPalette component -->
+<Navbar />
+<!-- TODO: CommandPalette component (Phase 5+) -->
 {@render children()}

@@ -1,111 +1,146 @@
 <script lang="ts">
   /**
-   * Home page — demo of CubeViewer + PlaybackControls with a hardcoded T-perm.
+   * Home page — hero section with solved 3D cube, tagline, and OLL/PLL nav cards.
    *
-   * This page demonstrates Phase 4 integration: the 3D cube, theme toggle,
-   * and playback controls all wired together.
+   * The cube shows the solved state (no algorithm loaded) and responds to orbit/zoom.
+   * Two nav cards direct users to OLL and PLL listing pages.
+   *
+   * See designs/phase5-browse-ui.md section 3.
    */
-
-  import { onMount, onDestroy } from 'svelte';
-  import { browser } from '$app/environment';
   import { resolve } from '$app/paths';
   import CubeViewer from '$lib/components/CubeViewer.svelte';
-  import PlaybackControls from '$lib/components/PlaybackControls.svelte';
-  import ThemeToggle from '$lib/components/ThemeToggle.svelte';
-  import { cubeStore } from '$lib/stores/cubeStore.svelte.js';
 
-  // T-perm: a classic PLL algorithm
-  const T_PERM = "R U R' U' R' F R2 U' R' U' R U R' F'";
+  // OLL 27 (Sune) pattern — used on OLL nav card
+  // OCLL case: all edges oriented, pattern shows oriented corners
+  const oll27Pattern: boolean[] = [true, false, true, false, true, false, true, false, true];
 
-  // Load algorithm on mount
-  onMount(() => {
-    cubeStore.loadAlgorithm(T_PERM);
-  });
-
-  // Keyboard controls
-  let commandPaletteOpen = false;
-
-  function handleKeydown(event: KeyboardEvent): void {
-    if (commandPaletteOpen) return;
-
-    const tag = (document.activeElement as HTMLElement)?.tagName;
-    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
-    if ((document.activeElement as HTMLElement)?.isContentEditable) return;
-
-    switch (event.key) {
-      case ' ':
-        event.preventDefault();
-        if (cubeStore.isPlaying) {
-          cubeStore.pause();
-        } else {
-          cubeStore.play();
-        }
-        break;
-      case 'ArrowRight':
-        event.preventDefault();
-        cubeStore.stepForward();
-        break;
-      case 'ArrowLeft':
-        event.preventDefault();
-        cubeStore.stepBack();
-        break;
-      case 'r':
-      case 'R':
-        cubeStore.reset();
-        break;
-    }
-  }
-
-  onMount(() => {
-    if (browser) {
-      window.addEventListener('keydown', handleKeydown);
-    }
-  });
-
-  onDestroy(() => {
-    if (browser) {
-      window.removeEventListener('keydown', handleKeydown);
-    }
-  });
+  // T Perm pattern — used on PLL nav card
+  // Swaps UL↔UR corners and top↔right edges
+  const tPermPattern = [
+    { from: 0 as const, to: 2 as const },
+    { from: 2 as const, to: 0 as const },
+    { from: 1 as const, to: 5 as const },
+    { from: 5 as const, to: 1 as const },
+  ];
 </script>
 
-<!-- Navbar -->
-<div class="navbar bg-base-100 border-base-300 border-b px-4">
-  <div class="flex-1">
-    <a href={resolve('/')} class="text-primary text-xl font-bold">CubeHill</a>
-  </div>
-  <div class="flex-none gap-2">
-    <ThemeToggle />
-  </div>
-</div>
+<svelte:head>
+  <title>CubeHill — Speedcubing Algorithm Visualizer</title>
+  <meta
+    name="description"
+    content="Learn speedcubing algorithms with an interactive 3D cube. Browse all 57 OLL and 21 PLL cases."
+  />
+</svelte:head>
 
-<!-- Main content -->
-<main class="container mx-auto max-w-5xl px-4 py-8">
-  <!-- Page title -->
-  <div class="mb-6">
-    <h1 class="text-base-content text-2xl font-bold">T Perm</h1>
-    <p class="text-base-content/60 mt-1 text-sm">
-      PLL — Corner + Edge Swap &nbsp;·&nbsp; {T_PERM}
-    </p>
+<!-- Hero section: cube + tagline -->
+<section class="flex flex-col items-center gap-6 py-6 text-center sm:py-10">
+  <div class="mx-auto aspect-square w-[min(60vw,60vh,500px)] min-w-[280px]">
+    <CubeViewer />
   </div>
 
-  <!-- Two-column layout on desktop, stacked on mobile -->
-  <div class="flex flex-col items-start gap-8 lg:flex-row">
-    <!-- Left column: 3D cube viewer -->
-    <div
-      class="mx-auto aspect-square w-full max-w-[480px] flex-shrink-0 lg:mx-0 lg:w-1/2 lg:max-w-[500px]"
-    >
-      <CubeViewer />
-    </div>
-
-    <!-- Right column: playback controls -->
-    <div class="w-full min-w-0 flex-1">
-      <PlaybackControls />
-    </div>
-  </div>
-
-  <!-- Usage hint -->
-  <p class="text-base-content/40 mt-8 text-center text-xs lg:text-left">
-    Double-click the cube to reset camera view
+  <p class="text-base-content/70 max-w-md px-4 text-base leading-relaxed">
+    Learn speedcubing algorithms with an interactive 3D cube.
   </p>
-</main>
+</section>
+
+<!-- Navigation cards -->
+<section class="mx-auto grid w-full max-w-2xl grid-cols-1 gap-4 px-4 pb-8 sm:grid-cols-2">
+  <!-- OLL card -->
+  <a
+    href={resolve('/oll/')}
+    class="card bg-base-200 hover:bg-base-300 border-base-300 hover:border-primary focus-visible:outline-primary border transition-colors duration-150 focus-visible:outline-2"
+  >
+    <figure class="px-6 pt-6">
+      <!-- OLL 27 pattern thumbnail -->
+      <svg
+        viewBox="0 0 3 3"
+        class="mx-auto h-24 w-24 rounded-md"
+        aria-label="OLL 27 pattern sample"
+        role="img"
+      >
+        {#each oll27Pattern as oriented, i (i)}
+          {@const col = i % 3}
+          {@const row = Math.floor(i / 3)}
+          <rect
+            x={col + 0.025}
+            y={row + 0.025}
+            width="0.95"
+            height="0.95"
+            fill={oriented ? 'oklch(85% 0.2 95)' : 'oklch(40% 0 0)'}
+          />
+        {/each}
+      </svg>
+    </figure>
+    <div class="card-body pt-3">
+      <h2 class="card-title text-lg">OLL</h2>
+      <p class="text-base-content/60 text-sm">57 cases — Orient the Last Layer</p>
+      <div class="card-actions mt-2 justify-end">
+        <span class="text-primary text-sm font-medium">Browse →</span>
+      </div>
+    </div>
+  </a>
+
+  <!-- PLL card -->
+  <a
+    href={resolve('/pll/')}
+    class="card bg-base-200 hover:bg-base-300 border-base-300 hover:border-primary focus-visible:outline-primary border transition-colors duration-150 focus-visible:outline-2"
+  >
+    <figure class="px-6 pt-6">
+      <!-- T Perm pattern thumbnail -->
+      <svg
+        viewBox="0 0 3 3"
+        class="text-primary mx-auto h-24 w-24 rounded-md"
+        aria-label="T Perm pattern sample"
+        role="img"
+      >
+        <defs>
+          <marker
+            id="arrowhead-home-pll"
+            viewBox="0 0 10 10"
+            refX="9"
+            refY="5"
+            markerWidth="3"
+            markerHeight="3"
+            orient="auto"
+          >
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor" />
+          </marker>
+        </defs>
+        <!-- Grey background cells -->
+        {#each Array.from({ length: 9 }, (_, idx) => idx) as i (i)}
+          {@const col = i % 3}
+          {@const row = Math.floor(i / 3)}
+          <rect x={col + 0.025} y={row + 0.025} width="0.95" height="0.95" fill="oklch(40% 0 0)" />
+        {/each}
+        <!-- T Perm arrows -->
+        {#each tPermPattern as arrow, arrowIdx (arrowIdx)}
+          {@const fromCol = arrow.from % 3}
+          {@const fromRow = Math.floor(arrow.from / 3)}
+          {@const toCol = arrow.to % 3}
+          {@const toRow = Math.floor(arrow.to / 3)}
+          <line
+            x1={fromCol + 0.5}
+            y1={fromRow + 0.5}
+            x2={toCol + 0.5}
+            y2={toRow + 0.5}
+            stroke="currentColor"
+            stroke-width="0.15"
+            marker-end="url(#arrowhead-home-pll)"
+          />
+        {/each}
+      </svg>
+    </figure>
+    <div class="card-body pt-3">
+      <h2 class="card-title text-lg">PLL</h2>
+      <p class="text-base-content/60 text-sm">21 cases — Permute the Last Layer</p>
+      <div class="card-actions mt-2 justify-end">
+        <span class="text-primary text-sm font-medium">Browse →</span>
+      </div>
+    </div>
+  </a>
+</section>
+
+<!-- Cmd+K hint — desktop only -->
+<p class="text-base-content/40 mt-2 mb-8 hidden text-center text-xs sm:block">
+  Press <kbd class="kbd kbd-xs">⌘K</kbd> to jump to any algorithm.
+</p>

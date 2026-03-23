@@ -5,7 +5,7 @@
  * See docs/technical/rendering.md for the architecture overview.
  */
 
-export { CubeScene } from './CubeScene.js';
+export { CubeScene, resolveDaisyColor } from './CubeScene.js';
 export { CubeMesh } from './CubeMesh.js';
 export { CubeAnimator, ANIMATION_DURATION } from './CubeAnimator.js';
 export { createOrbitControls, OrbitControls } from './controls.js';

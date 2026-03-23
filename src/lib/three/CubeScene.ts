@@ -8,6 +8,39 @@
  */
 
 import * as THREE from 'three';
+
+/**
+ * Resolve the DaisyUI bg-base-100 color to a hex string that THREE.Color can parse.
+ * DaisyUI v5 + Tailwind v4 uses oklch() which THREE.Color doesn't understand.
+ * We render a 1px element, draw it to a canvas, and read back the pixel as RGB.
+ */
+export function resolveDaisyColor(className = 'bg-base-100', fallback = '#1d232a'): string {
+  try {
+    const el = document.createElement('div');
+    el.className = className;
+    el.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;';
+    document.body.appendChild(el);
+    const computed = getComputedStyle(el).backgroundColor;
+    document.body.removeChild(el);
+
+    if (!computed || computed === 'rgba(0, 0, 0, 0)' || computed === 'transparent') {
+      return fallback;
+    }
+
+    // Draw to a 1x1 canvas and read back the pixel — guaranteed RGB regardless of input format
+    const canvas = document.createElement('canvas');
+    canvas.width = 1;
+    canvas.height = 1;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return fallback;
+    ctx.fillStyle = computed;
+    ctx.fillRect(0, 0, 1, 1);
+    const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+    return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+  } catch {
+    return fallback;
+  }
+}
 import { createOrbitControls } from './controls.js';
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
@@ -75,37 +108,7 @@ export class CubeScene {
   }
 
   private syncBackgroundFromCSS(): void {
-    // Read DaisyUI --b1 CSS variable for the base background color.
-    // DaisyUI v5 + Tailwind v4 stores --b1 as raw oklch channel values
-    // (e.g. "0.2 0.02 260"), not a full color expression. The browser resolves
-    // bg-base-100 to a computed backgroundColor, but that value arrives as
-    // oklch(...) which THREE.Color cannot parse.
-    //
-    // Fix: after getting the computed color, normalize it to #rrggbb by
-    // assigning it to a 2D canvas context's fillStyle — the browser always
-    // stores fillStyle as a hex or rgb string, never oklch.
-    try {
-      const el = document.createElement('div');
-      el.style.cssText =
-        'position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;pointer-events:none;';
-      el.className = 'bg-base-100';
-      document.body.appendChild(el);
-      const computed = getComputedStyle(el).backgroundColor;
-      document.body.removeChild(el);
-
-      if (computed && computed !== 'rgba(0, 0, 0, 0)' && computed !== 'transparent') {
-        const ctx = document.createElement('canvas').getContext('2d')!;
-        ctx.fillStyle = computed;
-        const hex = ctx.fillStyle; // always #rrggbb
-        this.scene.background = new THREE.Color(hex);
-        return;
-      }
-    } catch {
-      // ignore — fall through to fallback
-    }
-
-    // Final fallback: dark neutral
-    this.scene.background = new THREE.Color('#1d232a');
+    this.scene.background = new THREE.Color(resolveDaisyColor());
   }
 
   /** Add an object to the scene. */
@@ -146,20 +149,14 @@ export class CubeScene {
     this.renderer.render(this.scene, this.camera);
   }
 
-  /** Update the scene background to match the current theme. */
+  /** Update the scene background. Accepts any CSS color string (including oklch). */
   setBackgroundColor(color: string): void {
-    try {
-      // Normalize color to hex — browser canvas 2D always serializes fillStyle as #rrggbb
-      const ctx = document.createElement('canvas').getContext('2d');
-      if (ctx) {
-        ctx.fillStyle = color;
-        this.scene.background = new THREE.Color(ctx.fillStyle);
-        return;
-      }
-    } catch {
-      // fall through
-    }
     this.scene.background = new THREE.Color(color);
+  }
+
+  /** Re-read the DaisyUI theme color and update the scene background. */
+  syncBackground(): void {
+    this.scene.background = new THREE.Color(resolveDaisyColor());
   }
 
   private startLoop(): void {

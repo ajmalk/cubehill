@@ -2,10 +2,12 @@ import { test, expect } from '@playwright/test';
 
 test('home page loads', async ({ page }) => {
   await page.goto('/');
-  // Phase 5: home page is the landing page — shows OLL and PLL nav cards
+  // Phase 5: home page is the landing page — shows OLL and PLL nav cards.
+  // Use .first() because both the navbar link and the home page card match
+  // the href pattern — strict mode would fail with two matches.
   await expect(page.locator('h2').first()).toBeVisible();
-  await expect(page.locator('a[href*="/oll/"]')).toBeVisible();
-  await expect(page.locator('a[href*="/pll/"]')).toBeVisible();
+  await expect(page.locator('a[href*="/oll/"]').first()).toBeVisible();
+  await expect(page.locator('a[href*="/pll/"]').first()).toBeVisible();
 });
 
 test('home page has navbar', async ({ page }) => {

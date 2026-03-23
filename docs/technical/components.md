@@ -245,4 +245,10 @@ Manages the dark/light mode preference. See `theme-integration.md` for details.
 
 ## Design Artifacts
 
-The Phase 4 Svelte integration design (component hierarchy, store contracts, and interaction patterns) is documented in [`designs/phase4-svelte-integration.md`](../../designs/phase4-svelte-integration.md). Wireframes showing how these components are laid out on each page are in [`designs/phase4-wireframes.md`](../../designs/phase4-wireframes.md).
+The Phase 4 Svelte integration design (component hierarchy, store contracts, and interaction patterns) is documented in [`designs/phase4-svelte-integration.md`](../../designs/phase4-svelte-integration.md). Wireframes showing how these components are laid out on each page are in [`designs/phase4-wireframes.md`](../../designs/phase4-wireframes.md). The Figma source is in file `fiCCEbCrIIZqYVIm9XTjiD`, page **Phase 4 — CubeViewer & PlaybackControls**:
+
+- [Desktop wireframe (Figma)](https://www.figma.com/design/fiCCEbCrIIZqYVIm9XTjiD?node-id=16-463) — frame `16:463`
+- [Mobile wireframe (Figma)](https://www.figma.com/design/fiCCEbCrIIZqYVIm9XTjiD?node-id=16-512) — frame `16:512`
+
+![Desktop wireframe](../../designs/phase4-desktop-wireframe.png)
+![Mobile wireframe](../../designs/phase4-mobile-wireframe.png)

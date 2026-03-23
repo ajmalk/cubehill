@@ -244,7 +244,7 @@ When the theme changes (dark ↔ light), read the DaisyUI `--b1` CSS variable fr
 
 ## Design Artifacts
 
-The Phase 3 rendering parameter decisions (camera position, lighting setup, orbit controls settings, animation timing, and color palette) are documented in [`designs/phase3-rendering-parameters.md`](../../designs/phase3-rendering-parameters.md).
+The Phase 3 rendering parameter decisions (camera position, lighting setup, orbit controls settings, animation timing, and color palette) are documented in [`designs/phase3-rendering-parameters.md`](../../designs/phase3-rendering-parameters.md). This spec was authored as a text document; there are no associated Figma frames for Phase 3.
 
 ## Performance
 

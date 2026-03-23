@@ -129,4 +129,10 @@ The root layout (`src/routes/+layout.svelte`) provides the persistent shell:
 
 ## Design Artifacts
 
-Wireframes for the Phase 4 UI are in [`designs/phase4-wireframes.md`](../../designs/phase4-wireframes.md), with annotated screenshots at [`designs/phase4-desktop-wireframe.png`](../../designs/phase4-desktop-wireframe.png) and [`designs/phase4-mobile-wireframe.png`](../../designs/phase4-mobile-wireframe.png).
+Wireframes for the Phase 4 UI are in [`designs/phase4-wireframes.md`](../../designs/phase4-wireframes.md). The Figma source is in file `fiCCEbCrIIZqYVIm9XTjiD`, page **Phase 4 — CubeViewer & PlaybackControls**:
+
+- [Desktop wireframe (Figma)](https://www.figma.com/design/fiCCEbCrIIZqYVIm9XTjiD?node-id=16-463) — frame `16:463`
+- [Mobile wireframe (Figma)](https://www.figma.com/design/fiCCEbCrIIZqYVIm9XTjiD?node-id=16-512) — frame `16:512`
+
+![Desktop wireframe](../../designs/phase4-desktop-wireframe.png)
+![Mobile wireframe](../../designs/phase4-mobile-wireframe.png)

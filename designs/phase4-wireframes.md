@@ -7,8 +7,11 @@ Rough layout wireframes for the CubeViewer + PlaybackControls page. These are st
 **Figma file**: Design (`fiCCEbCrIIZqYVIm9XTjiD`), page: **Phase 4 — CubeViewer & PlaybackControls**
 
 **Wireframe screenshots** (exported from Figma):
-- `designs/phase4-desktop-wireframe.png` — Desktop layout (>1024px), frame `16:463`
-- `designs/phase4-mobile-wireframe.png` — Mobile layout (<640px), frame `16:512`
+- [Desktop wireframe (Figma)](https://www.figma.com/design/fiCCEbCrIIZqYVIm9XTjiD?node-id=16-463) — Desktop layout (>1024px), frame `16:463`
+- [Mobile wireframe (Figma)](https://www.figma.com/design/fiCCEbCrIIZqYVIm9XTjiD?node-id=16-512) — Mobile layout (<640px), frame `16:512`
+
+![Desktop wireframe](phase4-desktop-wireframe.png)
+![Mobile wireframe](phase4-mobile-wireframe.png)
 
 **Related design docs**:
 - `designs/phase4-svelte-integration.md` — Full component spec (sizing, interaction, states, accessibility)

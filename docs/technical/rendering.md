@@ -242,6 +242,10 @@ A `ResizeObserver` watches the canvas container and calls `scene.resize()` on si
 
 When the theme changes (dark ↔ light), read the DaisyUI `--b1` CSS variable from the DOM, resolve it to an `rgb(...)` string via a temporary element, and pass it to `scene.setBackgroundColor()`. See `theme-integration.md` for the correct resolution pattern — passing the raw `--b1` value directly to `THREE.Color` does not work because DaisyUI 5 stores values as bare oklch channels.
 
+## Design Artifacts
+
+The Phase 3 rendering parameter decisions (camera position, lighting setup, orbit controls settings, animation timing, and color palette) are documented in [`designs/phase3-rendering-parameters.md`](../../designs/phase3-rendering-parameters.md).
+
 ## Performance
 
 The cube is lightweight for Three.js:

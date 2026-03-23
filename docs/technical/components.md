@@ -242,3 +242,7 @@ Note: Playback sequencing is owned entirely by `CubeAnimator` (state machine: Id
 ### themeStore (`src/lib/stores/themeStore.svelte.ts`)
 
 Manages the dark/light mode preference. See `theme-integration.md` for details.
+
+## Design Artifacts
+
+The Phase 4 Svelte integration design (component hierarchy, store contracts, and interaction patterns) is documented in [`designs/phase4-svelte-integration.md`](../../designs/phase4-svelte-integration.md). Wireframes showing how these components are laid out on each page are in [`designs/phase4-wireframes.md`](../../designs/phase4-wireframes.md).

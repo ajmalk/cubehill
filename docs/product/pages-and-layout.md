@@ -126,3 +126,7 @@ The root layout (`src/routes/+layout.svelte`) provides the persistent shell:
 - `Navbar` and `CommandPalette` are always mounted, regardless of the active page
 - Page content renders via `{@render children()}` (Svelte 5 snippet syntax) within a centered container
 - The layout imports no Three.js or browser-only code directly — those are deferred to child components via `onMount`
+
+## Design Artifacts
+
+Wireframes for the Phase 4 UI are in [`designs/phase4-wireframes.md`](../../designs/phase4-wireframes.md), with annotated screenshots at [`designs/phase4-desktop-wireframe.png`](../../designs/phase4-desktop-wireframe.png) and [`designs/phase4-mobile-wireframe.png`](../../designs/phase4-mobile-wireframe.png).

@@ -73,6 +73,15 @@ See `docs/` for detailed documentation:
 - `contributing.md` — Best practices for contributing to the wiki
 - `issue-tracking.md` — Beads issue tracking standards and best practices
 
+**Designs** (`designs/`):
+
+UX Designer artifacts — wireframes, interaction specs, and rendering parameter decisions. These are source-of-truth design documents that technical docs cross-reference.
+
+- `phase3-rendering-parameters.md` — Camera, lighting, orbit controls, animation timing parameters
+- `phase4-svelte-integration.md` — Component hierarchy, store contracts, interaction patterns
+- `phase4-wireframes.md` — Annotated wireframes for all pages
+- `phase4-desktop-wireframe.png`, `phase4-mobile-wireframe.png` — Wireframe screenshots
+
 ## Key Conventions
 
 ### Docs Freshness

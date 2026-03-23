@@ -6,6 +6,8 @@ Algorithm data lives in `src/lib/data/` as static TypeScript arrays.
 
 ## Data Model
 
+The canonical type definitions live in `src/lib/cube/types.ts`. This document is the specification; the source file is the implementation. When the data model changes, update both.
+
 The data model uses a discriminated union so TypeScript can narrow the `pattern` field based on `category`:
 
 ```typescript
@@ -16,6 +18,7 @@ interface BaseAlgorithm {
   altNotations?: string[]; // Alternative algorithms for the same case
   group: string; // Grouping label, e.g., "Dot Cases", "T-Shape"
   probability: string; // Probability of encountering, e.g., "1/54"
+  isTwoLook: boolean; // True if this case is part of the 2-look OLL/PLL learning path
 }
 
 interface OllAlgorithm extends BaseAlgorithm {
@@ -58,6 +61,18 @@ pattern[6] | pattern[7] | pattern[8]
 ```
 
 Note: `pattern[4]` (center) is always `true` for OLL since the center is always oriented.
+
+**`isTwoLook`**: Marks cases that belong to the 2-look OLL or 2-look PLL learning path — the recommended entry point for beginners. The UI surfaces this as a visual badge ("Start Here") on algorithm cards and detail pages.
+
+The 2-look OLL cases (`isTwoLook: true`) are:
+- **Cross / edge orientation**: OLL 49, 50, 51, 52 — these handle all "no edges oriented" cases in one look
+- **OCLL / corner orientation**: OLL 21 (H), 22 (Pi), 23 (Headlights), 24 (Chameleon), 25 (Bowtie), 26 (Anti-Sune), 27 (Sune)
+
+The 2-look PLL cases (`isTwoLook: true`) are:
+- **Corner permutation**: `pll-aa` (Aa Perm), `pll-ab` (Ab Perm)
+- **Edge permutation**: `pll-ua` (Ua Perm), `pll-ub` (Ub Perm), `pll-h` (H Perm), `pll-z` (Z Perm)
+
+All other cases have `isTwoLook: false`. This field is never absent — every algorithm record must include it. The Cubing Advisor must validate this list before data entry begins.
 
 **`group`**: Categorization for grouping algorithms in the browse UI. OLL cases are grouped by the shape formed by the unoriented stickers. PLL cases are grouped by which pieces are permuted.
 

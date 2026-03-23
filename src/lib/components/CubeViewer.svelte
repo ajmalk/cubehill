@@ -140,10 +140,13 @@
   function syncThemeToScene(cubeScene: import('$lib/three/CubeScene.js').CubeScene): void {
     if (!browser) return;
 
-    // Create a throwaway element to resolve the DaisyUI bg-base-100 class
-    // to a computed RGB color the browser can parse
+    // Create a throwaway element to resolve the DaisyUI bg-base-100 class to
+    // a computed RGB color that Three.js can parse. The element must be part of
+    // the layout (not display:none) so the browser resolves oklch() CSS vars;
+    // position:fixed off-screen achieves this without visual impact.
     const el = document.createElement('div');
-    el.style.display = 'none';
+    el.style.cssText =
+      'position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;pointer-events:none;';
     el.className = 'bg-base-100';
     document.body.appendChild(el);
     const bg = getComputedStyle(el).backgroundColor;
@@ -152,11 +155,8 @@
     if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') {
       cubeScene.setBackgroundColor(bg);
     } else {
-      // Fallback: wrap --b1 in oklch()
-      const b1 = getComputedStyle(document.documentElement).getPropertyValue('--b1').trim();
-      if (b1) {
-        cubeScene.setBackgroundColor(`oklch(${b1})`);
-      }
+      // Final fallback: dark neutral matching DaisyUI "dark" theme base-100
+      cubeScene.setBackgroundColor('#1d232a');
     }
   }
 

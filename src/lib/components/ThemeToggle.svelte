@@ -15,7 +15,10 @@
   <input
     type="checkbox"
     checked={themeStore.theme === 'light'}
-    onchange={themeStore.toggleTheme}
+    onclick={(e) => {
+      e.preventDefault();
+      themeStore.toggleTheme();
+    }}
     aria-label="Toggle dark/light mode"
   />
 

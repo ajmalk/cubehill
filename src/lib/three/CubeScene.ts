@@ -78,10 +78,12 @@ export class CubeScene {
     // Read DaisyUI --b1 CSS variable for the base background color.
     // DaisyUI v5 stores --b1 as a raw oklch string (e.g. "0.2 0.02 260"),
     // not as a full color expression. Three.js cannot parse this directly.
-    // Resolve via a throwaway DOM element instead.
+    // Resolve via a throwaway DOM element. The element must be visible to the
+    // browser layout engine — display:none elements return rgba(0,0,0,0) for
+    // backgroundColor in some browsers, so we use position:fixed off-screen.
     try {
       const el = document.createElement('div');
-      el.style.display = 'none';
+      el.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;pointer-events:none;';
       el.className = 'bg-base-100';
       document.body.appendChild(el);
       const bg = getComputedStyle(el).backgroundColor;
@@ -93,18 +95,6 @@ export class CubeScene {
       }
     } catch {
       // ignore — fall through to fallback
-    }
-
-    // Secondary fallback: try wrapping --b1 in oklch()
-    try {
-      const computed = getComputedStyle(document.documentElement);
-      const b1 = computed.getPropertyValue('--b1').trim();
-      if (b1) {
-        this.scene.background = new THREE.Color(`oklch(${b1})`);
-        return;
-      }
-    } catch {
-      // ignore
     }
 
     // Final fallback: dark neutral

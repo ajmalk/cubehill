@@ -150,6 +150,12 @@ function loadAlgorithm(notation: string): void {
 function stepForward(): void {
   if (stepIndex >= moves.length) return;
 
+  // Stop any in-progress playback before manipulating state. Without this,
+  // the play() async loop could still be holding a stuck await, leaving
+  // isPlaying=true after the manual step.
+  _stopPlay();
+  playbackStatus = 'idle';
+
   // Save current state for undo
   history = [...history, [...cubeState]];
 
@@ -166,6 +172,12 @@ function stepForward(): void {
  */
 function stepBack(): void {
   if (stepIndex === 0 || history.length === 0) return;
+
+  // Stop any in-progress playback before manipulating state. Without this,
+  // the play() async loop could still be holding a stuck await on a
+  // cancelled animation promise, leaving isPlaying=true after the step.
+  _stopPlay();
+  playbackStatus = 'idle';
 
   const prevState = history[history.length - 1];
   history = history.slice(0, -1);

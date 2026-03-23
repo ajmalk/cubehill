@@ -125,7 +125,7 @@ function syncThemeToScene(scene: CubeScene) {
 
 `THREE.Color` accepts `rgb(r, g, b)` strings natively, so no hex conversion step is needed.
 
-The current `CubeScene.syncBackgroundFromCSS()` passes the raw `--b1` value directly to `THREE.Color` — this will not render the correct background color and must be fixed before theme sync is wired up.
+`CubeViewer` implements this correctly: it creates a throwaway `div.bg-base-100` element, reads `getComputedStyle(el).backgroundColor` to get a browser-resolved `rgb(...)` string, and falls back to `oklch(${b1})` if the computed value is transparent. `THREE.Color` handles `rgb(...)` strings natively.
 
 ### Sticker Colors
 

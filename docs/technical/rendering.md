@@ -149,11 +149,11 @@ Inter-move delay: 0ms. The ease-in-out curve creates a natural pause at the star
 
 ### Sequential Animation
 
-`CubeAnimator` uses an internal move queue and a state machine (see Animation State Machine below). Calls to `play()` drain `moveQueue` one move at a time via `playNext()`. The caller does not manage an `async/await` loop — the animator handles sequencing internally.
+`CubeAnimator.animate(move)` is a one-shot imperative call that returns a `Promise<void>`. It animates a single move and resolves when the animation is complete.
 
-`CubeViewer` uses `animator.play()` / `animator.pause()` / `animator.step()` / `animator.reset()`. The animator's `AnimationState` (`'idle' | 'animating' | 'paused'`) is the source of truth for playback status.
+Playback sequencing is owned by `cubeStore`, which runs an async loop: for each move, it calls `animator.animate(move)` and awaits completion before advancing to the next move. This ensures animations never overlap regardless of playback speed.
 
-`animate(move)` is still available as a one-shot imperative call that returns a `Promise<void>`. Use it only when animating a single move outside the queue context.
+The `AnimationState` (`'idle' | 'animating' | 'paused'`) in the animator is an internal concept used to prevent concurrent animations; the store's `isPlaying` / `playbackStatus` are the UI-visible state.
 
 ### Animation Interruption
 
@@ -218,16 +218,30 @@ Wraps `THREE.OrbitControls` (`src/lib/three/controls.ts`) with these settings:
 
 ### Mounting
 
-`CubeViewer.svelte` creates a `<canvas>` element and passes it to `CubeScene` in `onMount`:
+`CubeViewer.svelte` creates a `<canvas>` element and passes it to `CubeScene` in `onMount`. The Three.js modules are imported dynamically inside `onMount` (never at the top level) to ensure SSR safety:
 
 ```svelte
 <script>
   let canvas: HTMLCanvasElement;
-  let scene: CubeScene;
+  let scene: CubeScene | null = null;
 
   onMount(() => {
-    scene = new CubeScene(canvas);
-    return () => scene.dispose();
+    (async () => {
+      const [{ CubeScene, CubeMesh, CubeAnimator }, { solved }] = await Promise.all([
+        import('$lib/three/index.js'),
+        import('$lib/cube/index.js'),
+      ]);
+      const cubeScene = new CubeScene(canvas);
+      const cubeMesh = new CubeMesh(cubeScene.getScene());
+      const cubeAnim = new CubeAnimator(cubeScene, cubeMesh, solved());
+      scene = cubeScene;
+      cubeStore.setAnimator(cubeAnim);
+    })();
+
+    return () => {
+      cubeStore.clearAnimator();
+      scene?.dispose();
+    };
   });
 </script>
 
@@ -240,7 +254,9 @@ A `ResizeObserver` watches the canvas container and calls `scene.resize()` on si
 
 ### Theme-Aware Background
 
-When the theme changes (dark ↔ light), read the DaisyUI `--b1` CSS variable from the DOM, resolve it to an `rgb(...)` string via a temporary element, and pass it to `scene.setBackgroundColor()`. See `theme-integration.md` for the correct resolution pattern — passing the raw `--b1` value directly to `THREE.Color` does not work because DaisyUI 5 stores values as bare oklch channels.
+When the theme changes (dark ↔ light), `CubeViewer` syncs the scene background via a `$effect` that reads `themeStore.theme`. It resolves the DaisyUI base color by appending a throwaway `div.bg-base-100` element to the DOM and reading `getComputedStyle(el).backgroundColor`, which returns a browser-resolved `rgb(...)` string. This is passed directly to `scene.setBackgroundColor()`.
+
+Do not pass the raw `--b1` CSS variable value directly to `THREE.Color` — DaisyUI 5 stores oklch channel values without the `oklch()` wrapper, which `THREE.Color` cannot parse. See `theme-integration.md` for the full color resolution strategy.
 
 ## Design Artifacts
 

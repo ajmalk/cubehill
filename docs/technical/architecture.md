@@ -53,7 +53,7 @@ cubehill/
 │   └── routes/ *                       # SvelteKit file-based routing
 │       ├── +layout.svelte *           # Root layout (imports CSS, favicon)
 │       ├── +layout.ts *               # Prerender + trailingSlash config
-│       ├── +page.svelte *             # Home page (placeholder)
+│       ├── +page.svelte *             # Home page (T Perm demo — Phase 4)
 │       ├── oll/
 │       │   ├── +page.svelte           # OLL cases listing
 │       │   └── [id]/+page.svelte      # Individual OLL case
@@ -145,21 +145,25 @@ All routes are statically prerendered at build time via `adapter-static`. Dynami
 
 ## Component Hierarchy
 
+Target hierarchy (some components are TODOs in `+layout.svelte`; see Phase 4 home page for current state):
+
 ```
 +layout.svelte
-├── Navbar
-├── CommandPalette (global, always mounted)
+├── Navbar                              (TODO: move here from individual pages)
+├── CommandPalette (global)             (TODO: not yet implemented)
 └── {@render children()} (page content)
-    ├── Home (+page.svelte)
-    │   └── CubeViewer (interactive demo)
-    ├── OLL List (oll/+page.svelte)
-    │   └── AlgorithmList → AlgorithmCard[]
-    ├── OLL Detail (oll/[id]/+page.svelte)
+    ├── Home (+page.svelte)             (Phase 4: T Perm demo with inline navbar)
+    │   ├── ThemeToggle (inline navbar)
     │   ├── CubeViewer
     │   └── PlaybackControls
-    ├── PLL List (pll/+page.svelte)
+    ├── OLL List (oll/+page.svelte)     (future)
     │   └── AlgorithmList → AlgorithmCard[]
-    └── PLL Detail (pll/[id]/+page.svelte)
+    ├── OLL Detail (oll/[id]/+page.svelte) (future)
+    │   ├── CubeViewer
+    │   └── PlaybackControls
+    ├── PLL List (pll/+page.svelte)     (future)
+    │   └── AlgorithmList → AlgorithmCard[]
+    └── PLL Detail (pll/[id]/+page.svelte) (future)
         ├── CubeViewer
         └── PlaybackControls
 ```

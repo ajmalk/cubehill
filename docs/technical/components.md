@@ -4,6 +4,8 @@ This document describes the Svelte component APIs, reactive stores, keyboard con
 
 ## Components
 
+**Current state (post-Phase 4):** `CubeViewer`, `PlaybackControls`, and `ThemeToggle` are implemented. `AlgorithmList`, `AlgorithmCard`, `Navbar`, and `CommandPalette` are future work described below as specs.
+
 ### CubeViewer (`src/lib/components/CubeViewer.svelte`)
 
 The 3D cube canvas mount point. See `rendering.md` for full details on the Three.js integration.
@@ -12,34 +14,18 @@ Key responsibilities:
 
 - Creates a `<canvas>` element sized to fit its container, inside a `relative`-positioned wrapper
 - Instantiates `CubeScene`, `CubeMesh`, and `CubeAnimator` in `onMount` (Three.js must not run server-side)
+- Registers/unregisters the `CubeAnimator` with `cubeStore` via `cubeStore.setAnimator()` / `cubeStore.clearAnimator()`
 - Attaches a `ResizeObserver` for responsive canvas sizing
 - Shows a DaisyUI loading spinner overlay until `onMount` completes; shows an error state if WebGL is unavailable
 - Sets `touch-action: none` on the canvas to prevent browser scroll interception during orbit
 - Toggles `cursor: grab` / `cursor: grabbing` on the container via `mousedown`/`mouseup`
-- Handles double-click/double-tap to reset the camera to its default position (400ms ease-out animation)
-- Calls `scene.dispose()` and `animator.dispose()` in `onDestroy` to clean up WebGL resources
+- Handles double-click to reset the camera to its default position (400ms ease-out cubic tween)
+- Syncs the scene background with the current theme via a `$effect` that runs whenever `themeStore.theme` changes
+- Calls `scene.dispose()` on component destroy to clean up WebGL resources
 
-**Props:**
+**Props:** None. `CubeViewer` takes no props. All interaction (load, step, play, reset) is driven through `cubeStore`.
 
-```typescript
-interface CubeViewerProps {
-  algorithm?: string;  // Optional initial algorithm notation to load on mount
-  autoRotate?: boolean; // Optional: enable OrbitControls auto-rotate (home hero)
-}
-```
-
-**Methods (exposed via `bind:this`):**
-
-```typescript
-interface CubeViewerMethods {
-  loadAlgorithm(notation: string): void;
-  stepForward(): void;
-  stepBack(): void;
-  reset(): void;
-}
-```
-
-`PlaybackControls` writes to `cubeStore`; `CubeViewer` reacts to the store and calls the animator. Parents on the detail page call the exposed methods directly for keyboard-driven interactions.
+`PlaybackControls` reads and writes `cubeStore`; `CubeViewer` registers its animator with the store on mount so the store can delegate animation to it.
 
 ### AlgorithmList (`src/lib/components/AlgorithmList.svelte`)
 
@@ -221,23 +207,29 @@ The keydown listener is added in `onMount` and removed in `onDestroy` to prevent
 Manages the cube state and playback using Svelte 5 runes:
 
 ```typescript
-let cubeState = $state(solved()); // Current cube state (number[54])
-let algorithm = $state<Move[]>([]); // Current algorithm being played
-let stepIndex = $state(0); // Current step in the algorithm
-let isPlaying = $state(false); // Whether auto-playback is active
-let history = $state<number[][]>([]); // State history for undo/step-back
+let cubeState = $state(solved());         // Current cube state (number[54])
+let moves = $state<Move[]>([]);           // Parsed moves of the loaded algorithm
+let moveTokens = $state<string[]>([]);    // Notation tokens for the UI display
+let initialState = $state<number[]>(solved()); // Pre-algorithm starting state
+let stepIndex = $state(0);               // Current step (0 = no moves applied)
+let isPlaying = $state(false);           // Whether auto-playback is active
+let playbackStatus = $state<'idle' | 'playing' | 'paused'>('idle');
+let speed = $state<SpeedSetting>('normal');
+let history = $state<number[][]>([]);    // State history for undo/step-back
 ```
 
 Key operations:
 
-- **loadAlgorithm(notation: string)**: Parse the notation, compute the inverse to get the unsolved state, reset playback
-- **stepForward()**: Apply the next move, push current state to history, advance index
-- **stepBack()**: Pop the last state from history, decrement index
-- **play()**: Delegates to `CubeAnimator.play()` — the animator owns the playback loop and move queue. Sets `isPlaying = true` for UI state only.
-- **pause()**: Delegates to `CubeAnimator.pause()`. Sets `isPlaying = false`.
-- **reset()**: Delegates to `CubeAnimator.reset()`. Restores the initial unsolved state, clears history, resets index.
+- **loadAlgorithm(notation: string)**: Parse notation, apply the inverse to a solved cube to get the unsolved starting state, reset all playback state, sync the animator via `animator.loadAlgorithm()`.
+- **stepForward()**: Push current state to history, apply next move, advance `stepIndex`, call `animator.animate(move)` (fire-and-forget).
+- **stepBack()**: Pop history to restore previous state, decrement `stepIndex`, call `animator.loadAlgorithm()` to resync the animator queue.
+- **play()**: Runs an async loop — for each remaining move, applies it logically, awaits `animator.animate(move)`, then advances. Stops when the queue is exhausted or `pause()` is called.
+- **pause()**: Sets `cancelPlay = true` to break the play loop on the next iteration.
+- **reset()**: Restores `initialState`, clears history and `stepIndex`, syncs the animator via `animator.loadAlgorithm()`.
+- **setAnimator(anim)**: Called by `CubeViewer` after `onMount`. Registers the animator and loads any current algorithm into it.
+- **clearAnimator()**: Called by `CubeViewer` on destroy. Stops the play loop and nullifies the animator reference.
 
-Note: Playback sequencing is owned entirely by `CubeAnimator` (state machine: Idle / Animating / Paused). The store tracks UI-visible state (`stepIndex`, `isPlaying`) reactively from animator callbacks. The store does **not** run a timer loop — the animator's internal `requestAnimationFrame` loop drives all sequencing.
+Note: The store owns the playback sequencing loop (not the animator). The `CubeAnimator` handles the visual face-turn animation for individual moves; the store drives the step-by-step logic.
 
 ### themeStore (`src/lib/stores/themeStore.svelte.ts`)
 

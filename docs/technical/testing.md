@@ -84,26 +84,35 @@ E2E tests run against `npm run build && npm run preview` to test the production 
 
 Unit tests are co-located with their source files (`*.test.ts` next to the module). E2E tests live in a top-level `tests/e2e/` directory. Vitest is configured inside `vite.config.ts` (not a separate `vitest.config.ts`).
 
-### Current State (Post-Phase 2)
+### Current State (Post-Phase 4)
 
 ```
 cubehill/
 ├── src/lib/
 │   ├── smoke.test.ts                  # Smoke unit test (trivial assertions)
-│   └── cube/
-│       ├── CubeState.ts
-│       ├── CubeState.test.ts          # Cube state unit tests
-│       ├── colors.ts
-│       ├── colors.test.ts             # Color enum and constants tests
-│       ├── moves.ts
-│       ├── moves.test.ts              # Move permutation and algorithm tests
-│       ├── notation.ts
-│       └── notation.test.ts           # Notation parser tests
+│   ├── cube/
+│   │   ├── CubeState.ts
+│   │   ├── CubeState.test.ts          # Cube state unit tests
+│   │   ├── colors.ts
+│   │   ├── colors.test.ts             # Color enum and constants tests
+│   │   ├── moves.ts
+│   │   ├── moves.test.ts              # Move permutation and algorithm tests
+│   │   ├── notation.ts
+│   │   └── notation.test.ts           # Notation parser tests
+│   └── three/
+│       ├── CubeAnimator.ts
+│       ├── CubeAnimator.test.ts       # Animation duration constants, easing fn,
+│       │                              #   face rotation table, state machine logic
+│       ├── CubeMesh.ts
+│       └── CubeMesh.test.ts           # Sticker-index → cubie-position mapping,
+│                                      #   color table, 26-cubie invariants
 ├── tests/e2e/
-│   └── smoke.test.ts                  # E2E smoke test (page loads)
+│   └── smoke.test.ts                  # E2E: home page loads, navbar, canvas visible
 ├── vite.config.ts                     # Vitest configured here
 └── playwright.config.ts
 ```
+
+The Phase 4 Three.js tests avoid requiring a real WebGL context. `CubeAnimator.test.ts` tests exported constants and a mock state machine mirroring the real one. `CubeMesh.test.ts` inlines the sticker mapping function and verifies cubie-position invariants (26 distinct cubies, no invisible center, correct sticker counts per cubie type).
 
 ### Target Structure (Future Phases)
 

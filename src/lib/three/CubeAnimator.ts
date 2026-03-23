@@ -246,6 +246,7 @@ export class CubeAnimator {
       // Collect face cubies and reparent into TurnGroup
       const faceCubies = this.mesh.getFaceCubies(face);
       const turnGroup = new THREE.Group();
+      turnGroup.userData['isTurnGroup'] = true;
       this.scene.add(turnGroup);
 
       for (const cubie of faceCubies) {

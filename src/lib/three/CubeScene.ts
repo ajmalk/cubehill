@@ -75,16 +75,40 @@ export class CubeScene {
   }
 
   private syncBackgroundFromCSS(): void {
-    // Read DaisyUI --b1 CSS variable for the base background color
-    const computed = getComputedStyle(document.documentElement);
-    const b1 = computed.getPropertyValue('--b1').trim();
-    if (b1) {
-      // DaisyUI uses oklch values in --b1; fall back to a canvas read if needed
-      this.scene.background = new THREE.Color(b1);
-    } else {
-      // Fallback: read canvas background or use a neutral default
-      this.scene.background = new THREE.Color('#ffffff');
+    // Read DaisyUI --b1 CSS variable for the base background color.
+    // DaisyUI v5 stores --b1 as a raw oklch string (e.g. "0.2 0.02 260"),
+    // not as a full color expression. Three.js cannot parse this directly.
+    // Resolve via a throwaway DOM element instead.
+    try {
+      const el = document.createElement('div');
+      el.style.display = 'none';
+      el.className = 'bg-base-100';
+      document.body.appendChild(el);
+      const bg = getComputedStyle(el).backgroundColor;
+      document.body.removeChild(el);
+
+      if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') {
+        this.scene.background = new THREE.Color(bg);
+        return;
+      }
+    } catch {
+      // ignore — fall through to fallback
     }
+
+    // Secondary fallback: try wrapping --b1 in oklch()
+    try {
+      const computed = getComputedStyle(document.documentElement);
+      const b1 = computed.getPropertyValue('--b1').trim();
+      if (b1) {
+        this.scene.background = new THREE.Color(`oklch(${b1})`);
+        return;
+      }
+    } catch {
+      // ignore
+    }
+
+    // Final fallback: dark neutral
+    this.scene.background = new THREE.Color('#1d232a');
   }
 
   /** Add an object to the scene. */

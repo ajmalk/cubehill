@@ -26,6 +26,17 @@ export default ts.config(
     },
   },
   {
+    // .svelte.ts files use Svelte 5 $state runes — parse with svelte-eslint-parser
+    // so the rune syntax (e.g. $state, $derived, $effect) is understood.
+    files: ['**/*.svelte.ts'],
+    languageOptions: {
+      parser: svelteParser,
+      parserOptions: {
+        parser: ts.parser,
+      },
+    },
+  },
+  {
     ignores: ['build/', '.svelte-kit/', 'node_modules/'],
   },
 );

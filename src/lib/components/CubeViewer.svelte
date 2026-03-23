@@ -141,19 +141,27 @@
     if (!browser) return;
 
     // Create a throwaway element to resolve the DaisyUI bg-base-100 class to
-    // a computed RGB color that Three.js can parse. The element must be part of
+    // a computed color that Three.js can parse. The element must be part of
     // the layout (not display:none) so the browser resolves oklch() CSS vars;
     // position:fixed off-screen achieves this without visual impact.
+    //
+    // DaisyUI v5 + Tailwind v4 returns backgroundColor as oklch(...), which
+    // THREE.Color cannot parse. Normalise to #rrggbb by assigning the computed
+    // value to a 2D canvas context's fillStyle — the browser always serialises
+    // fillStyle as a hex string, never oklch.
     const el = document.createElement('div');
     el.style.cssText =
       'position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;pointer-events:none;';
     el.className = 'bg-base-100';
     document.body.appendChild(el);
-    const bg = getComputedStyle(el).backgroundColor;
+    const computed = getComputedStyle(el).backgroundColor;
     document.body.removeChild(el);
 
-    if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') {
-      cubeScene.setBackgroundColor(bg);
+    if (computed && computed !== 'rgba(0, 0, 0, 0)' && computed !== 'transparent') {
+      const ctx = document.createElement('canvas').getContext('2d')!;
+      ctx.fillStyle = computed;
+      const hex = ctx.fillStyle; // always #rrggbb
+      cubeScene.setBackgroundColor(hex);
     } else {
       // Final fallback: dark neutral matching DaisyUI "dark" theme base-100
       cubeScene.setBackgroundColor('#1d232a');

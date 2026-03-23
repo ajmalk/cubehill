@@ -76,21 +76,28 @@ export class CubeScene {
 
   private syncBackgroundFromCSS(): void {
     // Read DaisyUI --b1 CSS variable for the base background color.
-    // DaisyUI v5 stores --b1 as a raw oklch string (e.g. "0.2 0.02 260"),
-    // not as a full color expression. Three.js cannot parse this directly.
-    // Resolve via a throwaway DOM element. The element must be visible to the
-    // browser layout engine — display:none elements return rgba(0,0,0,0) for
-    // backgroundColor in some browsers, so we use position:fixed off-screen.
+    // DaisyUI v5 + Tailwind v4 stores --b1 as raw oklch channel values
+    // (e.g. "0.2 0.02 260"), not a full color expression. The browser resolves
+    // bg-base-100 to a computed backgroundColor, but that value arrives as
+    // oklch(...) which THREE.Color cannot parse.
+    //
+    // Fix: after getting the computed color, normalize it to #rrggbb by
+    // assigning it to a 2D canvas context's fillStyle — the browser always
+    // stores fillStyle as a hex or rgb string, never oklch.
     try {
       const el = document.createElement('div');
-      el.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;pointer-events:none;';
+      el.style.cssText =
+        'position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;pointer-events:none;';
       el.className = 'bg-base-100';
       document.body.appendChild(el);
-      const bg = getComputedStyle(el).backgroundColor;
+      const computed = getComputedStyle(el).backgroundColor;
       document.body.removeChild(el);
 
-      if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') {
-        this.scene.background = new THREE.Color(bg);
+      if (computed && computed !== 'rgba(0, 0, 0, 0)' && computed !== 'transparent') {
+        const ctx = document.createElement('canvas').getContext('2d')!;
+        ctx.fillStyle = computed;
+        const hex = ctx.fillStyle; // always #rrggbb
+        this.scene.background = new THREE.Color(hex);
         return;
       }
     } catch {

@@ -17,15 +17,17 @@
 
   let { data } = $props();
 
-  const { algorithm, prevCase, nextCase } = data;
+  const algorithm = $derived(data.algorithm);
+  const prevCase = $derived(data.prevCase);
+  const nextCase = $derived(data.nextCase);
 
   /** Extract denominator from probability fraction string, e.g. "1/54" → 54 */
   function parseProbabilityDenominator(probability: string): string {
     return probability.split('/')[1] ?? probability;
   }
 
-  // Load algorithm into cube on mount
-  onMount(() => {
+  // Load algorithm into cube whenever the algorithm changes (handles client-side navigation)
+  $effect(() => {
     cubeStore.loadAlgorithm(algorithm.notation);
   });
 

@@ -207,15 +207,13 @@ describe('Animation vs. State consistency (P0 bug investigation)', () => {
   // BUG 1: Animation direction vs. state permutation mismatch
   // -----------------------------------------------------------------------
 
-  describe('animation-state mismatch on all faces (THE BUG)', () => {
+  describe('animation-state consistency on all faces (FIXED)', () => {
     const faces: FaceMove[] = ['R', 'U', 'F', 'L', 'D', 'B'];
 
     for (const face of faces) {
-      it(`${face} CW: 3D rotation and state permutation DISAGREE`, () => {
+      it(`${face} CW: 3D rotation and state permutation AGREE`, () => {
         const errors = checkRotationConsistency(face);
-        // This test EXPECTS mismatches — it documents the bug.
-        // When cycles are fixed, change to: expect(errors.length).toBe(0)
-        expect(errors.length).toBeGreaterThan(0);
+        expect(errors.length).toBe(0);
       });
     }
   });
@@ -224,7 +222,7 @@ describe('Animation vs. State consistency (P0 bug investigation)', () => {
   // BUG 2: Cycles reference wrong sticker indices
   // -----------------------------------------------------------------------
 
-  describe('U move permutes stickers outside top layer (wrong cycle indices)', () => {
+  describe('U move only permutes stickers in top layer (FIXED)', () => {
     it('U CW should only move stickers at gy=1', () => {
       const labeled = Array.from({ length: 54 }, (_, i) => i);
       const result = applyMove(labeled, move('U'));
@@ -238,34 +236,20 @@ describe('Animation vs. State consistency (P0 bug investigation)', () => {
         }
       }
 
-      // BUG: U touches indices 42,43,44 (L bottom row, gy=-1) and 51,52,53
-      // (B bottom row, gy=-1). These should not be affected by a U move.
-      expect(wrongLayer.length).toBeGreaterThan(0);
+      expect(wrongLayer.length).toBe(0);
     });
   });
 
-  describe('R CW on labeled state: wrong sticker positions within column', () => {
-    it('R CW moves stickers to wrong positions (masked on solved state)', () => {
+  describe('R CW on labeled state: correct sticker positions (FIXED)', () => {
+    it('R CW moves stickers to correct positions', () => {
       const labeled = Array.from({ length: 54 }, (_, i) => i);
       const result = applyMove(labeled, move('R'));
 
-      // Physical R CW (-90 deg X): cubie at UFR (1,1,1) -> UBR (1,1,-1).
+      // Physical R CW (-90 deg X): cubie at UFR (1,1,1) rotates.
       //   U sticker (idx 2, +y normal) -> B at UBR (-z normal) = idx 47
-      //   F sticker (idx 20, +z normal) -> U at UBR (+y normal) = idx 8
-      //
-      // But the code's R_CYCLES cycle [2,20,29,47] with applyCyclesReverse gives:
-      //   Value from idx 20 goes to idx 2 (NOT to idx 8)
-      //   Value from idx 2 goes to idx 47 (correct)
-      //
-      // On solved state: idx 2 and idx 8 are both White, idx 20 and idx 26 are
-      // both Green, so the error is invisible. On non-solved state, it produces
-      // wrong colors.
-
-      // Expected (physical): idx 20's value should go to idx 8
-      expect(result[8]).not.toBe(20); // BUG: idx 8 gets value 26 instead of 20
-
-      // Expected (physical): idx 2's value should go to idx 47
-      expect(result[47]).toBe(2); // This one happens to be correct
+      //   F sticker (idx 20, +z normal) -> U at UFR (+y normal) = idx 8
+      expect(result[8]).toBe(20);  // F top-right -> U top-right
+      expect(result[47]).toBe(2);  // U top-right -> B top-right
     });
   });
 
@@ -273,7 +257,7 @@ describe('Animation vs. State consistency (P0 bug investigation)', () => {
   // BUG 3: F CW touches stickers outside the F layer
   // -----------------------------------------------------------------------
 
-  describe('F move scope', () => {
+  describe('F move scope (FIXED)', () => {
     it('F CW should only move stickers at gz=1', () => {
       const labeled = Array.from({ length: 54 }, (_, i) => i);
       const result = applyMove(labeled, move('F'));
@@ -287,15 +271,7 @@ describe('Animation vs. State consistency (P0 bug investigation)', () => {
         }
       }
 
-      // If F move touches stickers outside gz=1, its cycles are wrong too.
-      // Expect this to pass if F_CYCLES are correct, fail if wrong.
-      if (wrongLayer.length > 0) {
-        console.warn('F touches stickers outside gz=1:', wrongLayer.join(', '));
-      }
-      // BUG CONFIRMED: F cycles reference stickers at gz=-1 (back layer).
-      // Indices 6,7,8 (U back row), 11,14,17 (R back column), 38,41,44 (L back column)
-      // are all at gz=-1 but F should only touch gz=1.
-      expect(wrongLayer.length).toBeGreaterThan(0);
+      expect(wrongLayer.length).toBe(0);
     });
   });
 
@@ -331,11 +307,11 @@ describe('Animation vs. State consistency (P0 bug investigation)', () => {
   // Post-fix validation tests (will pass AFTER cycles are corrected)
   // -----------------------------------------------------------------------
 
-  describe('POST-FIX: animation-state consistency (skip until fix)', () => {
+  describe('POST-FIX: animation-state consistency (verified)', () => {
     const faces: FaceMove[] = ['R', 'U', 'F', 'L', 'D', 'B'];
 
     for (const face of faces) {
-      it.skip(`${face} CW: 3D rotation matches state permutation`, () => {
+      it(`${face} CW: 3D rotation matches state permutation`, () => {
         const errors = checkRotationConsistency(face);
         expect(errors.length).toBe(0);
       });

@@ -53,9 +53,9 @@ function applyCyclesWithModifier(
 ): number[] {
   switch (modifier) {
     case '':
-      return applyCyclesReverse(state, cycles);
-    case "'":
       return applyCyclesForward(state, cycles);
+    case "'":
+      return applyCyclesReverse(state, cycles);
     case '2':
       return applyCyclesDouble(state, cycles);
   }
@@ -67,51 +67,51 @@ function applyCyclesWithModifier(
 // The last 2 cycles rotate the face itself (corners and edges).
 
 const R_CYCLES: Cycle[] = [
-  [2, 20, 29, 47],
-  [5, 23, 32, 50],
-  [8, 26, 35, 53],
+  [2, 47, 35, 26],
+  [5, 50, 32, 23],
+  [8, 53, 29, 20],
   [9, 11, 17, 15],
   [10, 14, 16, 12],
 ];
 
 const U_CYCLES: Cycle[] = [
-  [18, 9, 53, 44],
-  [19, 10, 52, 43],
-  [20, 11, 51, 42],
-  [0, 2, 8, 6],
-  [1, 5, 7, 3],
+  [0, 6, 8, 2],
+  [1, 3, 7, 5],
+  [9, 18, 38, 47],
+  [10, 19, 37, 46],
+  [11, 20, 36, 45],
 ];
 
 const F_CYCLES: Cycle[] = [
-  [6, 38, 29, 17],
-  [7, 41, 28, 14],
-  [8, 44, 27, 11],
+  [0, 9, 29, 42],
+  [1, 12, 28, 39],
+  [2, 15, 27, 36],
   [18, 20, 26, 24],
   [19, 23, 25, 21],
 ];
 
 const L_CYCLES: Cycle[] = [
-  [0, 45, 27, 18],
-  [3, 48, 30, 21],
-  [6, 51, 33, 24],
-  [36, 38, 44, 42],
-  [37, 41, 43, 39],
+  [0, 24, 33, 45],
+  [3, 21, 30, 48],
+  [6, 18, 27, 51],
+  [36, 42, 44, 38],
+  [37, 39, 43, 41],
 ];
 
 const D_CYCLES: Cycle[] = [
-  [24, 15, 47, 42],
-  [25, 16, 46, 43],
-  [26, 17, 45, 44],
+  [15, 53, 44, 24],
+  [16, 52, 43, 25],
+  [17, 51, 42, 26],
   [27, 29, 35, 33],
   [28, 32, 34, 30],
 ];
 
 const B_CYCLES: Cycle[] = [
-  [2, 9, 33, 44],
-  [1, 12, 34, 41],
-  [0, 15, 35, 38],
-  [45, 47, 53, 51],
-  [46, 50, 52, 48],
+  [6, 44, 35, 11],
+  [7, 41, 34, 14],
+  [8, 38, 33, 17],
+  [45, 51, 53, 47],
+  [46, 48, 52, 50],
 ];
 
 const FACE_CYCLES: Record<FaceMove, Cycle[]> = {
@@ -129,21 +129,21 @@ const FACE_CYCLES: Record<FaceMove, Cycle[]> = {
 // S: Standing layer between F and B, follows F direction
 
 const M_CYCLES: Cycle[] = [
-  [1, 46, 28, 19],
-  [4, 49, 31, 22],
-  [7, 52, 34, 25],
+  [1, 25, 34, 46],
+  [4, 22, 31, 49],
+  [7, 19, 28, 52],
 ];
 
 const E_CYCLES: Cycle[] = [
-  [21, 12, 50, 39],
-  [22, 13, 49, 40],
-  [23, 14, 48, 41],
+  [12, 50, 41, 21],
+  [13, 49, 40, 22],
+  [14, 48, 39, 23],
 ];
 
 const S_CYCLES: Cycle[] = [
-  [3, 37, 32, 16],
-  [4, 40, 31, 13],
-  [5, 43, 30, 10],
+  [3, 10, 32, 43],
+  [4, 13, 31, 40],
+  [5, 16, 30, 37],
 ];
 
 const SLICE_CYCLES: Record<SliceMove, Cycle[]> = {

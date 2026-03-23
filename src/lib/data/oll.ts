@@ -431,9 +431,9 @@ export const OLL_ALGORITHMS: OllAlgorithm[] = [
     probability: '1/54',
     isTwoLook: false,
     //   .#.
-    //   ###
+    //   ##.
     //   ...
-    pattern: [false, true, false, true, true, true, false, false, false],
+    pattern: [false, true, false, true, true, false, false, false, false],
   },
 
   // ── Fish Cases (4 cases: OLL 9, 10, 35, 37) ─────────────────────────────
@@ -628,9 +628,9 @@ export const OLL_ALGORITHMS: OllAlgorithm[] = [
     probability: '1/54',
     isTwoLook: false,
     //   .#.
-    //   ###
+    //   .##
     //   ...
-    pattern: [false, true, false, true, true, true, false, false, false],
+    pattern: [false, true, false, false, true, true, false, false, false],
   },
 
   // ── L-Shape (OLL 47, 48, 53, 54, 57) ────────────────────────────────────

@@ -148,6 +148,17 @@ export class CubeScene {
 
   /** Update the scene background to match the current theme. */
   setBackgroundColor(color: string): void {
+    try {
+      // Normalize color to hex — browser canvas 2D always serializes fillStyle as #rrggbb
+      const ctx = document.createElement('canvas').getContext('2d');
+      if (ctx) {
+        ctx.fillStyle = color;
+        this.scene.background = new THREE.Color(ctx.fillStyle);
+        return;
+      }
+    } catch {
+      // fall through
+    }
     this.scene.background = new THREE.Color(color);
   }
 

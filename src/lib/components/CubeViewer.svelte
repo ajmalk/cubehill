@@ -130,9 +130,9 @@
   // ---------------------------------------------------------------------------
 
   $effect(() => {
-    // Depend on theme to re-run when it changes
-    void themeStore.theme;
-    if (scene && initialized) {
+    // Read theme value to create Svelte 5 dependency
+    const _theme = themeStore.theme;
+    if (scene && initialized && _theme) {
       syncThemeToScene(scene);
     }
   });

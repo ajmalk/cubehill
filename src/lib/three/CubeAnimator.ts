@@ -171,9 +171,17 @@ export class CubeAnimator {
     this.pendingStep = false;
   }
 
-  /** Animate a single move directly (without queue). Returns a promise that resolves when done. */
-  animate(move: Move): Promise<void> {
-    return this.animateMove(move);
+  /**
+   * Animate a single move directly (without queue). Returns a promise that resolves when done.
+   *
+   * @param move - The move to animate.
+   * @param targetState - Optional authoritative post-move state from the store. When provided,
+   *   `finishAnimation` re-colors from this state instead of computing it internally. This
+   *   eliminates the dual-state problem where both the store and animator independently apply
+   *   moves and can diverge (e.g. due to onMount ordering or initialization differences).
+   */
+  animate(move: Move, targetState?: number[]): Promise<void> {
+    return this.animateMove(move, targetState);
   }
 
   // -------------------------------------------------------------------------
@@ -213,13 +221,25 @@ export class CubeAnimator {
   // Single-move animation
   // -------------------------------------------------------------------------
 
-  private animateMove(move: Move): Promise<void> {
+  /**
+   * Internal move animation implementation.
+   *
+   * @param move - The move to animate.
+   * @param targetState - If provided by the store (authoritative single source of truth),
+   *   use it for re-coloring in `finishAnimation` instead of applying the move to
+   *   `this.logicalState`. This prevents color resets caused by the animator's internal
+   *   state diverging from the store's state (the dual-state bug).
+   *   When called from the internal queue (`playNext`), targetState is undefined and the
+   *   animator computes the new state itself.
+   */
+  private animateMove(move: Move, targetState?: number[]): Promise<void> {
     // Only face moves can be animated in 3D (slice moves + rotations affect all cubies).
     // For now, only animate FaceMoves. Others are snapped instantly.
     const faceMoves = new Set(['R', 'U', 'F', 'L', 'D', 'B']);
     if (!faceMoves.has(move.base) || move.wide) {
       // Snap non-face moves instantly
-      this.logicalState = applyMove(this.logicalState, move);
+      // If the store provided authoritative state, use it; otherwise compute it.
+      this.logicalState = targetState ? [...targetState] : applyMove(this.logicalState, move);
       this.mesh.resetTransforms();
       this.mesh.updateColors(this.logicalState);
       return Promise.resolve();
@@ -276,19 +296,36 @@ export class CubeAnimator {
           this.animFrameId = requestAnimationFrame(onFrame);
         } else {
           this.animFrameId = null;
-          this.finishAnimation(faceCubies, turnGroup);
+          this.finishAnimation(faceCubies, turnGroup, resolvedState);
           resolve();
         }
       };
 
       this.animFrameId = requestAnimationFrame(onFrame);
 
-      // Update logical state eagerly so it's always correct
-      this.logicalState = applyMove(this.logicalState, move);
+      // Compute post-move logical state. If the store passed an authoritative targetState,
+      // use that as the single source of truth — this prevents divergence when the animator
+      // was initialized with a different state than the store currently holds.
+      // When driving the internal queue (no targetState), compute it ourselves.
+      const resolvedState = targetState ? [...targetState] : applyMove(this.logicalState, move);
+      this.logicalState = resolvedState;
     });
   }
 
-  private finishAnimation(faceCubies: THREE.Group[], turnGroup: THREE.Group): void {
+  /**
+   * Complete an animation: reparent cubies back, reset transforms, re-color.
+   *
+   * @param faceCubies - The cubies that were reparented into the TurnGroup.
+   * @param turnGroup - The temporary rotation group to remove.
+   * @param state - The authoritative post-move state to re-color from. This is always
+   *   `this.logicalState` (already updated before animation starts), but is passed
+   *   explicitly to make the data flow clear and avoid any accidental stale reads.
+   */
+  private finishAnimation(
+    faceCubies: THREE.Group[],
+    turnGroup: THREE.Group,
+    state: number[],
+  ): void {
     // Reparent cubies back to scene root
     for (const cubie of faceCubies) {
       const worldPos = new THREE.Vector3();
@@ -305,9 +342,10 @@ export class CubeAnimator {
     // Remove TurnGroup from scene
     this.scene.remove(turnGroup);
 
-    // Drift prevention: reset all transforms to canonical and re-color
+    // Drift prevention: reset all transforms to canonical and re-color from the
+    // authoritative state (which was locked in at animation start, not re-read here).
     this.mesh.resetTransforms();
-    this.mesh.updateColors(this.logicalState);
+    this.mesh.updateColors(state);
   }
 
   // -------------------------------------------------------------------------

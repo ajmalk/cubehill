@@ -196,8 +196,9 @@ function stepForward(): void {
   cubeState = applyMove(cubeState, move);
   stepIndex = stepIndex + 1;
 
-  // Animate visually
-  animator?.animate(move);
+  // Animate visually, passing the store's authoritative post-move state so the
+  // animator does not need to independently recompute it (eliminates dual-state bug).
+  animator?.animate(move, [...cubeState]);
 }
 
 /**
@@ -258,9 +259,11 @@ async function play(): Promise<void> {
     // Signal that an animation is in-flight so stepForward() can detect it.
     animationInFlight = true;
     try {
-      // Animate and wait for completion
+      // Animate and wait for completion, passing the store's authoritative
+      // post-move state so the animator uses it for re-coloring (eliminates
+      // dual-state bug cubehill-u6u).
       if (animator) {
-        await animator.animate(move);
+        await animator.animate(move, [...cubeState]);
       } else {
         // No animator: just advance at the configured speed
         await _sleep(SPEED_MS[speed]);

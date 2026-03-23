@@ -179,8 +179,8 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
     name: 'Jb Perm',
     category: 'pll',
     group: 'Both Edges and Corners',
-    notation: "R U R' F' R U R' U' R' F R2 U' R'",
-    altNotations: ["R U R' F' R U R' U' R' F R2 U' R' U'"],
+    notation: "R U R' F' R U R' U' R' F R2 U' R' U'",
+    altNotations: ["R U R' F' R U R' U' R' F R2 U' R'"],
     probability: '1/18',
     isTwoLook: false,
     // swap UR corner↔DR corner, swap right edge↔bottom edge

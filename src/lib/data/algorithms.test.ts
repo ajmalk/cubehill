@@ -6,7 +6,7 @@
  *  - All IDs unique across each set
  *  - All notations parse without error
  *  - All required fields present and well-formed
- *  - isTwoLook only on OLL 21–27 (OCLL cases)
+ *  - isTwoLook on OLL 21–27 (OCLL/corner cases) and OLL 49–52 (cross/edge cases)
  *  - PLL isTwoLook correct (Ua, Ub, H, Z, Aa, Ab)
  *  - OLL pattern is a 9-element boolean array with center always true
  *  - PLL pattern arrows reference valid PiecePositions (not 4)
@@ -18,6 +18,8 @@ import { PLL_ALGORITHMS } from './pll.js';
 import { parseNotation } from '$lib/cube/notation.js';
 
 // IDs that should have isTwoLook: true for OLL
+// OLL 21–27: OCLL (corner orientation) cases used in 2-look OLL step 2
+// OLL 49–52: cross (edge orientation) cases used in 2-look OLL step 1
 const OLL_TWO_LOOK_IDS = new Set([
   'oll-21',
   'oll-22',
@@ -26,6 +28,10 @@ const OLL_TWO_LOOK_IDS = new Set([
   'oll-25',
   'oll-26',
   'oll-27',
+  'oll-49',
+  'oll-50',
+  'oll-51',
+  'oll-52',
 ]);
 
 // IDs that should have isTwoLook: true for PLL
@@ -86,7 +92,7 @@ describe('OLL algorithm data', () => {
     }
   });
 
-  it('isTwoLook is true only for OLL 21–27', () => {
+  it('isTwoLook is true for OLL 21–27 (OCLL) and OLL 49–52 (cross)', () => {
     for (const alg of OLL_ALGORITHMS) {
       if (OLL_TWO_LOOK_IDS.has(alg.id)) {
         expect(alg.isTwoLook, `${alg.id} should have isTwoLook: true`).toBe(true);

@@ -58,7 +58,7 @@ Each OLL case belongs to exactly one group. Groups are based on the shape formed
 | Ra Perm | R U' R' U' R U R D R' U' R D' R' U2 R' |
 | Rb Perm | R' U2 R U2 R' F R U R' U' R' F' R2 |
 | Y Perm | F R U' R' U' R U R' F' R U R' U' R' F R F' |
-| V Perm | R' U R' U' y R' F' R2 U' R' U R' F R F |
+| V Perm | R' U R' U' y R' F' R2 U' R' U R' F R F' |
 | Na Perm | R U R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R' |
 | Nb Perm | R' U R' F R F' R U' R' F' U F R U R' U' R |
 | Ga Perm | R2 U R' U R' U' R U' R2 U' D R' U R D' |

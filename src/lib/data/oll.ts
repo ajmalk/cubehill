@@ -8,7 +8,7 @@
  * true = sticker oriented (yellow facing up), false = not oriented.
  * pattern[4] (center) is always true.
  *
- * isTwoLook: true only for OCLL cases (OLL 21–27) per docs/technical/algorithm-data-model.md.
+ * isTwoLook: true for OCLL cases (OLL 21–27) and cross/edge cases (OLL 49–52).
  *
  * Algorithms from jperm.net standard OLL set.
  */
@@ -246,7 +246,7 @@ export const OLL_ALGORITHMS: OllAlgorithm[] = [
     category: 'oll',
     group: 'All Edges Oriented (OCLL)',
     notation: "R U2 R' U' R U R' U' R U' R'",
-    altNotations: ["y R U R' U R U2 R'"],
+    altNotations: ["R U R' U R U' R' U R U2 R'"],
     probability: '1/54',
     isTwoLook: true,
     //   #.#
@@ -431,7 +431,7 @@ export const OLL_ALGORITHMS: OllAlgorithm[] = [
     probability: '1/54',
     isTwoLook: false,
     //   .#.
-    //   #.#
+    //   ###
     //   ...
     pattern: [false, true, false, true, true, true, false, false, false],
   },
@@ -496,8 +496,8 @@ export const OLL_ALGORITHMS: OllAlgorithm[] = [
     name: 'OLL 36',
     category: 'oll',
     group: 'W-Shape',
-    notation: "R' U' R U' R' U R U l U' R' U",
-    altNotations: ["R U2 R' U' R U' R' U' R' F R F'"],
+    notation: "R U2 R' U' R U' R' U' R' F R F'",
+    altNotations: ["R' U' R U' R' U R U l U' R' U"],
     probability: '1/54',
     isTwoLook: false,
     //   #..
@@ -628,7 +628,7 @@ export const OLL_ALGORITHMS: OllAlgorithm[] = [
     probability: '1/54',
     isTwoLook: false,
     //   .#.
-    //   #.#
+    //   ###
     //   ...
     pattern: [false, true, false, true, true, true, false, false, false],
   },
@@ -670,7 +670,7 @@ export const OLL_ALGORITHMS: OllAlgorithm[] = [
     notation: "r U' r2 U r2 U r2 U' r",
     altNotations: ["R B' R2 F R2 B R2 F' R"],
     probability: '1/54',
-    isTwoLook: false,
+    isTwoLook: true,
     //   ...
     //   ##.
     //   ..#
@@ -684,7 +684,7 @@ export const OLL_ALGORITHMS: OllAlgorithm[] = [
     notation: "r' U r2 U' r2 U' r2 U r'",
     altNotations: ["R' B R2 F' R2 B' R2 F R'"],
     probability: '1/54',
-    isTwoLook: false,
+    isTwoLook: true,
     //   ...
     //   .##
     //   #..
@@ -699,7 +699,7 @@ export const OLL_ALGORITHMS: OllAlgorithm[] = [
     group: 'I-Shape',
     notation: "f R U R' U' R U R' U' f'",
     probability: '1/54',
-    isTwoLook: false,
+    isTwoLook: true,
     //   ...
     //   ###
     //   ...
@@ -713,7 +713,7 @@ export const OLL_ALGORITHMS: OllAlgorithm[] = [
     notation: "R U R' U R U' B U' B' R'",
     altNotations: ["R' U' R U' R' U F' U F R"],
     probability: '1/54',
-    isTwoLook: false,
+    isTwoLook: true,
     //   ...
     //   ###
     //   ...

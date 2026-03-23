@@ -10,11 +10,36 @@ The 3D cube canvas mount point. See `rendering.md` for full details on the Three
 
 Key responsibilities:
 
-- Creates a `<canvas>` element sized to fit its container
-- Instantiates `CubeScene` in `onMount` (Three.js must not run server-side)
+- Creates a `<canvas>` element sized to fit its container, inside a `relative`-positioned wrapper
+- Instantiates `CubeScene`, `CubeMesh`, and `CubeAnimator` in `onMount` (Three.js must not run server-side)
 - Attaches a `ResizeObserver` for responsive canvas sizing
-- Exposes methods for the parent to trigger animations and state updates
-- Calls `scene.dispose()` in `onDestroy` to clean up WebGL resources
+- Shows a DaisyUI loading spinner overlay until `onMount` completes; shows an error state if WebGL is unavailable
+- Sets `touch-action: none` on the canvas to prevent browser scroll interception during orbit
+- Toggles `cursor: grab` / `cursor: grabbing` on the container via `mousedown`/`mouseup`
+- Handles double-click/double-tap to reset the camera to its default position (400ms ease-out animation)
+- Calls `scene.dispose()` and `animator.dispose()` in `onDestroy` to clean up WebGL resources
+
+**Props:**
+
+```typescript
+interface CubeViewerProps {
+  algorithm?: string;  // Optional initial algorithm notation to load on mount
+  autoRotate?: boolean; // Optional: enable OrbitControls auto-rotate (home hero)
+}
+```
+
+**Methods (exposed via `bind:this`):**
+
+```typescript
+interface CubeViewerMethods {
+  loadAlgorithm(notation: string): void;
+  stepForward(): void;
+  stepBack(): void;
+  reset(): void;
+}
+```
+
+`PlaybackControls` writes to `cubeStore`; `CubeViewer` reacts to the store and calls the animator. Parents on the detail page call the exposed methods directly for keyboard-driven interactions.
 
 ### AlgorithmList (`src/lib/components/AlgorithmList.svelte`)
 
@@ -208,9 +233,11 @@ Key operations:
 - **loadAlgorithm(notation: string)**: Parse the notation, compute the inverse to get the unsolved state, reset playback
 - **stepForward()**: Apply the next move, push current state to history, advance index
 - **stepBack()**: Pop the last state from history, decrement index
-- **play()**: Set `isPlaying = true`, step forward on a timer until done or paused
-- **pause()**: Set `isPlaying = false`
-- **reset()**: Restore the initial unsolved state, clear history, reset index
+- **play()**: Delegates to `CubeAnimator.play()` — the animator owns the playback loop and move queue. Sets `isPlaying = true` for UI state only.
+- **pause()**: Delegates to `CubeAnimator.pause()`. Sets `isPlaying = false`.
+- **reset()**: Delegates to `CubeAnimator.reset()`. Restores the initial unsolved state, clears history, resets index.
+
+Note: Playback sequencing is owned entirely by `CubeAnimator` (state machine: Idle / Animating / Paused). The store tracks UI-visible state (`stepIndex`, `isPlaying`) reactively from animator callbacks. The store does **not** run a timer loop — the animator's internal `requestAnimationFrame` loop drives all sequencing.
 
 ### themeStore (`src/lib/stores/themeStore.svelte.ts`)
 

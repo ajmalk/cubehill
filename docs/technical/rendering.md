@@ -22,9 +22,9 @@ The main entry point for the 3D scene.
 Takes an `HTMLCanvasElement` and sets up:
 
 - `THREE.Scene` with a background color (read from DaisyUI CSS variables)
-- `THREE.PerspectiveCamera` positioned at a 3/4 angle looking at the origin (e.g., position `(3, 3, 3)` looking at `(0, 0, 0)`)
+- `THREE.PerspectiveCamera` positioned at `(3.5, 3.0, 3.5)` looking at the origin — a 3/4 angle that biases slightly toward the U face for OLL readability
 - `THREE.WebGLRenderer` bound to the provided canvas, with antialiasing enabled
-- Ambient light + directional light for clean, shadow-free illumination
+- Ambient light + two directional lights (key + fill) for clean, shadow-free illumination that keeps all faces readable from any orbit angle
 - `OrbitControls` for user-controlled camera rotation
 
 ### Methods
@@ -135,24 +135,25 @@ This prevents floating-point drift that would cause cubies to gradually misalign
 
 ### Animation Timing
 
-- Duration: ~300ms per move (adjustable for speed control)
-- Easing: Ease-in-out for natural feel
-- Implementation: Simple lerp in `requestAnimationFrame`, no external tween library needed
+Speed levels (from `ANIMATION_DURATION` in `CubeAnimator.ts`):
+
+| Speed | Duration | Use |
+|-------|----------|-----|
+| `default` | 250ms | Normal playback |
+| `fast` | 120ms | Experienced users scanning algorithms |
+| `slow` | 500ms | Beginners studying individual moves |
+
+Easing: Ease-in-out cubic. No external tween library — the easing function is a 5-line inline implementation.
+
+Inter-move delay: 0ms. The ease-in-out curve creates a natural pause at the start/end of each move.
 
 ### Sequential Animation
 
-To play a full algorithm:
+`CubeAnimator` uses an internal move queue and a state machine (see Animation State Machine below). Calls to `play()` drain `moveQueue` one move at a time via `playNext()`. The caller does not manage an `async/await` loop — the animator handles sequencing internally.
 
-```typescript
-async function playAlgorithm(moves: Move[]): Promise<void> {
-  for (const move of moves) {
-    if (isPaused) break;
-    await animator.animate(move);
-  }
-}
-```
+`CubeViewer` uses `animator.play()` / `animator.pause()` / `animator.step()` / `animator.reset()`. The animator's `AnimationState` (`'idle' | 'animating' | 'paused'`) is the source of truth for playback status.
 
-A pause flag is checked between moves. Step-forward/step-back advance one move at a time.
+`animate(move)` is still available as a one-shot imperative call that returns a `Promise<void>`. Use it only when animating a single move outside the queue context.
 
 ### Animation Interruption
 
@@ -167,6 +168,18 @@ If the user triggers a new action while an animation is in progress (e.g., loadi
 4. **Rapid step-forward clicks**: Queue the next step. If an animation is already running, wait for it to complete before starting the next. Do not skip animations — each move should be visually shown, even if briefly.
 
 The key invariant: **the logical cube state and the visual state must always agree after any animation completes or is cancelled**. If an animation is cancelled mid-tween, snap the logical state forward (apply the move) and reset cubie transforms to match.
+
+#### Implementation note: TurnGroup tagging
+
+`cancelAndSnap()` in `CubeAnimator` locates in-flight TurnGroups by scanning the scene for objects with `userData['isTurnGroup'] === true`. The `animateMove()` method **must** set this flag on every TurnGroup it creates:
+
+```typescript
+const turnGroup = new THREE.Group();
+turnGroup.userData['isTurnGroup'] = true; // required for cancelAndSnap detection
+this.scene.add(turnGroup);
+```
+
+Without this flag, `cancelAndSnap` cannot find or clean up TurnGroups and cancellation will silently fail (cubies left orphaned inside the unremoved group). This is a known gap that must be fixed before cancellation is exercised in production.
 
 ### Animation State Machine
 
@@ -193,12 +206,13 @@ When transitioning out of Animating via reset or new algorithm, the in-progress 
 
 ## OrbitControls
 
-Wraps `THREE.OrbitControls` with these settings:
+Wraps `THREE.OrbitControls` (`src/lib/three/controls.ts`) with these settings:
 
-- **Damping**: Enabled for smooth deceleration after dragging
-- **Auto-rotate**: Disabled by default (could be enabled on the home page for visual appeal)
-- **Zoom limits**: Min/max distance set so the cube stays a reasonable size on screen
-- **Pan**: Disabled (the cube should stay centered)
+- **Damping**: Enabled, factor `0.08` (smooth but not floaty)
+- **Auto-rotate**: Disabled by default (could be enabled on the home page hero as a future enhancement)
+- **Zoom limits**: Min distance `4.0`, max distance `12.0`
+- **Pan**: Disabled — the cube stays centered
+- **Zoom**: Enabled (scroll wheel / pinch)
 
 ## Canvas Integration
 
@@ -226,7 +240,7 @@ A `ResizeObserver` watches the canvas container and calls `scene.resize()` on si
 
 ### Theme-Aware Background
 
-When the theme changes (dark ↔ light), read the DaisyUI `--b1` (base background) CSS variable from the DOM and pass it to `scene.setBackgroundColor()`. This keeps the 3D canvas background consistent with the page theme.
+When the theme changes (dark ↔ light), read the DaisyUI `--b1` CSS variable from the DOM, resolve it to an `rgb(...)` string via a temporary element, and pass it to `scene.setBackgroundColor()`. See `theme-integration.md` for the correct resolution pattern — passing the raw `--b1` value directly to `THREE.Color` does not work because DaisyUI 5 stores values as bare oklch channels.
 
 ## Performance
 

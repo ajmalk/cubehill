@@ -92,34 +92,40 @@ The Three.js scene background should match the DaisyUI base background color (`-
 2. Convert it to a Three.js-compatible color
 3. Apply it to the scene background
 
+### DaisyUI Color Format — Critical Detail
+
+DaisyUI 5 stores its color custom properties as raw oklch channel values **without** the `oklch()` function wrapper (e.g., `--b1: 0.2 0.02 260` means lightness=0.2, chroma=0.02, hue=260). `THREE.Color` does not understand this format — passing it directly will produce incorrect colors or black.
+
+**Do not do this:**
 ```typescript
+const b1 = getComputedStyle(document.documentElement).getPropertyValue('--b1').trim();
+scene.setBackgroundColor(b1); // Wrong: THREE.Color cannot parse oklch channel values
+```
+
+**Correct approach — use a temporary element to resolve the color:**
+
+```typescript
+function resolveDaisyColor(cssVarValue: string): string {
+  // Let the browser resolve oklch to rgb via a temporary element
+  const el = document.createElement('div');
+  el.style.backgroundColor = `oklch(${cssVarValue})`;
+  document.body.appendChild(el);
+  const resolved = getComputedStyle(el).backgroundColor; // "rgb(r, g, b)"
+  document.body.removeChild(el);
+  return resolved; // THREE.Color can parse rgb(...) strings directly
+}
+
 function syncThemeToScene(scene: CubeScene) {
   const style = getComputedStyle(document.documentElement);
-  const bgColor = style.getPropertyValue('--b1').trim();
+  const b1Raw = style.getPropertyValue('--b1').trim();
+  const bgColor = b1Raw ? resolveDaisyColor(b1Raw) : '#ffffff';
   scene.setBackgroundColor(bgColor);
 }
 ```
 
-### DaisyUI Color Format
+`THREE.Color` accepts `rgb(r, g, b)` strings natively, so no hex conversion step is needed.
 
-DaisyUI 5 uses oklch color values in its CSS custom properties (e.g., `--b1: 0.2 0.02 260`). These are oklch lightness, chroma, and hue values without the `oklch()` wrapper.
-
-To use these in Three.js:
-
-```typescript
-function daisyColorToHex(cssVar: string): string {
-  // Read the computed style (browser resolves oklch to rgb)
-  const el = document.createElement('div');
-  el.style.color = `oklch(${cssVar})`;
-  document.body.appendChild(el);
-  const computed = getComputedStyle(el).color; // returns "rgb(r, g, b)"
-  document.body.removeChild(el);
-  // Parse and convert to hex for Three.js
-  return rgbStringToHex(computed);
-}
-```
-
-Alternatively, use `getComputedStyle` on an element that already has the DaisyUI class applied, and read its resolved `background-color` directly — this avoids manual color parsing.
+The current `CubeScene.syncBackgroundFromCSS()` passes the raw `--b1` value directly to `THREE.Color` — this will not render the correct background color and must be fixed before theme sync is wired up.
 
 ### Sticker Colors
 

@@ -130,6 +130,16 @@ This project uses a team of 6 agents. **Each agent must stay within their role**
 
 Docs are organized into 3 folders with clear ownership: `docs/technical/` (Architect), `docs/product/` (PM), `docs/process/` (shared). No shared pages — each topic is split into its technical and product halves.
 
+### Agent Operational Rules
+
+These rules apply to ALL agents and to the orchestrator spawning them:
+
+- **Model selection**: Use Sonnet for straightforward implementation, bug fixes, and routine reviews. Reserve Opus for complex architecture, deep analysis, and cubing validation.
+- **Background execution**: Always spawn agents in the background (`run_in_background: true`) so the main conversation stays unblocked.
+- **Commit and push**: Every agent that creates or modifies files must commit and push before finishing. Work is not done until `git push` succeeds.
+- **No inline scripts**: Never use `node -e "..."` or `npx tsx -e "..."` with inline code — it triggers security prompts. Write to a temp file, run it, then delete it.
+- **Review-only agents**: Agents doing read-only work (Cubing Advisor validation, Code Review) should use Read/Glob/Grep tools, not Bash, to avoid permission issues.
+
 <!-- BEGIN BEADS INTEGRATION v:1 profile:minimal hash:ca08a54f -->
 
 ## Beads Issue Tracker

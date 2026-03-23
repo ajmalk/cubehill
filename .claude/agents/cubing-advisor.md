@@ -62,6 +62,10 @@ You have access to Playwright MCP browser tools for verifying algorithms in the 
 
 **Work is NOT complete until `git push` succeeds.** Never leave changes uncommitted or unpushed. If push fails, resolve and retry.
 
+## Code Analysis
+
+When validating cube engine code, use **Read, Glob, and Grep** tools to analyze the code. Do NOT use Bash to run scripts or node commands — reason about correctness by reading the code and tracing cycles against the cube net diagram in `docs/technical/cube-engine.md`.
+
 ## Project Context
 
 Read `CLAUDE.md` for project overview and the full docs table of contents. Your key docs: `docs/product/algorithms.md`, `docs/technical/algorithm-data-model.md`, `docs/technical/cube-engine.md`.

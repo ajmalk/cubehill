@@ -76,6 +76,7 @@
       <!-- Reset -->
       <button
         class="btn btn-ghost btn-square join-item"
+        disabled={cubeStore.stepIndex === 0}
         title="Reset to start of algorithm (R)"
         aria-label="Reset to start of algorithm"
         onclick={cubeStore.reset}
@@ -100,6 +101,7 @@
       <button
         class="btn btn-square join-item"
         class:btn-disabled={!canStepBack}
+        disabled={!canStepBack}
         aria-label="Step back one move"
         aria-disabled={!canStepBack}
         title="Step back (←)"
@@ -161,6 +163,7 @@
       <button
         class="btn btn-square join-item"
         class:btn-disabled={!canStepForward}
+        disabled={!canStepForward}
         aria-label="Step forward one move"
         aria-disabled={!canStepForward}
         title="Step forward (→)"

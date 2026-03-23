@@ -7,12 +7,7 @@
    *
    * See docs/technical/theme-integration.md.
    */
-  import { onMount } from 'svelte';
   import { themeStore } from '$lib/stores/themeStore.svelte.js';
-
-  onMount(() => {
-    themeStore.initTheme();
-  });
 </script>
 
 <!-- DaisyUI swap — rotates between sun (light) and moon (dark) icons -->

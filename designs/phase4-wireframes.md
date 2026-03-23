@@ -2,6 +2,18 @@
 
 Rough layout wireframes for the CubeViewer + PlaybackControls page. These are structural sketches only — gray rectangles with text labels. The detailed component spec is in `phase4-svelte-integration.md`.
 
+## Design Artifacts
+
+**Figma file**: Design (`fiCCEbCrIIZqYVIm9XTjiD`), page: **Phase 4 — CubeViewer & PlaybackControls**
+
+**Wireframe screenshots** (exported from Figma):
+- `designs/phase4-desktop-wireframe.png` — Desktop layout (>1024px), frame `16:463`
+- `designs/phase4-mobile-wireframe.png` — Mobile layout (<640px), frame `16:512`
+
+**Related design docs**:
+- `designs/phase4-svelte-integration.md` — Full component spec (sizing, interaction, states, accessibility)
+- `designs/phase3-rendering-parameters.md` — Visual parameters for the 3D cube itself
+
 ## Figma Location
 
 File: **Design** (`fiCCEbCrIIZqYVIm9XTjiD`)

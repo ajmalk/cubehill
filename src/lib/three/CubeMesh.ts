@@ -311,6 +311,15 @@ export class CubeMesh {
   }
 
   /**
+   * Return all 26 cubie groups (every cubie in the 3×3×3 grid except the
+   * invisible centre). Used by CubeAnimator for whole-cube rotation moves
+   * (x, y, z) which rotate all cubies simultaneously.
+   */
+  getAllCubies(): THREE.Group[] {
+    return this.cubies.map((c) => c.group);
+  }
+
+  /**
    * Clean up all geometries and materials.
    */
   dispose(): void {

@@ -61,6 +61,13 @@ const FACE_ROTATION: Record<FaceMove, { axis: 'x' | 'y' | 'z'; cwSign: number }>
   B: { axis: 'z', cwSign: 1 },
 };
 
+// Rotation moves (x, y, z) map to the same axis/direction as R, U, F respectively.
+const ROTATION_AXES: Record<string, { axis: 'x' | 'y' | 'z'; cwSign: number }> = {
+  x: { axis: 'x', cwSign: -1 }, // same as R
+  y: { axis: 'y', cwSign: -1 }, // same as U
+  z: { axis: 'z', cwSign: -1 }, // same as F
+};
+
 // ---------------------------------------------------------------------------
 // Easing
 // ---------------------------------------------------------------------------
@@ -239,11 +246,67 @@ export class CubeAnimator {
    *   animator computes the new state itself.
    */
   private animateMove(move: Move, targetState?: number[]): Promise<void> {
-    // Only face moves can be animated in 3D (slice moves + rotations affect all cubies).
-    // For now, only animate FaceMoves. Others are snapped instantly.
     const faceMoves = new Set(['R', 'U', 'F', 'L', 'D', 'B']);
+    const rotationMoves = new Set(['x', 'y', 'z']);
+
+    // Handle rotation moves (x, y, z): animate all 26 cubies together.
+    if (rotationMoves.has(move.base)) {
+      const { axis, cwSign } = ROTATION_AXES[move.base];
+      const duration = ANIMATION_DURATION[this.speed];
+
+      let targetAngle: number;
+      if (move.modifier === '') {
+        targetAngle = cwSign * (Math.PI / 2);
+      } else if (move.modifier === "'") {
+        targetAngle = -cwSign * (Math.PI / 2);
+      } else {
+        targetAngle = Math.PI;
+      }
+
+      return new Promise<void>((resolve) => {
+        const allCubies = this.mesh.getAllCubies();
+        const turnGroup = new THREE.Group();
+        turnGroup.userData['isTurnGroup'] = true;
+        this.scene.add(turnGroup);
+
+        for (const cubie of allCubies) {
+          const worldPos = new THREE.Vector3();
+          cubie.getWorldPosition(worldPos);
+          this.scene.remove(cubie);
+          turnGroup.add(cubie);
+          cubie.position.copy(worldPos);
+        }
+
+        const startTime = performance.now();
+
+        const resolvedState = targetState ? [...targetState] : applyMove(this.logicalState, move);
+        this.logicalState = resolvedState;
+
+        const onFrame = (now: number) => {
+          const elapsed = now - startTime;
+          const rawT = Math.min(elapsed / duration, 1);
+          const t = easeInOutCubic(rawT);
+          const angle = t * targetAngle;
+
+          if (axis === 'x') turnGroup.rotation.x = angle;
+          else if (axis === 'y') turnGroup.rotation.y = angle;
+          else turnGroup.rotation.z = angle;
+
+          if (rawT < 1) {
+            this.animFrameId = requestAnimationFrame(onFrame);
+          } else {
+            this.animFrameId = null;
+            this.finishAnimation(allCubies, turnGroup, resolvedState);
+            resolve();
+          }
+        };
+
+        this.animFrameId = requestAnimationFrame(onFrame);
+      });
+    }
+
+    // Snap non-face, non-rotation moves (slice moves, wide moves) instantly.
     if (!faceMoves.has(move.base) || move.wide) {
-      // Snap non-face moves instantly
       // If the store provided authoritative state, use it; otherwise compute it.
       this.logicalState = targetState ? [...targetState] : applyMove(this.logicalState, move);
       this.mesh.resetTransforms();

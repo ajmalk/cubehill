@@ -28,7 +28,7 @@ flowchart TD
 
 ## Current Status
 
-**Phases 1 and 2 are complete.** Phase 4 is now blocked only on Phase 3. Phases 3 and 6 are unblocked and can start in parallel.
+**Phases 1, 2, 3, and 4 are complete.** Phases 5, 6, 7, 8, and 9 are all unblocked and can proceed in parallel (Phase 7 also requires Phase 6 to be complete first).
 
 ## Phases
 
@@ -72,7 +72,7 @@ Pure TypeScript cube state model with no rendering — the logical foundation th
 
 ---
 
-### Phase 3: Three.js 3D Renderer
+### Phase 3: Three.js 3D Renderer -- COMPLETE
 
 **Issue**: `cubehill-vak` / [#3](https://github.com/ajmalk/cubehill/issues/3)
 
@@ -89,7 +89,7 @@ The 3D rendering layer — takes cube state and displays it as an interactive 3D
 
 ---
 
-### Phase 4: Svelte Integration
+### Phase 4: Svelte Integration -- COMPLETE
 
 **Issue**: `cubehill-1wv` / [#4](https://github.com/ajmalk/cubehill/issues/4)
 

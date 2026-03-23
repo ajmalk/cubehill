@@ -4,7 +4,7 @@ This document describes the Svelte component APIs, reactive stores, keyboard con
 
 ## Components
 
-**Current state (post-Phase 5):** `CubeViewer`, `PlaybackControls`, `ThemeToggle`, `AlgorithmList`, `AlgorithmCard`, and `Navbar` are implemented. `CommandPalette` is the Phase 6 target described below as a spec.
+**Current state (post-Phase 6):** `CubeViewer`, `PlaybackControls`, `ThemeToggle`, `AlgorithmList`, `AlgorithmCard`, `Navbar`, and `CommandPalette` are all implemented.
 
 ### CubeViewer (`src/lib/components/CubeViewer.svelte`)
 
@@ -157,66 +157,101 @@ The command palette is powered by `ninja-keys`, a framework-agnostic web compone
 
 ### Mounting
 
-`CommandPalette.svelte` is mounted once in `+layout.svelte` so it's available on every page. The `ninja-keys` element is imported dynamically inside `onMount` to avoid SSR issues (it requires browser APIs):
+`CommandPalette.svelte` is mounted once in `+layout.svelte` so it's available on every page.
+
+SSR safety is handled in two ways:
+
+1. `ninja-keys` is imported dynamically inside `onMount` so it never runs server-side.
+2. The `<ninja-keys>` element is guarded by `{#if browser}` so it is not rendered during prerendering.
+
+After the dynamic import resolves, a `Promise.resolve()` microtask yield gives Svelte 5 time to bind `ninjaEl` via `bind:this` before the code tries to access it. This is necessary because Svelte 5's `bind:this` is applied after the current microtask completes.
 
 ```svelte
 <script>
   import { onMount } from 'svelte';
   import { browser } from '$app/environment';
+  import { buildCommands } from '$lib/commands/commandData.js';
+  import { commandPaletteStore } from '$lib/stores/commandPaletteStore.svelte.js';
 
-  let ninjaKeys: HTMLElement;
+  let ninjaEl: HTMLElement | undefined = $state(undefined);
 
   onMount(async () => {
     await import('ninja-keys');
-    // Configure commands after the element is defined
-    ninjaKeys.data = buildCommands();
+    await Promise.resolve(); // yield for Svelte 5 bind:this timing
+    if (!ninjaEl) return;
+
+    (ninjaEl as any).data = buildCommands();
+
+    commandPaletteStore.setOpenFn(() => (ninjaEl as any)?.open());
+
+    ninjaEl.addEventListener('ninja:open', () => commandPaletteStore.setOpen(true));
+    ninjaEl.addEventListener('ninja:close', () => commandPaletteStore.setOpen(false));
   });
 </script>
 
 {#if browser}
-  <ninja-keys bind:this={ninjaKeys}></ninja-keys>
+  <ninja-keys bind:this={ninjaEl}></ninja-keys>
 {/if}
 ```
 
+### commandData.ts (`src/lib/commands/commandData.ts`)
+
+`buildCommands()` constructs and returns the full `NinjaCommand[]` array. It is called once inside `onMount` and the result is assigned to `ninjaEl.data`. The command hierarchy has four sections:
+
+```
+NAVIGATION
+  Home                    → goto(resolve('/'))
+  OLL Algorithms          → goto(resolve('/oll/'))
+  PLL Algorithms          → goto(resolve('/pll/'))
+
+ALGORITHMS
+  OLL ▸                   → opens OLL groups sub-menu
+    Dot Cases ▸           → opens cases under this group
+      OLL 1               → goto(resolve('/oll/oll-1/'))
+      …
+    T-Shape ▸ … (all OLL groups, 57 cases total)
+  PLL ▸                   → opens PLL groups sub-menu
+    Adjacent Corner Swap ▸
+      Aa Perm             → goto(resolve('/pll/pll-aa/'))
+      …
+    … (all PLL groups, 21 cases total)
+
+THEME
+  Dark                    → themeStore.setTheme('dark')
+  Light                   → themeStore.setTheme('light')
+```
+
+Groups use an intermediate parent entry (no `handler`) so ninja-keys drills into them as sub-menus. Individual case commands include `keywords` with the group name, category, notation string, and (for OLL) any `nicknames` from the algorithm data — enabling search by move sequence and common names.
+
+All navigation uses `goto(resolve('/path/'))` where `resolve` comes from `$app/paths`. This is required for the GitHub Pages subpath deployment.
+
 ### Command Structure
 
-Commands are organized as a nested menu:
+Commands follow the `NinjaCommand` interface (defined in `commandData.ts`):
 
+```typescript
+interface NinjaCommand {
+  id: string;           // unique, e.g. 'oll-1', 'theme-dark', 'nav-home'
+  title: string;        // display label, e.g. 'OLL 1', 'T Perm', 'Dark'
+  parent?: string;      // id of parent command for nesting
+  keywords?: string;    // additional search terms (space-separated)
+  section?: string;     // section header label
+  handler?: () => void; // action on selection; omit for sub-menu-only entries
+}
 ```
-Root
-├── OLL → (opens nested menu)
-│   ├── OLL 1
-│   ├── OLL 2
-│   ├── ...
-│   └── OLL 57
-├── PLL → (opens nested menu)
-│   ├── Aa Perm
-│   ├── Ab Perm
-│   ├── ...
-│   └── Z Perm
-├── Toggle Theme
-└── Home
-```
-
-Each command includes:
-
-- `id`: Unique identifier
-- `title`: Display text (e.g., "OLL 1 — Dot Cases")
-- `parent`: ID of parent menu for nesting (e.g., OLL cases have `parent: 'oll'`)
-- `handler`: Navigation function using `goto(resolve('/oll/oll-1/'))` — `resolve()` from `$app/paths` handles the GitHub Pages subpath
-- `keywords`: Additional search terms (e.g., the algorithm notation itself, so users can search by moves)
 
 ### Search
 
-ninja-keys provides built-in fuzzy search. The `keywords` field on each command enhances discoverability:
+ninja-keys provides built-in fuzzy search across `title` and `keywords`. The `keywords` field enhances discoverability:
 
-- Searching "T Perm" finds the T Perm PLL case
-- Searching "R U R'" finds algorithms that contain those moves
-- Searching "dot" finds OLL cases in the "Dot Cases" group
+- Searching "T Perm" finds the T Perm PLL case (title match)
+- Searching "R U R'" finds algorithms whose notation contains those moves (keyword match)
+- Searching "dot" finds OLL cases in the "Dot Cases" group (keyword match)
+- OLL cases include their `nicknames` in keywords so common alternate names are searchable
 
 ### Open/Close Events
 
-The command palette dispatches events when it opens and closes. These events are used to disable cube keyboard shortcuts while the palette is open (see Keyboard Controls below).
+ninja-keys dispatches `ninja:open` and `ninja:close` DOM events when the palette opens and closes. `CommandPalette.svelte` listens for both and calls `commandPaletteStore.setOpen()` to keep the shared store in sync. Keyboard control handlers on detail pages read `commandPaletteStore.open` to suppress cube shortcuts while the palette is active (see Keyboard Controls below).
 
 ## Keyboard Controls
 
@@ -309,6 +344,23 @@ Note: The store owns the playback sequencing loop (not the animator). The `CubeA
 ### themeStore (`src/lib/stores/themeStore.svelte.ts`)
 
 Manages the dark/light mode preference. See `theme-integration.md` for details.
+
+### commandPaletteStore (`src/lib/stores/commandPaletteStore.svelte.ts`)
+
+Shared reactive state for the command palette. Bridges `CommandPalette.svelte` (which owns the `ninja-keys` DOM element) with the Navbar (which triggers open) and detail page keyboard handlers (which need to suppress shortcuts while the palette is visible).
+
+```typescript
+export const commandPaletteStore = {
+  get open(): boolean,   // true while the palette is visible
+  setOpen(value: boolean): void,     // called by ninja:open / ninja:close events
+  setOpenFn(fn: () => void): void,   // registered by CommandPalette after onMount
+  openPalette(): void,               // called by Navbar button; delegates to openFn
+};
+```
+
+Key design: `CommandPalette.svelte` registers an `openFn` closure (which calls `ninjaEl.open()`) via `setOpenFn()` after mounting. `openPalette()` then calls that closure, so the Navbar never needs a direct DOM reference to `ninja-keys`.
+
+The `open` getter is a Svelte 5 `$state`-backed reactive value — any component that reads `commandPaletteStore.open` will re-run its `$effect` or template when it changes.
 
 ## Home Page Architecture (Phase 5)
 

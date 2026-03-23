@@ -28,7 +28,7 @@ flowchart TD
 
 ## Current Status
 
-**Phases 1–5 are complete.** Phase 6 design is done (spec in `designs/phase6-command-palette.md`) and implementation is ready to begin. Phases 6, 7, 8, and 9 are all unblocked and can proceed in parallel (Phase 7 also requires Phase 6 to be complete first).
+**Phases 1–6 are complete.** Phases 7, 8, and 9 are all unblocked and can proceed in parallel. Phase 7 (Keyboard Controls) was unblocked by Phase 6 completing.
 
 ## Phases
 
@@ -124,7 +124,7 @@ The algorithm content and browsing experience — the core user-facing feature o
 
 ---
 
-### Phase 6: Command Palette -- DESIGN COMPLETE
+### Phase 6: Command Palette -- COMPLETE
 
 **Issue**: `cubehill-cpj` / [#6](https://github.com/ajmalk/cubehill/issues/6)
 
@@ -132,13 +132,15 @@ ninja-keys integration for fast algorithm search and navigation via Cmd+K / Ctrl
 
 **Key deliverables:**
 
-- ninja-keys web component integration (SSR-safe)
-- Algorithm search across all OLL and PLL cases
-- Nested menus (OLL > category > case, PLL > category > case)
-- Theme switching commands
+- ninja-keys web component integration (SSR-safe, dynamically imported in onMount with `{#if browser}` guard)
+- Algorithm search across all OLL and PLL cases with nested group menus
 - Navigation commands (Home, OLL, PLL)
+- Theme switching commands (Light, Dark)
+- `commandPaletteStore` for cross-component open state and programmatic triggering
 
 **Design artifacts:** `designs/phase6-command-palette.md` — covers trigger mechanics, visual design, command structure, search behaviour, keyboard navigation, mobile, animation, and CSS custom properties.
+
+**Note:** The "Cubehill" custom theme command was deferred — it depends on Phase 8 (Theming) delivering a distinct cubehill theme. Theme commands in Phase 6 cover Light and Dark only.
 
 **Dependencies:** Phase 1.
 

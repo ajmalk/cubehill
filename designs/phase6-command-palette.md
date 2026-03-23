@@ -188,8 +188,8 @@ Root
 │
 └── THEME
     ├── Dark                        → apply dark theme immediately
-    ├── Light                       → apply light theme immediately
-    └── Cubehill                    → apply cubehill theme immediately
+    └── Light                       → apply light theme immediately
+    (Cubehill theme deferred to Phase 8 — the cubehill DaisyUI theme does not exist yet)
 ```
 
 ### Command Data Shape (ninja-keys)
@@ -316,10 +316,11 @@ Palette closes immediately after navigation. The detail page loads the algorithm
 ### Theme commands
 
 ```
-Dark         → themeStore.set('dark')   (no navigation, palette stays open)
-Light        → themeStore.set('light')
-Cubehill     → themeStore.set('cubehill')
+Dark         → themeStore.setTheme('dark')   (no navigation, palette stays open)
+Light        → themeStore.setTheme('light')
 ```
+
+The "Cubehill" theme command was deferred to Phase 8 — it depends on a distinct cubehill DaisyUI theme being defined first.
 
 Theme applies **immediately** (live preview) without closing the palette. The user can switch themes rapidly to compare. Close manually with Escape.
 

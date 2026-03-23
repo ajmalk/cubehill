@@ -41,7 +41,10 @@ cubehill/
 │   │   ├── types.ts                   # Shared TypeScript types (if needed beyond cube/types.ts)
 │   │   ├── stores/                     # Reactive state (Svelte 5 runes)
 │   │   │   ├── cubeStore.svelte.ts    # Cube state + playback
-│   │   │   └── themeStore.svelte.ts   # Dark/light mode preference
+│   │   │   ├── themeStore.svelte.ts   # Dark/light mode preference
+│   │   │   └── commandPaletteStore.svelte.ts  # Palette open state + trigger
+│   │   ├── commands/
+│   │   │   └── commandData.ts         # ninja-keys command array builder
 │   │   └── components/                 # Svelte components
 │   │       ├── CubeViewer.svelte      # Three.js canvas mount point
 │   │       ├── AlgorithmCard.svelte   # Algorithm case thumbnail
@@ -228,4 +231,4 @@ Target hierarchy for Phase 5. The Navbar and CommandPalette move to `+layout.sve
         └── PlaybackControls
 ```
 
-**Current state (post-Phase 5):** Navbar is in `+layout.svelte`. The home page is the solved-cube landing page with OLL/PLL nav cards. CommandPalette is not yet implemented (Phase 6 target).
+**Current state (post-Phase 6):** Navbar and CommandPalette are both in `+layout.svelte` and mounted on every page. The home page is the solved-cube landing page with OLL/PLL nav cards. The command palette is fully implemented with Navigation, OLL, PLL, and Theme sections.

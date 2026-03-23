@@ -114,7 +114,7 @@ function buildOllCommands(): NinjaCommand[] {
         id: alg.id,
         title: alg.name,
         parent: gid,
-        keywords: `oll ${group.toLowerCase()} ${alg.category} ${alg.notation}`,
+        keywords: `oll ${group.toLowerCase()} ${alg.category} ${alg.notation} ${(alg.nicknames || []).join(' ')}`,
         handler: () => goto(resolve(`/oll/${alg.id}/`)),
       });
     }

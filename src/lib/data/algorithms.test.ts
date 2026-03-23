@@ -21,6 +21,7 @@ import { parseNotation } from '$lib/cube/notation.js';
 // OLL 21–27: OCLL (corner orientation) cases used in 2-look OLL step 2
 // OLL 49–52: cross (edge orientation) cases used in 2-look OLL step 1
 const OLL_TWO_LOOK_IDS = new Set([
+  // OCLL cases (corner orientation after cross is solved)
   'oll-21',
   'oll-22',
   'oll-23',
@@ -28,10 +29,10 @@ const OLL_TWO_LOOK_IDS = new Set([
   'oll-25',
   'oll-26',
   'oll-27',
-  'oll-49',
-  'oll-50',
+  // Cross/edge orientation cases
+  'oll-44',
+  'oll-45',
   'oll-51',
-  'oll-52',
 ]);
 
 // IDs that should have isTwoLook: true for PLL
@@ -92,7 +93,7 @@ describe('OLL algorithm data', () => {
     }
   });
 
-  it('isTwoLook is true for OLL 21–27 (OCLL) and OLL 49–52 (cross)', () => {
+  it('isTwoLook is true for OLL 21–27 (OCLL) and OLL 44, 45, 51 (cross/edge)', () => {
     for (const alg of OLL_ALGORITHMS) {
       if (OLL_TWO_LOOK_IDS.has(alg.id)) {
         expect(alg.isTwoLook, `${alg.id} should have isTwoLook: true`).toBe(true);

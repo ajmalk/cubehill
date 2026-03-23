@@ -41,6 +41,8 @@ export interface BaseAlgorithm {
 export interface OllAlgorithm extends BaseAlgorithm {
   category: 'oll';
   pattern: boolean[];
+  /** Common nicknames for this OLL case (e.g. "Sune", "Anti-Sune"). */
+  nicknames?: string[];
 }
 
 export interface PllAlgorithm extends BaseAlgorithm {

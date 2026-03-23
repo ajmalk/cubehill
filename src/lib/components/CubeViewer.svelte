@@ -184,6 +184,14 @@
       cancelAnimationFrame(cameraResetRaf);
     }
 
+    // Disable OrbitControls during the tween so its internal update() does not
+    // overwrite the camera position we set each frame. OrbitControls.update()
+    // recomputes camera.position from its own spherical coordinates, which
+    // means any direct camera.position.set() call is immediately cancelled when
+    // controls.update() runs inside the render loop. Disabling controls prevents
+    // that conflict; controls.reset() at the end restores the canonical state.
+    controls.enabled = false;
+
     const tween = (now: number) => {
       const elapsed = now - startTime;
       const rawT = Math.min(elapsed / duration, 1);
@@ -196,13 +204,17 @@
         startPos.z + (endPos.z - startPos.z) * t,
       );
       camera.lookAt(0, 0, 0);
-      controls.update();
 
       if (rawT < 1) {
         cameraResetRaf = requestAnimationFrame(tween);
       } else {
         cameraResetRaf = null;
+        // Snap to exact target, restore OrbitControls internal spherical state,
+        // then re-enable so the user can orbit again.
+        camera.position.set(endPos.x, endPos.y, endPos.z);
+        camera.lookAt(0, 0, 0);
         controls.reset();
+        controls.enabled = true;
       }
     };
 

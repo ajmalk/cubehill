@@ -203,6 +203,11 @@ function stepForward(): void {
 
 /**
  * Step the cube back one move by restoring from history.
+ *
+ * Animates the inverse of the move being undone so the face turn plays
+ * visually in reverse. The prevState (post-undo) is passed as the
+ * authoritative targetState so the animator re-colors correctly after
+ * the animation completes.
  */
 function stepBack(): void {
   if (stepIndex === 0 || history.length === 0) return;
@@ -213,16 +218,19 @@ function stepBack(): void {
   _stopPlay();
   playbackStatus = 'idle';
 
+  // The move being undone is at stepIndex - 1 (before we decrement).
+  const moveBeingUndone = moves[stepIndex - 1];
+
   const prevState = history[history.length - 1];
   history = history.slice(0, -1);
   cubeState = [...prevState];
   stepIndex = stepIndex - 1;
 
-  // Reload the animator with remaining moves from the restored position.
-  // This keeps the animator queue in sync.
-  if (animator) {
-    const remainingMoves = moves.slice(stepIndex);
-    animator.loadAlgorithm(remainingMoves, [...prevState]);
+  // Animate the inverse of the undone move so the face turns visually in reverse.
+  // Pass prevState as the authoritative post-undo state for re-coloring.
+  if (animator && moveBeingUndone) {
+    const [inverseMove] = invertAlgorithm([moveBeingUndone]);
+    animator.animate(inverseMove, [...prevState]);
   }
 }
 

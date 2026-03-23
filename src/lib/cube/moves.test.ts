@@ -63,6 +63,38 @@ describe('applyMove', () => {
   });
 
   describe('R move specifics', () => {
+    it('R clockwise moves stickers in the correct direction', () => {
+      // This test verifies the exact sticker positions after a single R clockwise move
+      // on a solved cube. It catches direction bugs that algebraic property tests
+      // (e.g. 4x = identity) cannot detect, because both directions satisfy those properties.
+      //
+      // R clockwise cycles: U right col → B, F right col → U, D right col → F, B → D
+      // Color values: White=0, Red=1, Green=2, Yellow=3, Orange=4, Blue=5
+      // Face indices: U=0-8, R=9-17, F=18-26, D=27-35, L=36-44, B=45-53
+      const state = solved();
+      const result = applyMove(state, move('R'));
+
+      // U right column (2,5,8) should now show Green — came from F right column
+      expect(result[2]).toBe(2); // Green
+      expect(result[5]).toBe(2); // Green
+      expect(result[8]).toBe(2); // Green
+
+      // F right column (20,23,26) should now show Yellow — came from D right column
+      expect(result[20]).toBe(3); // Yellow
+      expect(result[23]).toBe(3); // Yellow
+      expect(result[26]).toBe(3); // Yellow
+
+      // D right column (29,32,35) should now show Blue — came from B
+      expect(result[29]).toBe(5); // Blue
+      expect(result[32]).toBe(5); // Blue
+      expect(result[35]).toBe(5); // Blue
+
+      // B right column (47,50,53) should now show White — came from U right column
+      expect(result[47]).toBe(0); // White
+      expect(result[50]).toBe(0); // White
+      expect(result[53]).toBe(0); // White
+    });
+
     it('R move changes the correct stickers', () => {
       const state = solved();
       const result = applyMove(state, move('R'));
@@ -70,14 +102,7 @@ describe('applyMove', () => {
       // R face rotates (center stays Red)
       expect(result[13]).toBe(1); // R center stays Red
 
-      // U right column (2,5,8) should now have F colors (Green)
-      // After R: F right column goes to U right column
-      // Actually: in R clockwise, U right col → B, F right col → U, D right col → F, B → D
-      // No: R clockwise: U→B→D→F→U... let me just check non-center stickers changed
       expect(result).not.toEqual(state);
-
-      // The R face corners and edges should rearrange
-      // The stickers on adjacent faces' right columns should cycle
     });
 
     it('R move only affects R face and adjacent columns', () => {

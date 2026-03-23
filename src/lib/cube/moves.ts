@@ -52,9 +52,9 @@ function applyCyclesWithModifier(
 ): number[] {
   switch (modifier) {
     case '':
-      return applyCyclesForward(state, cycles);
-    case "'":
       return applyCyclesReverse(state, cycles);
+    case "'":
+      return applyCyclesForward(state, cycles);
     case '2':
       return applyCyclesDouble(state, cycles);
   }

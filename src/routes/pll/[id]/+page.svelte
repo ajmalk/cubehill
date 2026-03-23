@@ -13,6 +13,7 @@
   import CubeViewer from '$lib/components/CubeViewer.svelte';
   import PlaybackControls from '$lib/components/PlaybackControls.svelte';
   import { cubeStore } from '$lib/stores/cubeStore.svelte.js';
+  import { commandPaletteStore } from '$lib/stores/commandPaletteStore.svelte.js';
 
   let { data } = $props();
 
@@ -29,10 +30,9 @@
   });
 
   // Keyboard controls
-  let commandPaletteOpen = false;
 
   function handleKeydown(event: KeyboardEvent): void {
-    if (commandPaletteOpen) return;
+    if (commandPaletteStore.open) return;
 
     const tag = (document.activeElement as HTMLElement)?.tagName;
     if (tag === 'INPUT' || tag === 'TEXTAREA') return;

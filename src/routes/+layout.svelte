@@ -4,6 +4,7 @@
   import { onMount } from 'svelte';
   import { themeStore } from '$lib/stores/themeStore.svelte.js';
   import Navbar from '$lib/components/Navbar.svelte';
+  import CommandPalette from '$lib/components/CommandPalette.svelte';
 
   let { children } = $props();
 
@@ -17,5 +18,5 @@
 </svelte:head>
 
 <Navbar />
-<!-- TODO: CommandPalette component (Phase 5+) -->
+<CommandPalette />
 {@render children()}

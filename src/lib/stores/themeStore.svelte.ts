@@ -52,6 +52,18 @@ function toggleTheme(): void {
   localStorage.setItem('theme', theme);
 }
 
+/**
+ * Set a specific theme, persisting the result.
+ * Used by the command palette theme commands.
+ */
+function setTheme(newTheme: 'light' | 'dark'): void {
+  if (!browser) return;
+
+  theme = newTheme;
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('theme', theme);
+}
+
 // ---------------------------------------------------------------------------
 // Public API
 // ---------------------------------------------------------------------------
@@ -62,4 +74,5 @@ export const themeStore = {
   },
   initTheme,
   toggleTheme,
+  setTheme,
 };

@@ -84,8 +84,26 @@ let speed = $state<SpeedSetting>('normal');
 /** History stack: history[i] = cube state before move[i] was applied. */
 let history = $state<number[][]>([]);
 
-/** Flag to cancel the play loop. */
-let cancelPlay = false;
+/**
+ * Generation counter for the play loop.
+ *
+ * Each call to play() captures the current generation. After every awaited
+ * animation, the loop compares its captured generation to the current one.
+ * If they differ, pause() or _stopPlay() was called — the loop bails out
+ * immediately without touching state. This closes the race window where the
+ * while-loop condition was already read before pause() set its flags.
+ */
+let playGeneration = 0;
+
+/**
+ * Whether the play loop is currently awaiting an in-flight animation.
+ *
+ * Set to true just before `await animator.animate()` and cleared afterward.
+ * stepForward() reads this to decide whether it needs to apply a move itself:
+ * if an animation is already in-flight, the play loop already advanced
+ * cubeState and stepIndex — stepForward() must not do so again.
+ */
+let animationInFlight = false;
 
 // ---------------------------------------------------------------------------
 // Animator registration
@@ -107,7 +125,7 @@ function setAnimator(anim: CubeAnimator): void {
  * Unregister the animator. Called by CubeViewer on onDestroy.
  */
 function clearAnimator(): void {
-  cancelPlay = true;
+  playGeneration++;
   animator = null;
 }
 
@@ -146,13 +164,28 @@ function loadAlgorithm(notation: string): void {
 
 /**
  * Step the cube forward one move.
+ *
+ * If a play() animation is currently in-flight, the play loop has already
+ * advanced cubeState and stepIndex for this move. In that case we only
+ * cancel future play iterations (via playGeneration++) and skip the state
+ * mutation — applying it again would cause a double-advance (Bug cubehill-exr).
+ *
+ * If no animation is in-flight, we apply the move ourselves and trigger a
+ * new animation.
  */
 function stepForward(): void {
   if (stepIndex >= moves.length) return;
 
-  // Stop any in-progress playback before manipulating state. Without this,
-  // the play() async loop could still be holding a stuck await, leaving
-  // isPlaying=true after the manual step.
+  if (animationInFlight) {
+    // The play loop already applied this move to cubeState/stepIndex and
+    // started the animation. Cancel future play iterations but let the
+    // current animation finish cleanly — do NOT apply the move again.
+    _stopPlay();
+    playbackStatus = 'idle';
+    return;
+  }
+
+  // No animation in-flight: stop any lingering play state, then advance.
   _stopPlay();
   playbackStatus = 'idle';
 
@@ -194,6 +227,12 @@ function stepBack(): void {
 
 /**
  * Start auto-playback. Runs an async loop, awaiting each animation.
+ *
+ * Race condition fix (cubehill-9me): each call to play() captures a
+ * generation token. After every awaited animation the loop checks whether
+ * its generation is still current. If pause() or _stopPlay() was called
+ * while the animation was in-flight, playGeneration will have been
+ * incremented and the stale loop exits immediately without touching state.
  */
 async function play(): Promise<void> {
   if (moves.length === 0) return;
@@ -201,9 +240,14 @@ async function play(): Promise<void> {
 
   isPlaying = true;
   playbackStatus = 'playing';
-  cancelPlay = false;
+  // Claim this generation. Any concurrent or stale loop from a previous
+  // play() call will see a mismatched generation and bail out.
+  const myGeneration = ++playGeneration;
 
-  while (stepIndex < moves.length && !cancelPlay && isPlaying) {
+  while (stepIndex < moves.length) {
+    // Check cancellation at the top of every iteration.
+    if (playGeneration !== myGeneration) return;
+
     // Save state to history before applying move
     history = [...history, [...cubeState]];
 
@@ -211,26 +255,40 @@ async function play(): Promise<void> {
     cubeState = applyMove(cubeState, move);
     stepIndex = stepIndex + 1;
 
-    // Animate and wait for completion
-    if (animator) {
-      await animator.animate(move);
-    } else {
-      // No animator: just advance at the configured speed
-      await _sleep(SPEED_MS[speed]);
+    // Signal that an animation is in-flight so stepForward() can detect it.
+    animationInFlight = true;
+    try {
+      // Animate and wait for completion
+      if (animator) {
+        await animator.animate(move);
+      } else {
+        // No animator: just advance at the configured speed
+        await _sleep(SPEED_MS[speed]);
+      }
+    } finally {
+      animationInFlight = false;
     }
+
+    // After the await, re-check cancellation before the next iteration.
+    // This is the critical window: pause() may have fired while we were
+    // awaiting. If our generation is stale we exit without setting isPlaying.
+    if (playGeneration !== myGeneration) return;
   }
 
-  if (!cancelPlay) {
-    isPlaying = false;
-    playbackStatus = stepIndex >= moves.length ? 'idle' : 'paused';
-  }
+  // Loop completed all moves normally.
+  isPlaying = false;
+  playbackStatus = stepIndex >= moves.length ? 'idle' : 'paused';
 }
 
 /**
  * Pause auto-playback.
+ *
+ * Incrementing playGeneration immediately invalidates the current play loop.
+ * Even if the loop is mid-await it will detect the stale generation on the
+ * next check and exit without re-entering the while body.
  */
 function pause(): void {
-  cancelPlay = true;
+  playGeneration++;
   isPlaying = false;
   if (playbackStatus === 'playing') {
     playbackStatus = 'paused';
@@ -265,7 +323,7 @@ function setSpeed(newSpeed: SpeedSetting): void {
 // ---------------------------------------------------------------------------
 
 function _stopPlay(): void {
-  cancelPlay = true;
+  playGeneration++;
   isPlaying = false;
 }
 

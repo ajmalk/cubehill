@@ -6,6 +6,7 @@
 
 // Types
 export type {
+  CubeState,
   FaceMove,
   SliceMove,
   Rotation,

@@ -95,16 +95,6 @@ describe('applyMove', () => {
       expect(result[53]).toBe(0); // White
     });
 
-    it('R move changes the correct stickers', () => {
-      const state = solved();
-      const result = applyMove(state, move('R'));
-
-      // R face rotates (center stays Red)
-      expect(result[13]).toBe(1); // R center stays Red
-
-      expect(result).not.toEqual(state);
-    });
-
     it('R move only affects R face and adjacent columns', () => {
       const state = solved();
       const result = applyMove(state, move('R'));

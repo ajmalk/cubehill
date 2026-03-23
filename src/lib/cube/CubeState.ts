@@ -8,6 +8,7 @@
  */
 
 import { Color } from './colors.js';
+import type { CubeState } from './types.js';
 
 /**
  * Returns a solved cube state: number[54] with each face set to its color.
@@ -20,7 +21,7 @@ import { Color } from './colors.js';
  * - L (36-44): Orange (4)
  * - B (45-53): Blue (5)
  */
-export function solved(): number[] {
+export function solved(): CubeState {
   return [
     // U face (0-8): White
     Color.White,

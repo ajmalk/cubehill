@@ -8,10 +8,7 @@
  */
 
 import type { Move, MoveBase, Modifier } from './types.js';
-
-const FACE_MOVES = new Set(['R', 'U', 'F', 'L', 'D', 'B']);
-const SLICE_MOVES = new Set(['M', 'E', 'S']);
-const ROTATIONS = new Set(['x', 'y', 'z']);
+import { FACE_MOVES, SLICE_MOVES, ROTATIONS } from './constants.js';
 
 /** Lowercase face letters that denote wide moves (r = Rw, u = Uw, etc.) */
 const LOWERCASE_WIDE: Record<string, string> = {

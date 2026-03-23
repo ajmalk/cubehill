@@ -9,7 +9,8 @@
  * See docs/technical/cube-engine.md for the sticker index layout and cycle definitions.
  */
 
-import type { Move, FaceMove, SliceMove, Rotation } from './types.js';
+import type { Move, FaceMove, SliceMove, Rotation, CubeState } from './types.js';
+import { FACE_MOVES, SLICE_MOVES, ROTATIONS as ROTATIONS_SET } from './constants.js';
 
 type Cycle = [number, number, number, number];
 
@@ -174,13 +175,8 @@ function extractCycles(perm: number[]): Cycle[] {
     }
     if (cycle.length === 4) {
       cycles.push(cycle as Cycle);
-    } else if (cycle.length === 2) {
-      // A 2-cycle can be represented as two identical 4-cycles won't work.
-      // Instead, handle 2-cycles as a double of a 4-cycle by storing them specially.
-      // Actually for cube rotations all cycles should be length 4 (quarter turns)
-      // or length 2 (half-turn components). For now, skip 2-cycles as they
-      // shouldn't appear in quarter-turn rotations.
     }
+    // 2-cycles don't appear in quarter-turn rotations; skip any other cycle lengths.
   }
   return cycles;
 }
@@ -196,14 +192,9 @@ function computeRotationPerm(moves: Array<{ cycles: Cycle[]; reverse: boolean }>
   for (const { cycles, reverse } of moves) {
     state = reverse ? applyCyclesReverse(state, cycles) : applyCyclesForward(state, cycles);
   }
-  // state[i] now contains the value that was originally at position i,
-  // but we applied cycles to state, so state[pos] = original_value_at_pos.
-  // Actually: applyCyclesForward with identity state gives us the inverse permutation.
-  // We need: perm[i] = where position i's value goes to.
-  // With identity state, after applying forward cycles, state[b] = identity[a] = a.
-  // So state[b] = a means the value from position a ended up at position b.
-  // The permutation we want for extractCycles: perm[a] = b (value at a goes to b).
-  // We have: state[b] = a, so we need to invert: perm[a] = b.
+  // Applying cycles to an identity array gives the inverse permutation:
+  // state[b] = a means the value from position a moved to position b.
+  // Invert to get perm[a] = b (where each value ends up).
   const perm = new Array(54);
   for (let b = 0; b < 54; b++) {
     perm[state[b]] = b;
@@ -262,14 +253,10 @@ const WIDE_SLICE_MAP: Record<FaceMove, SliceComplement> = {
 
 // --- Public API ---
 
-const FACE_MOVES = new Set<string>(['R', 'U', 'F', 'L', 'D', 'B']);
-const SLICE_MOVES = new Set<string>(['M', 'E', 'S']);
-const ROTATIONS_SET = new Set<string>(['x', 'y', 'z']);
-
 /**
  * Apply a single move to a cube state. Returns a new state array.
  */
-export function applyMove(state: number[], move: Move): number[] {
+export function applyMove(state: CubeState, move: Move): CubeState {
   const { base, modifier, wide } = move;
 
   // Handle wide moves: face move + slice move
@@ -314,7 +301,7 @@ export function applyMove(state: number[], move: Move): number[] {
 /**
  * Apply a sequence of moves to a cube state. Returns a new state array.
  */
-export function applyAlgorithm(state: number[], moves: Move[]): number[] {
+export function applyAlgorithm(state: CubeState, moves: Move[]): CubeState {
   let current = state;
   for (const move of moves) {
     current = applyMove(current, move);

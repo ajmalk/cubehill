@@ -5,6 +5,11 @@
  * See docs/technical/cube-engine.md and docs/technical/algorithm-data-model.md.
  */
 
+// --- Cube State ---
+
+/** The cube state: a 54-element array of color values, one per sticker. */
+export type CubeState = number[];
+
 // --- Move Types ---
 
 export type FaceMove = 'R' | 'U' | 'F' | 'L' | 'D' | 'B';

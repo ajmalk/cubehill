@@ -4,7 +4,7 @@ This document describes the Svelte component APIs, reactive stores, keyboard con
 
 ## Components
 
-**Current state (post-Phase 4):** `CubeViewer`, `PlaybackControls`, and `ThemeToggle` are implemented. `AlgorithmList`, `AlgorithmCard`, `Navbar`, and `CommandPalette` are Phase 5 targets described below as specs.
+**Current state (post-Phase 5):** `CubeViewer`, `PlaybackControls`, `ThemeToggle`, `AlgorithmList`, `AlgorithmCard`, and `Navbar` are implemented. `CommandPalette` is the Phase 6 target described below as a spec.
 
 ### CubeViewer (`src/lib/components/CubeViewer.svelte`)
 
@@ -288,20 +288,23 @@ let isPlaying = $state(false);           // Whether auto-playback is active
 let playbackStatus = $state<'idle' | 'playing' | 'paused'>('idle');
 let speed = $state<SpeedSetting>('normal');
 let history = $state<number[][]>([]);    // State history for undo/step-back
+// (module-level, not $state — not reactive)
+let playGeneration = 0;                  // Generation counter for play loop cancellation
+let animationInFlight = false;           // True while play() is mid-await on an animation
 ```
 
 Key operations:
 
 - **loadAlgorithm(notation: string)**: Parse notation, apply the inverse to a solved cube to get the unsolved starting state, reset all playback state, sync the animator via `animator.loadAlgorithm()`.
-- **stepForward()**: Push current state to history, apply next move, advance `stepIndex`, call `animator.animate(move)` (fire-and-forget).
-- **stepBack()**: Pop history to restore previous state, decrement `stepIndex`, call `animator.loadAlgorithm()` to resync the animator queue.
-- **play()**: Runs an async loop — for each remaining move, applies it logically, awaits `animator.animate(move)`, then advances. Stops when the queue is exhausted or `pause()` is called.
-- **pause()**: Sets `cancelPlay = true` to break the play loop on the next iteration.
+- **stepForward()**: Checks `animationInFlight` first — if the play loop is currently awaiting an animation, that loop has already applied the move and we must not double-apply it. If no animation is in-flight, pushes state to history, applies the move, advances `stepIndex`, and calls `animator.animate(move, [...cubeState])`. Always passes the post-move state to the animator (see targetState pattern in `rendering.md`).
+- **stepBack()**: Pops history to restore previous state, decrements `stepIndex`, calls `animator.loadAlgorithm()` to resync the animator queue.
+- **play()**: Runs an async loop using a generation counter. Each call increments `playGeneration` and captures the current generation. After every `await animator.animate(...)`, the loop checks if its generation is still current — if `pause()` or any interruption fired during the await, the generation will differ and the loop exits without touching state. Sets `animationInFlight = true` around each await so `stepForward()` can detect the in-flight animation.
+- **pause()**: Increments `playGeneration` to invalidate the current play loop. The loop detects this on its next generation check and exits.
 - **reset()**: Restores `initialState`, clears history and `stepIndex`, syncs the animator via `animator.loadAlgorithm()`.
 - **setAnimator(anim)**: Called by `CubeViewer` after `onMount`. Registers the animator and loads any current algorithm into it.
-- **clearAnimator()**: Called by `CubeViewer` on destroy. Stops the play loop and nullifies the animator reference.
+- **clearAnimator()**: Called by `CubeViewer` on destroy. Increments `playGeneration` to cancel any running loop and nullifies the animator reference.
 
-Note: The store owns the playback sequencing loop (not the animator). The `CubeAnimator` handles the visual face-turn animation for individual moves; the store drives the step-by-step logic.
+Note: The store owns the playback sequencing loop (not the animator). The `CubeAnimator` handles the visual face-turn animation for individual moves; the store drives the step-by-step logic. The store is the single source of truth for logical cube state — it always passes `targetState` to `animator.animate()` rather than letting the animator compute its own state.
 
 ### themeStore (`src/lib/stores/themeStore.svelte.ts`)
 

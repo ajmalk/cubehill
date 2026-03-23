@@ -84,7 +84,7 @@ E2E tests run against `npm run build && npm run preview` to test the production 
 
 Unit tests are co-located with their source files (`*.test.ts` next to the module). E2E tests live in a top-level `tests/e2e/` directory. Vitest is configured inside `vite.config.ts` (not a separate `vitest.config.ts`).
 
-### Current State (Post-Phase 4)
+### Current State (Post-Phase 5)
 
 ```
 cubehill/
@@ -99,6 +99,9 @@ cubehill/
 │   │   ├── moves.test.ts              # Move permutation and algorithm tests
 │   │   ├── notation.ts
 │   │   └── notation.test.ts           # Notation parser tests
+│   ├── data/
+│   │   └── algorithms.test.ts         # Algorithm data integrity: 57 OLL + 21 PLL,
+│   │                                  #   unique IDs, valid notations, pattern shape
 │   └── three/
 │       ├── CubeAnimator.ts
 │       ├── CubeAnimator.test.ts       # Animation duration constants, easing fn,
@@ -107,12 +110,13 @@ cubehill/
 │       └── CubeMesh.test.ts           # Sticker-index → cubie-position mapping,
 │                                      #   color table, 26-cubie invariants
 ├── tests/e2e/
-│   └── smoke.test.ts                  # E2E: home page loads, navbar, canvas visible
+│   └── smoke.test.ts                  # E2E: home page loads (OLL/PLL nav cards),
+│                                      #   navbar branding, canvas visible
 ├── vite.config.ts                     # Vitest configured here
 └── playwright.config.ts
 ```
 
-The Phase 4 Three.js tests avoid requiring a real WebGL context. `CubeAnimator.test.ts` tests exported constants and a mock state machine mirroring the real one. `CubeMesh.test.ts` inlines the sticker mapping function and verifies cubie-position invariants (26 distinct cubies, no invisible center, correct sticker counts per cubie type).
+The Three.js tests avoid requiring a real WebGL context. `CubeAnimator.test.ts` tests exported constants and a mock state machine mirroring the real one. `CubeMesh.test.ts` inlines the sticker mapping function and verifies cubie-position invariants (26 distinct cubies, no invisible center, correct sticker counts per cubie type). `algorithms.test.ts` validates the full OLL and PLL datasets — all 78 entries, unique IDs, parseable notations, correct pattern shapes.
 
 ### Target Structure (Future Phases)
 

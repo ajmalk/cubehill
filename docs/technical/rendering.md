@@ -32,7 +32,8 @@ Takes an `HTMLCanvasElement` and sets up:
 - `resize(width: number, height: number)` — Updates camera aspect ratio and renderer size. Called by `ResizeObserver`.
 - `render()` — Called on each `requestAnimationFrame`. Updates controls, renders the scene.
 - `dispose()` — Cleans up all Three.js resources. Called on `onDestroy`.
-- `setBackgroundColor(color: string)` — Updates the scene background to match the current theme.
+- `setBackgroundColor(color: string)` — Sets the scene background to an arbitrary CSS color string.
+- `syncBackground()` — Re-resolves the DaisyUI `bg-base-100` color via canvas pixel sampling and updates the scene background. Called by `CubeViewer` on mount and on theme change.
 
 ## CubeMesh
 
@@ -92,7 +93,7 @@ When a move is requested:
 
    Counter-clockwise (prime moves) reverse the sign. Double moves use ±180° (sign doesn't matter for 180°).
 
-4. **Complete**: When the animation finishes (~300ms):
+4. **Complete**: When the animation finishes (250ms at default speed):
    - Reparent cubies back to the scene root
    - **Reset all cubie transforms** to their canonical grid positions
    - Call `updateColors()` with the new logical state
@@ -149,11 +150,24 @@ Inter-move delay: 0ms. The ease-in-out curve creates a natural pause at the star
 
 ### Sequential Animation
 
-`CubeAnimator.animate(move)` is a one-shot imperative call that returns a `Promise<void>`. It animates a single move and resolves when the animation is complete.
+`CubeAnimator.animate(move, targetState?)` is a one-shot imperative call that returns a `Promise<void>`. It animates a single move and resolves when the animation is complete.
 
-Playback sequencing is owned by `cubeStore`, which runs an async loop: for each move, it calls `animator.animate(move)` and awaits completion before advancing to the next move. This ensures animations never overlap regardless of playback speed.
+Playback sequencing is owned by `cubeStore`, which runs an async loop: for each move, it calls `animator.animate(move, [...cubeState])` and awaits completion before advancing to the next move. This ensures animations never overlap regardless of playback speed.
 
 The `AnimationState` (`'idle' | 'animating' | 'paused'`) in the animator is an internal concept used to prevent concurrent animations; the store's `isPlaying` / `playbackStatus` are the UI-visible state.
+
+### Single Source of Truth: targetState Pattern
+
+`CubeAnimator` keeps its own internal `logicalState` for cases where the animator drives the queue internally (e.g., the `play()` / `step()` methods on the animator itself). However, `cubeStore` is the canonical source of truth for logical cube state and always passes `targetState` when calling `animate()`.
+
+The `animate(move, targetState)` signature accepts an optional authoritative post-move state from the store. When provided:
+
+1. The animator uses `targetState` for re-coloring in `finishAnimation` instead of computing it internally via `applyMove`.
+2. `this.logicalState` is set to `targetState` at animation start, keeping the animator's internal state in sync.
+
+This eliminates the **dual-state problem**: before this pattern, both `cubeStore` and `CubeAnimator` independently applied moves to their own copies of the state. On mount, the animator was initialized with `solved()` while the store may have already loaded an algorithm — leading to diverged states and sticker colors being reset after each animation.
+
+The rule: **`cubeStore` owns the logical state. `CubeAnimator.logicalState` is a follower, not an independent source.**
 
 ### Animation Interruption
 
@@ -171,7 +185,7 @@ The key invariant: **the logical cube state and the visual state must always agr
 
 #### Implementation note: TurnGroup tagging
 
-`cancelAndSnap()` in `CubeAnimator` locates in-flight TurnGroups by scanning the scene for objects with `userData['isTurnGroup'] === true`. The `animateMove()` method **must** set this flag on every TurnGroup it creates:
+`cancelAndSnap()` in `CubeAnimator` locates in-flight TurnGroups by scanning the scene for objects with `userData['isTurnGroup'] === true`. The `animateMove()` method sets this flag on every TurnGroup it creates:
 
 ```typescript
 const turnGroup = new THREE.Group();
@@ -179,7 +193,7 @@ turnGroup.userData['isTurnGroup'] = true; // required for cancelAndSnap detectio
 this.scene.add(turnGroup);
 ```
 
-Without this flag, `cancelAndSnap` cannot find or clean up TurnGroups and cancellation will silently fail (cubies left orphaned inside the unremoved group). This is a known gap that must be fixed before cancellation is exercised in production.
+Without this flag, `cancelAndSnap` cannot find or clean up TurnGroups and cancellation will silently fail (cubies left orphaned inside the unremoved group). This flag is set correctly in the current implementation.
 
 ### Animation State Machine
 

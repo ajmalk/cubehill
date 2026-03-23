@@ -2,8 +2,10 @@ import { test, expect } from '@playwright/test';
 
 test('home page loads', async ({ page }) => {
   await page.goto('/');
-  // Phase 4: home page shows T Perm demo — h1 is the algorithm name
-  await expect(page.locator('h1')).toContainText('T Perm');
+  // Phase 5: home page is the landing page — shows OLL and PLL nav cards
+  await expect(page.locator('h2').first()).toBeVisible();
+  await expect(page.locator('a[href*="/oll/"]')).toBeVisible();
+  await expect(page.locator('a[href*="/pll/"]')).toBeVisible();
 });
 
 test('home page has navbar', async ({ page }) => {

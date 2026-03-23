@@ -53,7 +53,7 @@ cubehill/
 │   └── routes/ *                       # SvelteKit file-based routing
 │       ├── +layout.svelte *           # Root layout (imports CSS, favicon)
 │       ├── +layout.ts *               # Prerender + trailingSlash config
-│       ├── +page.svelte *             # Home page (T Perm demo — Phase 4)
+│       ├── +page.svelte *             # Home page (solved cube hero + OLL/PLL nav cards)
 │       ├── oll/
 │       │   ├── +page.svelte           # OLL cases listing
 │       │   └── [id]/+page.svelte      # Individual OLL case
@@ -155,7 +155,7 @@ Algorithm data is stored as TypeScript constants (not fetched from an API). This
 
 | Route        | Page       | Description                                                  |
 | ------------ | ---------- | ------------------------------------------------------------ |
-| `/`          | Home       | Solved cube hero, introduction, links to algorithm sets      |
+| `/`          | Home       | Solved cube hero with OLL/PLL nav cards; no playback controls |
 | `/oll/`      | OLL List   | All 57 OLL cases in a categorized grid                       |
 | `/oll/[id]/` | OLL Detail | Single OLL case with 3D visualizer and playback              |
 | `/pll/`      | PLL List   | All 21 PLL cases in a categorized grid                       |
@@ -228,4 +228,4 @@ Target hierarchy for Phase 5. The Navbar and CommandPalette move to `+layout.sve
         └── PlaybackControls
 ```
 
-**Current state (post-Phase 4):** Navbar is inlined in `+page.svelte` rather than in `+layout.svelte`. Phase 5 should move it to the layout. CommandPalette is not yet implemented. The home page is a T Perm demo; Phase 5 replaces it with the landing page described above.
+**Current state (post-Phase 5):** Navbar is in `+layout.svelte`. The home page is the solved-cube landing page with OLL/PLL nav cards. CommandPalette is not yet implemented (Phase 6 target).

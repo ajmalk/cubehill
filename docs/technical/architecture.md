@@ -93,6 +93,26 @@ flowchart TB
 
 Data flows down: static algorithm data is parsed by the cube engine into state, held in the Svelte store, and consumed by both the Three.js renderer and UI components. Feedback flows up: user actions (play, pause, step, reset, algorithm selection) and animation-complete events write back into the store, triggering the next update.
 
+## Algorithm Data Files
+
+Algorithm data lives in `src/lib/data/` as static TypeScript arrays exported from two files:
+
+```typescript
+// src/lib/data/oll.ts
+import type { OllAlgorithm } from '$lib/cube/types';
+export const oll: OllAlgorithm[] = [ /* 57 cases */ ];
+
+// src/lib/data/pll.ts
+import type { PllAlgorithm } from '$lib/cube/types';
+export const pll: PllAlgorithm[] = [ /* 21 cases */ ];
+```
+
+Each file is a single named export of a typed array. There is no default export and no index barrel re-exporting both — the list and detail pages each import directly from the file they need. This keeps tree-shaking effective (a PLL page does not bundle OLL data) even though the full dataset is small enough that it would not matter in practice.
+
+Cases are ordered by their canonical number within each file — OLL 1 through OLL 57, then the PLL perms in the standard reference order. Group order is determined by the order cases first appear in the array. `AlgorithmList` preserves this order when grouping; it does not re-sort.
+
+See [Algorithm Data Model](./algorithm-data-model.md) for the full TypeScript type definitions.
+
 ## Key Architectural Decisions
 
 ### Separation of Concerns
@@ -135,7 +155,7 @@ Algorithm data is stored as TypeScript constants (not fetched from an API). This
 
 | Route        | Page       | Description                                                  |
 | ------------ | ---------- | ------------------------------------------------------------ |
-| `/`          | Home       | Interactive cube hero, introduction, links to algorithm sets |
+| `/`          | Home       | Solved cube hero, introduction, links to algorithm sets      |
 | `/oll/`      | OLL List   | All 57 OLL cases in a categorized grid                       |
 | `/oll/[id]/` | OLL Detail | Single OLL case with 3D visualizer and playback              |
 | `/pll/`      | PLL List   | All 21 PLL cases in a categorized grid                       |
@@ -143,27 +163,69 @@ Algorithm data is stored as TypeScript constants (not fetched from an API). This
 
 All routes are statically prerendered at build time via `adapter-static`. Dynamic `[id]` routes use `entries()` to enumerate all valid IDs.
 
+### Static Prerendering for Dynamic Routes
+
+`adapter-static` cannot discover dynamic route parameters on its own — you must tell it which IDs exist. Each dynamic route needs a `+page.ts` that exports an `entries` function:
+
+```typescript
+// src/routes/oll/[id]/+page.ts
+import { oll } from '$lib/data/oll';
+
+export const entries = () => oll.map((a) => ({ id: a.id }));
+export const prerender = true;
+```
+
+The same pattern applies to `pll/[id]/+page.ts` using the `pll` array. The root `+layout.ts` already sets `prerender = true` globally; the `entries` export tells the adapter which `[id]` values to generate pages for.
+
+### ID Format
+
+The `id` field on each algorithm is the URL slug: `"oll-1"`, `"oll-2"`, ..., `"pll-aa"`, `"pll-t"`. This is a human-readable string, not a numeric index. Using the string form directly as the URL segment (e.g., `/oll/oll-1/`) is redundant but unambiguous and avoids collisions between OLL and PLL IDs in the URL namespace.
+
+Alternative considered: use `"1"` through `"57"` as the `[id]` for OLL and named slugs like `"t"` or `"aa"` for PLL. Rejected because it would require the load function to distinguish OLL numeric IDs from PLL name-based IDs with separate lookup logic, and because OLL cases do not have universally agreed short names — the number is the canonical identifier. Using `"oll-1"` as both the `id` field and the URL segment keeps the data model and routing consistent.
+
+### Load Function Pattern
+
+Each detail page has a `+page.ts` that handles data loading and 404s:
+
+```typescript
+// src/routes/oll/[id]/+page.ts
+import { oll } from '$lib/data/oll';
+import { error } from '@sveltejs/kit';
+import type { EntryGenerator, PageLoad } from './$types';
+
+export const entries: EntryGenerator = () => oll.map((a) => ({ id: a.id }));
+export const prerender = true;
+
+export const load: PageLoad = ({ params }) => {
+  const algorithm = oll.find((a) => a.id === params.id);
+  if (!algorithm) error(404, `OLL case "${params.id}" not found`);
+  return { algorithm };
+};
+```
+
+The `error()` call from `@sveltejs/kit` triggers SvelteKit's error page. Because all valid IDs are enumerated by `entries`, a 404 should never occur in production — it is a safety net for development-time typos.
+
 ## Component Hierarchy
 
-Target hierarchy (some components are TODOs in `+layout.svelte`; see Phase 4 home page for current state):
+Target hierarchy for Phase 5. The Navbar and CommandPalette move to `+layout.svelte` so they are present on every page. The home page transitions from the T Perm demo to a proper landing page with a solved cube hero.
 
 ```
 +layout.svelte
-├── Navbar                              (TODO: move here from individual pages)
-├── CommandPalette (global)             (TODO: not yet implemented)
+├── Navbar
+├── CommandPalette (global, ninja-keys)
 └── {@render children()} (page content)
-    ├── Home (+page.svelte)             (Phase 4: T Perm demo with inline navbar)
-    │   ├── ThemeToggle (inline navbar)
+    ├── Home (+page.svelte)
+    │   └── CubeViewer (solved cube, no playback controls)
+    ├── OLL List (oll/+page.svelte)
+    │   └── AlgorithmList → AlgorithmCard[]
+    ├── OLL Detail (oll/[id]/+page.svelte)
     │   ├── CubeViewer
     │   └── PlaybackControls
-    ├── OLL List (oll/+page.svelte)     (future)
+    ├── PLL List (pll/+page.svelte)
     │   └── AlgorithmList → AlgorithmCard[]
-    ├── OLL Detail (oll/[id]/+page.svelte) (future)
-    │   ├── CubeViewer
-    │   └── PlaybackControls
-    ├── PLL List (pll/+page.svelte)     (future)
-    │   └── AlgorithmList → AlgorithmCard[]
-    └── PLL Detail (pll/[id]/+page.svelte) (future)
+    └── PLL Detail (pll/[id]/+page.svelte)
         ├── CubeViewer
         └── PlaybackControls
 ```
+
+**Current state (post-Phase 4):** Navbar is inlined in `+page.svelte` rather than in `+layout.svelte`. Phase 5 should move it to the layout. CommandPalette is not yet implemented. The home page is a T Perm demo; Phase 5 replaces it with the landing page described above.

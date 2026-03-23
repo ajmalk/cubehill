@@ -4,7 +4,7 @@ This document describes the Svelte component APIs, reactive stores, keyboard con
 
 ## Components
 
-**Current state (post-Phase 4):** `CubeViewer`, `PlaybackControls`, and `ThemeToggle` are implemented. `AlgorithmList`, `AlgorithmCard`, `Navbar`, and `CommandPalette` are future work described below as specs.
+**Current state (post-Phase 4):** `CubeViewer`, `PlaybackControls`, and `ThemeToggle` are implemented. `AlgorithmList`, `AlgorithmCard`, `Navbar`, and `CommandPalette` are Phase 5 targets described below as specs.
 
 ### CubeViewer (`src/lib/components/CubeViewer.svelte`)
 
@@ -29,20 +29,92 @@ Key responsibilities:
 
 ### AlgorithmList (`src/lib/components/AlgorithmList.svelte`)
 
-Renders a grid of `AlgorithmCard` components:
+Renders a grouped grid of `AlgorithmCard` components for a single algorithm category.
 
-- Accepts an array of `Algorithm` objects
-- Groups them by their `group` field and renders section headers
-- Responsive grid: adjusts column count based on viewport width
+**Props:**
+
+```typescript
+interface AlgorithmListProps {
+  algorithms: Algorithm[]; // All OLL or all PLL cases — pre-filtered by the page
+}
+```
+
+Rendering behavior:
+
+- Groups items by `algorithm.group` using a `Map<string, Algorithm[]>` built once at render time; preserves the natural order of the data array (do not sort groups alphabetically — group order in the source data is intentional)
+- Renders a `<h2>` section header for each group, then a CSS grid of `AlgorithmCard` beneath it
+- Grid is responsive: 2 columns on mobile, 3 on `sm`, 4 on `md`, 5 on `lg`
+- No internal state — purely a presentation component driven by its `algorithms` prop
 
 ### AlgorithmCard (`src/lib/components/AlgorithmCard.svelte`)
 
-A clickable card representing a single algorithm case:
+A clickable card representing a single algorithm case. Links to the detail page.
 
-- Displays the case name (e.g., "OLL 1", "T Perm")
-- Renders a 2D thumbnail of the case pattern (a 3x3 grid showing oriented vs. unoriented stickers)
-- Shows the probability of encountering the case
-- Links to the detail page using `base` from `$app/paths`
+**Props:**
+
+```typescript
+interface AlgorithmCardProps {
+  algorithm: Algorithm;
+}
+```
+
+Rendering:
+
+- Uses `resolve()` from `$app/paths` to build the href (`/oll/{id}/` or `/pll/{id}/`) — required for the GitHub Pages subpath
+- Derives the href from `algorithm.category` and `algorithm.id`: `resolve(\`/${algorithm.category}/${algorithm.id}/\`)`
+- Displays the case name (`algorithm.name`) and group label (`algorithm.group`)
+- Renders a 2D pattern thumbnail (see Pattern Thumbnails below)
+- Shows `algorithm.probability` as a secondary label
+
+### Pattern Thumbnails
+
+Both `AlgorithmCard` variants render a 2D thumbnail as an inline SVG — no canvas, no external images, no runtime dependencies.
+
+#### OLL Thumbnail
+
+The OLL `pattern` field is a `boolean[9]` in row-major order. Render it as a 3x3 grid:
+
+- Each cell is a colored square: yellow (`oklch(85% 0.2 95)`) if `true`, grey (`oklch(40% 0 0)`) if `false`
+- Draw a thin white border between cells
+- The center cell (`pattern[4]`) is always `true`
+- Size: 48x48px intrinsic, scales with CSS. No viewBox tricks — use a fixed `viewBox="0 0 3 3"` with `1` unit per cell
+
+This is the simplest possible approach: 9 `<rect>` elements, no library, no runtime logic beyond indexing the boolean array.
+
+#### PLL Thumbnail
+
+The PLL `pattern` field is a `PermutationArrow[]`. Each arrow shows where a piece moves. Render:
+
+- A 3x3 grid background (all grey cells — top face is already solved in PLL)
+- One `<line>` or curved `<path>` per arrow, drawn from the center of the `from` cell to the center of the `to` cell
+- Arrowhead: use an SVG `<marker>` with `markerEnd`
+- Use a distinct color (e.g., accent color via `currentColor`) for arrows so they read clearly over the grey grid
+
+Cell center positions follow the same 3x3 grid as OLL. Position index to (col, row): `col = index % 3`, `row = Math.floor(index / 3)`, center = `(col + 0.5, row + 0.5)` in the `0 0 3 3` viewBox.
+
+**Why SVG (not Canvas or CSS grid)**: SVG is markup — it renders server-side, works with `adapter-static` prerendering, requires no `onMount`, and scales cleanly at any DPI. Canvas requires `onMount` and would need a ref per card (expensive at 57 OLL + 21 PLL cards on the list page). CSS grid can do the OLL thumbnail but cannot draw PLL arrows. Inline SVG handles both cases uniformly with no runtime cost.
+
+### AlgorithmDetailPage (route component: `oll/[id]/+page.svelte`, `pll/[id]/+page.svelte`)
+
+Not a reusable component — this is the SvelteKit page file for each detail route. The two routes share the same layout and composition, differing only in which data array they read from.
+
+Structure:
+
+```
+[id]/+page.svelte
+├── <svelte:head> — page title + meta description
+├── Navbar (from layout)
+├── <h1> case name + breadcrumb
+├── <p> notation string
+├── Two-column layout (same pattern as current home page)
+│   ├── CubeViewer (left / top on mobile)
+│   └── PlaybackControls (right / below on mobile)
+└── Keyboard controls (same as home page, copied pattern)
+```
+
+Data loading: use SvelteKit's `+page.ts` (not `+page.server.ts` — this is a static site). The load function imports from `$lib/data/oll` or `$lib/data/pll`, finds the matching case by `id`, and returns it. If not found, call `error(404)` from `@sveltejs/kit`.
+
+The page's `onMount` calls `cubeStore.loadAlgorithm(algorithm.notation)` — same pattern as the current home page's `T_PERM` demo.
 
 ### PlaybackControls (`src/lib/components/PlaybackControls.svelte`)
 
@@ -64,7 +136,7 @@ Top navigation bar using DaisyUI's `navbar` component:
 - Logo/title linking to home
 - Navigation links to OLL and PLL pages
 - `ThemeToggle` component for dark/light mode switching
-- All links use `base` from `$app/paths` as prefix (required for GitHub Pages subpath deployment)
+- All links use `resolve()` from `$app/paths` to build hrefs (required for GitHub Pages subpath deployment)
 
 ### ThemeToggle (`src/lib/components/ThemeToggle.svelte`)
 
@@ -131,7 +203,7 @@ Each command includes:
 - `id`: Unique identifier
 - `title`: Display text (e.g., "OLL 1 — Dot Cases")
 - `parent`: ID of parent menu for nesting (e.g., OLL cases have `parent: 'oll'`)
-- `handler`: Navigation function using `goto()` with `base` prefix
+- `handler`: Navigation function using `goto(resolve('/oll/oll-1/'))` — `resolve()` from `$app/paths` handles the GitHub Pages subpath
 - `keywords`: Additional search terms (e.g., the algorithm notation itself, so users can search by moves)
 
 ### Search
@@ -234,6 +306,37 @@ Note: The store owns the playback sequencing loop (not the animator). The `CubeA
 ### themeStore (`src/lib/stores/themeStore.svelte.ts`)
 
 Manages the dark/light mode preference. See `theme-integration.md` for details.
+
+## Home Page Architecture (Phase 5)
+
+The home page transitions from a hardcoded T Perm demo to a proper landing page. The cube on the home page does not auto-rotate or run through an algorithm on its own — it loads in the solved state and sits idle. This keeps the home page simple and avoids surprising the user with motion they did not initiate.
+
+Recommended home page structure for Phase 5:
+
+- Navbar (moved out of `+page.svelte` into `+layout.svelte`)
+- Hero section: centered `CubeViewer` showing the solved cube, with a headline and brief description
+- Call-to-action links to `/oll/` and `/pll/`
+- No `PlaybackControls` on the home page — the cube is not in playback mode
+
+The solved cube hero is purely visual. `CubeViewer` already supports this: if `cubeStore.loadAlgorithm()` is never called, the cube renders in the solved state with no animation. The home page `onMount` should call nothing on `cubeStore`.
+
+## SEO and Page Metadata
+
+All pages use `<svelte:head>` to set the title and meta description. These are rendered into the static HTML at prerender time and are fully SEO-compatible.
+
+### Title and Description Patterns
+
+| Route | Title | Description |
+|-------|-------|-------------|
+| `/` | `CubeHill — Speedcubing Algorithm Visualizer` | `Visualize OLL and PLL algorithms with an interactive 3D Rubik's cube.` |
+| `/oll/` | `OLL Algorithms — CubeHill` | `All 57 OLL cases with 3D visualizer and step-by-step playback.` |
+| `/pll/` | `PLL Algorithms — CubeHill` | `All 21 PLL cases with 3D visualizer and step-by-step playback.` |
+| `/oll/[id]/` | `{name} — OLL — CubeHill` | `{name}: {group}. Algorithm: {notation}` |
+| `/pll/[id]/` | `{name} — PLL — CubeHill` | `{name}: {group}. Algorithm: {notation}` |
+
+The detail page title uses the algorithm's `name` field (e.g., "OLL 1" or "T Perm"). The description includes the notation so the algorithm moves appear in search snippets — useful for cubers who search by move sequence.
+
+No structured data (JSON-LD) is needed for Phase 5. The static title and description are sufficient.
 
 ## Design Artifacts
 

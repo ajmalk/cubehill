@@ -73,7 +73,7 @@
         cubeStore.setAnimator(cubeAnim);
 
         // Sync background with current theme
-        syncThemeToScene(cubeScene);
+        cubeScene.syncBackground();
 
         // ResizeObserver for responsive canvas sizing
         resizeObserver = new ResizeObserver((entries) => {

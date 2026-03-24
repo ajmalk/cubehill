@@ -12,21 +12,35 @@
   import { PLL_ALGORITHMS } from '$lib/data/pll.js';
   import PllGraph from '$lib/components/PllGraph.svelte';
 
-  // Algorithm filter state — which algorithms' edges to show
-  // Empty set = show all
-  let filteredIds = new SvelteSet<string>();
+  // Algorithm filter state — tracks which algorithms are EXCLUDED
+  // Empty set = show all (nothing excluded)
+  let excludedIds = new SvelteSet<string>();
+
+  // The set passed to PllGraph: which algorithms to INCLUDE
+  // If nothing excluded, pass empty set (= show all)
+  let filteredIds = $derived.by(() => {
+    if (excludedIds.size === 0) return new SvelteSet<string>();
+    const included = new SvelteSet<string>();
+    for (const alg of PLL_ALGORITHMS) {
+      if (!excludedIds.has(alg.id)) included.add(alg.id);
+    }
+    return included;
+  });
 
   function toggleAlgorithm(id: string) {
-    if (filteredIds.has(id)) {
-      filteredIds.delete(id);
+    if (excludedIds.has(id)) {
+      excludedIds.delete(id);
     } else {
-      filteredIds.add(id);
+      excludedIds.add(id);
     }
   }
 
   function clearFilter() {
-    filteredIds.clear();
+    excludedIds.clear();
   }
+
+  // Direction toggle
+  let showIncoming = $state(false);
 
   // Group algorithms for the filter UI
   const groups = [
@@ -61,8 +75,8 @@
   <details class="collapse collapse-arrow bg-base-200 mb-6 rounded-box">
     <summary class="collapse-title text-sm font-medium">
       Filter by algorithm
-      {#if filteredIds.size > 0}
-        <span class="badge badge-primary badge-sm ml-2">{filteredIds.size} selected</span>
+      {#if excludedIds.size > 0}
+        <span class="badge badge-primary badge-sm ml-2">{PLL_ALGORITHMS.length - excludedIds.size} of {PLL_ALGORITHMS.length}</span>
       {/if}
     </summary>
     <div class="collapse-content">
@@ -83,7 +97,7 @@
                     <input
                       type="checkbox"
                       class="checkbox checkbox-xs"
-                      checked={filteredIds.size === 0 || filteredIds.has(id)}
+                      checked={!excludedIds.has(id)}
                       onchange={() => toggleAlgorithm(id)}
                     />
                     <span class="text-sm">{alg.name}</span>
@@ -97,9 +111,34 @@
     </div>
   </details>
 
+  <!-- Direction toggle -->
+  <div class="mb-4 flex items-center gap-3">
+    <span class="text-sm font-medium">Direction:</span>
+    <label class="label cursor-pointer gap-2">
+      <input
+        type="radio"
+        name="direction"
+        class="radio radio-sm"
+        checked={!showIncoming}
+        onchange={() => showIncoming = false}
+      />
+      <span class="text-sm">From selected</span>
+    </label>
+    <label class="label cursor-pointer gap-2">
+      <input
+        type="radio"
+        name="direction"
+        class="radio radio-sm"
+        checked={showIncoming}
+        onchange={() => showIncoming = true}
+      />
+      <span class="text-sm">To selected</span>
+    </label>
+  </div>
+
   <!-- Graph -->
   {#if browser}
-    <PllGraph graph={pllGraph} filteredAlgorithmIds={filteredIds} />
+    <PllGraph graph={pllGraph} filteredAlgorithmIds={filteredIds} {showIncoming} />
   {:else}
     <div class="bg-base-200 flex h-64 items-center justify-center rounded-box">
       <span class="text-base-content/40 text-sm">Loading graph...</span>

@@ -98,24 +98,27 @@ const AUF_PERMS: Array<{ label: 'none' | 'U' | 'U2' | "U'"; perm: number[] }> = 
 
 /**
  * Build a lookup table: permutation string → case ID.
- * Maps every recognizable state (at all 4 AUF rotations) to its case ID.
+ * Uses double coset: compose(U^j, compose(state, U^k)) for all j, k.
+ * This covers the full 288-element PLL group, mapping every element to its case.
+ * Note: U rotation of a swap case can look like a 3-cycle in the "slot filled from"
+ * representation, but it's still the same PLL case.
  */
 function buildStateLookup(): Map<string, string> {
   const lookup = new Map<string, string>();
 
-  // Add solved state at all 4 AUF rotations
-  for (const { perm: auf } of AUF_PERMS) {
-    lookup.set(composePerm(auf, IDENTITY).join(','), 'solved');
-  }
+  const allCases: Array<{ id: string; perm: number[] }> = [
+    { id: 'solved', perm: IDENTITY },
+    ...PLL_ALGORITHMS.map((alg) => ({ id: alg.id, perm: alg.permutation })),
+  ];
 
-  // For each PLL case, the permutation IS the state — add all 4 AUF rotations
-  for (const alg of PLL_ALGORITHMS) {
-    const statePerm = alg.permutation;
-    for (const { perm: auf } of AUF_PERMS) {
-      const rotated = composePerm(auf, statePerm);
-      const key = rotated.join(',');
-      if (!lookup.has(key)) {
-        lookup.set(key, alg.id);
+  for (const { id, perm } of allCases) {
+    for (const { perm: uk } of AUF_PERMS) {
+      for (const { perm: uj } of AUF_PERMS) {
+        const rotated = composePerm(uj, composePerm(perm, uk));
+        const key = rotated.join(',');
+        if (!lookup.has(key)) {
+          lookup.set(key, id);
+        }
       }
     }
   }
@@ -162,13 +165,11 @@ export function computePllGraph(): PllGraph {
   for (const [sourceId, sourceState] of sourceStates) {
     for (const { label: aufLabel, perm: aufPerm } of AUF_PERMS) {
       for (const { alg, effect: algEffect } of algEffects) {
+        // Apply: source state + pre-AUF + algorithm effect
         const result = composePerm(sourceState, composePerm(aufPerm, algEffect));
         const targetId = STATE_LOOKUP.get(result.join(','));
 
-        if (targetId === undefined) {
-          // Should not happen with correct permutations
-          continue;
-        }
+        if (targetId === undefined) continue;
 
         const edgeKey = `${sourceId}::${targetId}`;
         if (!rawEdges.has(edgeKey)) rawEdges.set(edgeKey, []);

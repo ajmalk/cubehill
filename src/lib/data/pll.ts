@@ -393,7 +393,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 7, to: 3 },
       { from: 3, to: 1 },
     ],
-    permutation: [2, 3, 6, 7, 5, 0, 1, 8],
+    permutation: [8, 1, 2, 7, 3, 0, 5, 6],
   },
   {
     id: 'pll-e',

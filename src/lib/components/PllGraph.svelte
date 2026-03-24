@@ -13,9 +13,11 @@
     graph: PllGraph;
     /** Which algorithm IDs to include in displayed edges. Empty = all. */
     filteredAlgorithmIds?: Set<string>;
+    /** Show edges going TO the selected node instead of FROM it. */
+    showIncoming?: boolean;
   }
 
-  let { graph, filteredAlgorithmIds = new Set() }: Props = $props();
+  let { graph, filteredAlgorithmIds = new Set(), showIncoming = false }: Props = $props();
 
   // ── State ──────────────────────────────────────────────────────────────────
   let svgEl = $state<SVGSVGElement | undefined>(undefined);
@@ -94,9 +96,9 @@
   function visibleEdges(edges: typeof simulationEdges): typeof simulationEdges {
     if (selectedNodeId === null) return [];
 
-    let result = edges.filter(
-      (e) => e.source === selectedNodeId || e.target === selectedNodeId
-    );
+    let result = showIncoming
+      ? edges.filter((e) => e.target === selectedNodeId)
+      : edges.filter((e) => e.source === selectedNodeId);
 
     if (filteredAlgorithmIds.size > 0) {
       result = result.map((e) => ({
@@ -112,8 +114,8 @@
   function isNodeConnected(nodeId: string): boolean {
     if (selectedNodeId === null) return true;
     if (nodeId === selectedNodeId) return true;
-    return visibleEdges(simulationEdges).some(
-      (e) => e.source === nodeId || e.target === nodeId
+    return visibleEdges(simulationEdges).some((e) =>
+      showIncoming ? e.source === nodeId : e.target === nodeId
     );
   }
 
@@ -146,12 +148,12 @@
           simulationEdges.map((e) => ({ ...e, source: e.source, target: e.target }))
         )
           .id((d) => d.id)
-          .distance(80)
-          .strength(0.1)
+          .distance(150)
+          .strength(0.05)
       )
-      .force('charge', d3force.forceManyBody().strength(-200))
+      .force('charge', d3force.forceManyBody().strength(-600))
       .force('center', d3force.forceCenter(width / 2, height / 2))
-      .force('collision', d3force.forceCollide(30))
+      .force('collision', d3force.forceCollide(55))
       .on('tick', () => {
         // Trigger reactivity by reassigning
         simulationNodes = [...simulationNodes];
@@ -228,17 +230,22 @@
   // ── SVG path helpers ─────────────────────────────────────────────────────────
   function edgePath(
     sx: number, sy: number, tx: number, ty: number,
-    isBidirectional: boolean
+    isBidirectional: boolean, targetRadius: number
   ): string {
+    const dx = tx - sx;
+    const dy = ty - sy;
+    const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+    // Shorten the line so the arrow ends at the node edge
+    const offset = targetRadius + 12; // radius + arrow size
+    const ex = tx - (dx / dist) * offset;
+    const ey = ty - (dy / dist) * offset;
+
     if (isBidirectional) {
-      // Curve the path slightly so bidirectional edges don't overlap
-      const dx = tx - sx;
-      const dy = ty - sy;
-      const mx = (sx + tx) / 2 - dy * 0.2;
-      const my = (sy + ty) / 2 + dx * 0.2;
-      return `M ${sx} ${sy} Q ${mx} ${my} ${tx} ${ty}`;
+      const mx = (sx + ex) / 2 - dy * 0.15;
+      const my = (sy + ey) / 2 + dx * 0.15;
+      return `M ${sx} ${sy} Q ${mx} ${my} ${ex} ${ey}`;
     }
-    return `M ${sx} ${sy} L ${tx} ${ty}`;
+    return `M ${sx} ${sy} L ${ex} ${ey}`;
   }
 
   // Check if a reverse edge exists (for bidirectional detection)
@@ -293,23 +300,23 @@
         <defs>
           <marker
             id="arrowhead"
-            markerWidth="8"
-            markerHeight="6"
-            refX="7"
-            refY="3"
+            markerWidth="10"
+            markerHeight="8"
+            refX="10"
+            refY="4"
             orient="auto"
           >
-            <polygon points="0 0, 8 3, 0 6" fill={colorBaseContent} opacity="0.4" />
+            <polygon points="0 0, 10 4, 0 8" fill={colorBaseContent} opacity="0.5" />
           </marker>
           <marker
             id="arrowhead-hover"
-            markerWidth="8"
-            markerHeight="6"
-            refX="7"
-            refY="3"
+            markerWidth="10"
+            markerHeight="8"
+            refX="10"
+            refY="4"
             orient="auto"
           >
-            <polygon points="0 0, 8 3, 0 6" fill={colorPrimary} />
+            <polygon points="0 0, 10 4, 0 8" fill={colorPrimary} />
           </marker>
         </defs>
 
@@ -320,7 +327,8 @@
             {@const tNode = simulationNodes.find((n) => n.id === edge.target)}
             {#if sNode && tNode}
               {@const isBi = hasBidirectional(edge)}
-              {@const path = edgePath(sNode.x, sNode.y, tNode.x, tNode.y, isBi)}
+              {@const tRadius = tNode.id === 'solved' ? 38 : 28}
+              {@const path = edgePath(sNode.x, sNode.y, tNode.x, tNode.y, isBi, tRadius)}
               {@const edgeKey = edge.source + '::' + edge.target}
               {@const isHovered = hoveredEdgeKey === edgeKey}
               <path
@@ -344,7 +352,7 @@
         <!-- Nodes -->
         <g class="nodes">
           {#each simulationNodes as node (node.id)}
-            {@const radius = node.isSolved ? 20 : 14}
+            {@const radius = node.isSolved ? 38 : 28}
             {@const isSelected = node.id === selectedNodeId}
             {@const isConnected = isNodeConnected(node.id)}
             {@const opacity = selectedNodeId === null ? 1 : isConnected ? 1 : 0.25}
@@ -367,7 +375,7 @@
               <text
                 text-anchor="middle"
                 dominant-baseline="middle"
-                font-size={node.isSolved ? '11' : '9'}
+                font-size={node.isSolved ? '14' : '12'}
                 font-weight={node.isSolved ? 'bold' : 'normal'}
                 fill={colorBase100}
                 class="pointer-events-none select-none"

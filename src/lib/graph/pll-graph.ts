@@ -12,8 +12,8 @@
  * - Array indices: [0→pos0, 1→pos1, 2→pos2, 3→pos3, 4→pos5, 5→pos6, 6→pos7, 7→pos8]
  * - Values are position numbers (0,1,2,3,5,6,7,8): perm[idx] = "slot is filled from this position"
  * - Identity: [0, 1, 2, 3, 5, 6, 7, 8]
- * - The `permutation` field on PllAlgorithm stores what the algorithm DOES to pieces.
- * - The STATE (cube configuration) that a PLL case represents is the INVERSE of the algorithm's permutation.
+ * - The `permutation` field on PllAlgorithm IS the STATE (cube configuration before solving).
+ * - The algorithm EFFECT is the INVERSE of the permutation (applying the algorithm solves the state).
  */
 
 import type { PiecePosition } from '$lib/cube/types.js';
@@ -80,10 +80,10 @@ function invertPerm(perm: number[]): number[] {
 
 // ── U rotation permutations ──────────────────────────────────────────────────
 
-// Clockwise U: corners 0→2→8→6→0, edges 1→5→7→3→1
-// In "slot filled from": slot 0 from 6, slot 2 from 0, slot 8 from 2, slot 6 from 8,
-//                        slot 1 from 3, slot 5 from 1, slot 7 from 5, slot 3 from 7
-const U_PERM = [6, 3, 0, 7, 1, 8, 5, 2];
+// Clockwise U from above: corners 0→6→8→2→0, edges 1→3→7→5→1
+// In "slot filled from": slot 0 from 2, slot 2 from 8, slot 6 from 0, slot 8 from 6,
+//                        slot 1 from 5, slot 3 from 1, slot 5 from 7, slot 7 from 3
+const U_PERM = [2, 5, 8, 1, 7, 0, 3, 6];
 const U2_PERM = composePerm(U_PERM, U_PERM);
 const U_PRIME_PERM = composePerm(U2_PERM, U_PERM);
 
@@ -108,10 +108,9 @@ function buildStateLookup(): Map<string, string> {
     lookup.set(composePerm(auf, IDENTITY).join(','), 'solved');
   }
 
-  // For each PLL case, compute the STATE (= inverse of algorithm permutation)
-  // and add all 4 AUF rotations
+  // For each PLL case, the permutation IS the state — add all 4 AUF rotations
   for (const alg of PLL_ALGORITHMS) {
-    const statePerm = invertPerm(alg.permutation);
+    const statePerm = alg.permutation;
     for (const { perm: auf } of AUF_PERMS) {
       const rotated = composePerm(auf, statePerm);
       const key = rotated.join(',');
@@ -144,11 +143,11 @@ export function computePllGraph(): PllGraph {
     })),
   ];
 
-  // Build source states: solved = identity, each PLL case = inverse of its algorithm permutation
+  // Build source states: solved = identity, each PLL case = its permutation (already a state)
   const sourceStates = new Map<string, number[]>();
   sourceStates.set('solved', IDENTITY);
   for (const alg of PLL_ALGORITHMS) {
-    sourceStates.set(alg.id, invertPerm(alg.permutation));
+    sourceStates.set(alg.id, alg.permutation);
   }
 
   // Collect raw edges
@@ -157,8 +156,9 @@ export function computePllGraph(): PllGraph {
   for (const [sourceId, sourceState] of sourceStates) {
     for (const { label: aufLabel, perm: aufPerm } of AUF_PERMS) {
       for (const alg of PLL_ALGORITHMS) {
-        // Apply AUF then algorithm to source state
-        const result = composePerm(sourceState, composePerm(aufPerm, alg.permutation));
+        // Apply AUF then algorithm effect (= inverse of permutation) to source state
+        const algEffect = invertPerm(alg.permutation);
+        const result = composePerm(sourceState, composePerm(aufPerm, algEffect));
         const targetId = STATE_LOOKUP.get(result.join(','));
 
         if (targetId === undefined) {

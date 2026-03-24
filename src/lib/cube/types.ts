@@ -48,6 +48,8 @@ export interface OllAlgorithm extends BaseAlgorithm {
 export interface PllAlgorithm extends BaseAlgorithm {
   category: 'pll';
   pattern: PermutationArrow[];
+  /** Engine-derived 8-element permutation: what the algorithm does to each slot. */
+  permutation: number[];
 }
 
 export type Algorithm = OllAlgorithm | PllAlgorithm;

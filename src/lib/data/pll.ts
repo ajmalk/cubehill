@@ -35,6 +35,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 7, to: 5 },
       { from: 5, to: 1 },
     ],
+    permutation: [0, 3, 2, 5, 1, 6, 7, 8],
   },
   {
     id: 'pll-ub',
@@ -52,6 +53,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 5, to: 7 },
       { from: 7, to: 1 },
     ],
+    permutation: [0, 5, 2, 1, 3, 6, 7, 8],
   },
   {
     id: 'pll-h',
@@ -68,6 +70,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 3, to: 5 },
       { from: 5, to: 3 },
     ],
+    permutation: [0, 7, 2, 5, 3, 6, 1, 8],
   },
   {
     id: 'pll-z',
@@ -84,6 +87,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 3, to: 7 },
       { from: 7, to: 3 },
     ],
+    permutation: [2, 7, 8, 3, 5, 0, 1, 6],
   },
 
   // ── Corners Only (2 cases) ────────────────────────────────────────────────
@@ -103,6 +107,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 8, to: 2 },
       { from: 2, to: 0 },
     ],
+    permutation: [0, 1, 8, 3, 5, 2, 7, 6],
   },
   {
     id: 'pll-ab',
@@ -120,6 +125,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 2, to: 8 },
       { from: 8, to: 0 },
     ],
+    permutation: [0, 1, 6, 3, 5, 8, 7, 2],
   },
 
   // ── Both Edges and Corners (15 cases) ────────────────────────────────────
@@ -138,6 +144,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 1, to: 5 },
       { from: 5, to: 1 },
     ],
+    permutation: [0, 1, 8, 5, 3, 6, 7, 2],
   },
   {
     id: 'pll-f',
@@ -154,6 +161,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 1, to: 3 },
       { from: 3, to: 1 },
     ],
+    permutation: [0, 7, 8, 3, 5, 6, 1, 2],
   },
   {
     id: 'pll-ja',
@@ -173,6 +181,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 5, to: 7 },
       { from: 7, to: 1 },
     ],
+    permutation: [0, 1, 8, 3, 7, 6, 5, 2],
   },
   {
     id: 'pll-jb',
@@ -190,6 +199,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 5, to: 7 },
       { from: 7, to: 5 },
     ],
+    permutation: [0, 5, 8, 3, 1, 6, 7, 2],
   },
   {
     id: 'pll-ra',
@@ -209,6 +219,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 5, to: 3 },
       { from: 3, to: 1 },
     ],
+    permutation: [8, 5, 2, 1, 3, 0, 7, 6],
   },
   {
     id: 'pll-rb',
@@ -228,6 +239,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 3, to: 5 },
       { from: 5, to: 1 },
     ],
+    permutation: [2, 1, 6, 5, 7, 0, 3, 8],
   },
   {
     id: 'pll-y',
@@ -244,6 +256,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 3, to: 5 },
       { from: 5, to: 3 },
     ],
+    permutation: [0, 1, 6, 7, 5, 2, 3, 8],
   },
   {
     id: 'pll-v',
@@ -260,6 +273,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 1, to: 7 },
       { from: 7, to: 1 },
     ],
+    permutation: [0, 1, 6, 3, 7, 2, 5, 8],
   },
   {
     id: 'pll-na',
@@ -281,6 +295,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 3, to: 5 },
       { from: 5, to: 3 },
     ],
+    permutation: [8, 1, 2, 5, 3, 6, 7, 0],
   },
   {
     id: 'pll-nb',
@@ -301,6 +316,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 5, to: 7 },
       { from: 7, to: 5 },
     ],
+    permutation: [0, 1, 6, 5, 3, 2, 7, 8],
   },
   {
     id: 'pll-ga',
@@ -320,6 +336,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 5, to: 7 },
       { from: 7, to: 1 },
     ],
+    permutation: [0, 7, 8, 5, 1, 6, 3, 2],
   },
   {
     id: 'pll-gb',
@@ -338,6 +355,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 7, to: 5 },
       { from: 5, to: 1 },
     ],
+    permutation: [0, 5, 8, 7, 3, 6, 1, 2],
   },
   {
     id: 'pll-gc',
@@ -356,6 +374,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 3, to: 7 },
       { from: 7, to: 1 },
     ],
+    permutation: [0, 3, 8, 5, 7, 6, 1, 2],
   },
   {
     id: 'pll-gd',
@@ -374,6 +393,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 7, to: 3 },
       { from: 3, to: 1 },
     ],
+    permutation: [0, 7, 8, 1, 3, 6, 5, 2],
   },
   {
     id: 'pll-e',
@@ -391,5 +411,6 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 6, to: 8 },
       { from: 8, to: 6 },
     ],
+    permutation: [6, 1, 8, 3, 5, 0, 7, 2],
   },
 ];

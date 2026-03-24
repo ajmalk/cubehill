@@ -6,20 +6,20 @@
  *
  * The graph has 22 nodes — 21 PLL cases plus the solved state.
  * See docs/technical/pll-graph.md for the full specification.
+ *
+ * Permutation model:
+ * - Each permutation is an 8-element array mapping the 8 top-face slots (excluding center 4).
+ * - Array indices: [0→pos0, 1→pos1, 2→pos2, 3→pos3, 4→pos5, 5→pos6, 6→pos7, 7→pos8]
+ * - Values are position numbers (0,1,2,3,5,6,7,8): perm[idx] = "slot is filled from this position"
+ * - Identity: [0, 1, 2, 3, 5, 6, 7, 8]
+ * - The `permutation` field on PllAlgorithm stores what the algorithm DOES to pieces.
+ * - The STATE (cube configuration) that a PLL case represents is the INVERSE of the algorithm's permutation.
  */
 
-import type { PermutationArrow, PiecePosition } from '$lib/cube/types.js';
+import type { PiecePosition } from '$lib/cube/types.js';
 import { PLL_ALGORITHMS } from '$lib/data/pll.js';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
-
-/**
- * Maps position → source position (where does slot i get filled from).
- * Length 8. Positions: [0,1,2,3,5,6,7,8] (center 4 excluded).
- * Array index mapping: idx 0→pos 0, idx 1→pos 1, idx 2→pos 2,
- * idx 3→pos 3, idx 4→pos 5, idx 5→pos 6, idx 6→pos 7, idx 7→pos 8.
- */
-type Permutation = number[];
 
 export interface PllGraphNode {
   id: string;
@@ -49,115 +49,84 @@ export interface PllGraph {
 // ── Position helpers ──────────────────────────────────────────────────────────
 
 const POSITIONS: PiecePosition[] = [0, 1, 2, 3, 5, 6, 7, 8];
+const IDENTITY = [...POSITIONS];
 
-function posToIdx(pos: PiecePosition): number {
-  // Skip center position 4
+/** Map a position value (0-8, skipping 4) to an array index (0-7). */
+function posToIdx(pos: number): number {
   return pos < 4 ? pos : pos - 1;
 }
 
-// Identity permutation: each slot filled from itself
-const IDENTITY: Permutation = POSITIONS.map((p) => p);
-
-// U rotation permutation (clockwise):
-// corners: 0→2→8→6→0 (slot 0 filled from 6, slot 2 from 0, slot 8 from 2, slot 6 from 8)
-// edges: 1→5→7→3→1 (slot 1 from 3, slot 5 from 1, slot 7 from 5, slot 3 from 7)
-const U_PERM: Permutation = (() => {
-  const p = [...IDENTITY];
-  // corners cycle: 0←6, 2←0, 8←2, 6←8
-  p[posToIdx(0)] = 6;
-  p[posToIdx(2)] = 0;
-  p[posToIdx(8)] = 2;
-  p[posToIdx(6)] = 8;
-  // edges cycle: 1←3, 5←1, 7←5, 3←7
-  p[posToIdx(1)] = 3;
-  p[posToIdx(5)] = 1;
-  p[posToIdx(7)] = 5;
-  p[posToIdx(3)] = 7;
-  return p;
-})();
-
-// ── Core functions ────────────────────────────────────────────────────────────
-
-/**
- * Convert a PermutationArrow[] pattern to internal Permutation type.
- * Inverts "from→to" arrows into the "slot←source" convention.
- * Unaffected positions map to themselves (identity).
- */
-export function patternToPermutation(pattern: PermutationArrow[]): Permutation {
-  const perm = [...IDENTITY];
-  for (const arrow of pattern) {
-    // arrow.from moves to arrow.to means slot `to` is filled from `from`
-    perm[posToIdx(arrow.to as PiecePosition)] = arrow.from;
-  }
-  return perm;
-}
+// ── Core permutation functions ────────────────────────────────────────────────
 
 /**
  * Compose two permutations: apply `a` first, then `b`.
- * compose(a, b)[i] = a[b[i]]
- * Does not mutate inputs.
+ * result[i] = a[posToIdx(b[i])]
  */
-export function composePerm(a: Permutation, b: Permutation): Permutation {
-  return b.map((src) => {
-    // b[i] gives us the position (as value), we need its index in `a`
-    const srcIdx = posToIdx(src as PiecePosition);
-    return a[srcIdx];
-  });
+function composePerm(a: number[], b: number[]): number[] {
+  return b.map((src) => a[posToIdx(src)]);
 }
 
 /**
- * Invert a permutation. If perm[i] = j (position i filled from j),
- * then inv[j] = i (position j filled from i).
+ * Invert a permutation. If perm says "slot i filled from position P",
+ * then inv says "slot at position P filled from position POSITIONS[i]".
  */
-function invertPerm(perm: Permutation): Permutation {
+function invertPerm(perm: number[]): number[] {
   const inv = [...IDENTITY];
   for (let i = 0; i < perm.length; i++) {
-    inv[posToIdx(perm[i] as PiecePosition)] = POSITIONS[i];
+    inv[posToIdx(perm[i])] = POSITIONS[i];
   }
   return inv;
 }
 
-function permEqual(a: Permutation, b: Permutation): boolean {
-  return a.every((v, i) => v === b[i]);
-}
+// ── U rotation permutations ──────────────────────────────────────────────────
 
-// Pre-compute AUF permutations
+// Clockwise U: corners 0→2→8→6→0, edges 1→5→7→3→1
+// In "slot filled from": slot 0 from 6, slot 2 from 0, slot 8 from 2, slot 6 from 8,
+//                        slot 1 from 3, slot 5 from 1, slot 7 from 5, slot 3 from 7
+const U_PERM = [6, 3, 0, 7, 1, 8, 5, 2];
 const U2_PERM = composePerm(U_PERM, U_PERM);
-const U_PRIME_PERM = composePerm(U_PERM, U2_PERM);
+const U_PRIME_PERM = composePerm(U2_PERM, U_PERM);
 
-const AUF_PERMS: Array<{ label: 'none' | 'U' | 'U2' | "U'"; perm: Permutation }> = [
+const AUF_PERMS: Array<{ label: 'none' | 'U' | 'U2' | "U'"; perm: number[] }> = [
   { label: 'none', perm: IDENTITY },
   { label: 'U', perm: U_PERM },
   { label: 'U2', perm: U2_PERM },
   { label: "U'", perm: U_PRIME_PERM },
 ];
 
-// Pre-compute algorithm permutations from pattern data
-const ALG_PERMS = PLL_ALGORITHMS.map((alg) => ({
-  alg,
-  perm: patternToPermutation(alg.pattern),
-}));
+// ── Lookup table ─────────────────────────────────────────────────────────────
 
 /**
- * Identify a permutation as a PLL case id, "solved", or null.
- * Tries all 4 AUF post-rotations of each known case.
- *
- * Compares against PLL states (inverse of algorithm effects) with AUF rotations.
- * A PLL state is the cube configuration that a given algorithm solves: P^(-1)
- * where P is the algorithm's effect permutation.
+ * Build a lookup table: permutation string → case ID.
+ * Maps every recognizable state (at all 4 AUF rotations) to its case ID.
  */
-export function identifyPllCase(perm: Permutation): string | null {
-  if (permEqual(perm, IDENTITY)) return 'solved';
+function buildStateLookup(): Map<string, string> {
+  const lookup = new Map<string, string>();
 
-  for (const { alg, perm: algPerm } of ALG_PERMS) {
-    const statePerm = invertPerm(algPerm);
-    for (const { perm: aufPerm } of AUF_PERMS) {
-      const rotated = composePerm(statePerm, aufPerm);
-      if (permEqual(perm, rotated)) return alg.id;
+  // Add solved state at all 4 AUF rotations
+  for (const { perm: auf } of AUF_PERMS) {
+    lookup.set(composePerm(auf, IDENTITY).join(','), 'solved');
+  }
+
+  // For each PLL case, compute the STATE (= inverse of algorithm permutation)
+  // and add all 4 AUF rotations
+  for (const alg of PLL_ALGORITHMS) {
+    const statePerm = invertPerm(alg.permutation);
+    for (const { perm: auf } of AUF_PERMS) {
+      const rotated = composePerm(auf, statePerm);
+      const key = rotated.join(',');
+      if (!lookup.has(key)) {
+        lookup.set(key, alg.id);
+      }
     }
   }
-  return null;
+
+  return lookup;
 }
+
+const STATE_LOOKUP = buildStateLookup();
+
+// ── Graph computation ────────────────────────────────────────────────────────
 
 /**
  * Compute the full PLL transition graph.
@@ -175,30 +144,30 @@ export function computePllGraph(): PllGraph {
     })),
   ];
 
-  // Build source permutations: solved = identity, each PLL case = inverse of its algorithm effect
-  // The state that algorithm X solves is P^(-1), because applying P to P^(-1) = identity.
-  const sourcePerms: Map<string, Permutation> = new Map();
-  sourcePerms.set('solved', IDENTITY);
-  for (const { alg, perm } of ALG_PERMS) {
-    sourcePerms.set(alg.id, invertPerm(perm));
+  // Build source states: solved = identity, each PLL case = inverse of its algorithm permutation
+  const sourceStates = new Map<string, number[]>();
+  sourceStates.set('solved', IDENTITY);
+  for (const alg of PLL_ALGORITHMS) {
+    sourceStates.set(alg.id, invertPerm(alg.permutation));
   }
 
-  // Collect raw edges: key = "source::target", value = list of (algId, algName, auf)
-  const rawEdges: Map<string, PllGraphEdgeAlgorithm[]> = new Map();
+  // Collect raw edges
+  const rawEdges = new Map<string, PllGraphEdgeAlgorithm[]>();
 
-  for (const [sourceId, sourcePerm] of sourcePerms) {
+  for (const [sourceId, sourceState] of sourceStates) {
     for (const { label: aufLabel, perm: aufPerm } of AUF_PERMS) {
-      for (const { alg, perm: algPerm } of ALG_PERMS) {
-        // Combined: start in sourceState, apply AUF, then apply algorithm
-        // compose(sourcePerm, compose(aufPerm, algPerm))
-        const combined = composePerm(sourcePerm, composePerm(aufPerm, algPerm));
-        const targetId = identifyPllCase(combined);
-        if (targetId === null) continue; // shouldn't happen for valid perms
+      for (const alg of PLL_ALGORITHMS) {
+        // Apply AUF then algorithm to source state
+        const result = composePerm(sourceState, composePerm(aufPerm, alg.permutation));
+        const targetId = STATE_LOOKUP.get(result.join(','));
+
+        if (targetId === undefined) {
+          // Should not happen with correct permutations
+          continue;
+        }
 
         const edgeKey = `${sourceId}::${targetId}`;
-        if (!rawEdges.has(edgeKey)) {
-          rawEdges.set(edgeKey, []);
-        }
+        if (!rawEdges.has(edgeKey)) rawEdges.set(edgeKey, []);
         rawEdges.get(edgeKey)!.push({
           algorithmId: alg.id,
           algorithmName: alg.name,

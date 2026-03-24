@@ -32,16 +32,62 @@
   let simulationNodes = $state<(PllGraphNode & { x: number; y: number; vx: number; vy: number })[]>([]);
   let simulationEdges = $state<(PllGraphEdge & { sourceNode?: { x: number; y: number }; targetNode?: { x: number; y: number } })[]>([]);
 
-  // ── Group colors (DaisyUI-friendly palette) ──────────────────────────────────
-  const GROUP_COLORS: Record<string, string> = {
-    'Solved': 'oklch(var(--su))',
-    'Edges Only': 'oklch(var(--in))',
-    'Corners Only': 'oklch(var(--wa))',
-    'Both Edges and Corners': 'oklch(var(--er))',
-  };
+  // ── Resolved DaisyUI colors (populated in onMount) ───────────────────────────
+  let colorSolved = $state('#22c55e');        // bg-success fallback
+  let colorEdgesOnly = $state('#3b82f6');     // bg-info fallback
+  let colorCornersOnly = $state('#f59e0b');   // bg-warning fallback
+  let colorBothEdgesCorners = $state('#ef4444'); // bg-error fallback
+  let colorBaseContent = $state('#ffffff');   // bg-base-content fallback
+  let colorBase100 = $state('#1d232a');       // bg-base-100 fallback
+  let colorPrimary = $state('#570df8');       // bg-primary fallback
+
+  /** Resolve a DaisyUI bg utility class to a hex color string via computed style readback. */
+  function resolveDaisyColor(className: string, fallback: string): string {
+    try {
+      const el = document.createElement('div');
+      el.className = className;
+      el.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;';
+      document.body.appendChild(el);
+      const computed = getComputedStyle(el).backgroundColor;
+      document.body.removeChild(el);
+
+      if (!computed || computed === 'rgba(0, 0, 0, 0)' || computed === 'transparent') {
+        return fallback;
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = 1;
+      canvas.height = 1;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return fallback;
+      ctx.fillStyle = computed;
+      ctx.fillRect(0, 0, 1, 1);
+      const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+      return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+    } catch {
+      return fallback;
+    }
+  }
+
+  function resolveAllColors() {
+    colorSolved = resolveDaisyColor('bg-success', '#22c55e');
+    colorEdgesOnly = resolveDaisyColor('bg-info', '#3b82f6');
+    colorCornersOnly = resolveDaisyColor('bg-warning', '#f59e0b');
+    colorBothEdgesCorners = resolveDaisyColor('bg-error', '#ef4444');
+    colorBaseContent = resolveDaisyColor('bg-base-content', '#ffffff');
+    colorBase100 = resolveDaisyColor('bg-base-100', '#1d232a');
+    colorPrimary = resolveDaisyColor('bg-primary', '#570df8');
+  }
+
+  let GROUP_COLORS = $derived<Record<string, string>>({
+    'Solved': colorSolved,
+    'Edges Only': colorEdgesOnly,
+    'Corners Only': colorCornersOnly,
+    'Both Edges and Corners': colorBothEdgesCorners,
+  });
 
   function nodeColor(node: PllGraphNode): string {
-    return GROUP_COLORS[node.group] ?? 'oklch(var(--bc))';
+    return GROUP_COLORS[node.group] ?? colorBaseContent;
   }
 
   // ── Derived edge visibility ─────────────────────────────────────────────────
@@ -72,9 +118,12 @@
   }
 
   // ── D3 simulation ───────────────────────────────────────────────────────────
-  let simulation: import('d3-force').Simulation<PllGraphNode & { x: number; y: number; vx: number; vy: number }, undefined> | null = null;
+  let simulation: import('d3').Simulation<PllGraphNode & { x: number; y: number; vx: number; vy: number }, undefined> | null = null;
   onMount(async () => {
-    const d3force = await import('d3-force');
+    // Resolve theme colors before rendering
+    resolveAllColors();
+
+    const d3force = await import('d3');
 
     // Initialize node positions
     simulationNodes = graph.nodes.map((n) => ({
@@ -250,7 +299,7 @@
             refY="3"
             orient="auto"
           >
-            <polygon points="0 0, 8 3, 0 6" class="fill-base-content/40" />
+            <polygon points="0 0, 8 3, 0 6" fill={colorBaseContent} opacity="0.4" />
           </marker>
           <marker
             id="arrowhead-hover"
@@ -260,7 +309,7 @@
             refY="3"
             orient="auto"
           >
-            <polygon points="0 0, 8 3, 0 6" class="fill-primary" />
+            <polygon points="0 0, 8 3, 0 6" fill={colorPrimary} />
           </marker>
         </defs>
 
@@ -277,7 +326,8 @@
               <path
                 d={path}
                 fill="none"
-                stroke={isHovered ? 'oklch(var(--p))' : 'oklch(var(--bc) / 0.3)'}
+                stroke={isHovered ? colorPrimary : colorBaseContent}
+                stroke-opacity={isHovered ? 1 : 0.3}
                 stroke-width={Math.max(1, Math.min(edge.count * 0.5, 4))}
                 marker-end={isHovered ? 'url(#arrowhead-hover)' : 'url(#arrowhead)'}
                 class="cursor-pointer transition-colors"
@@ -310,7 +360,7 @@
               <circle
                 r={radius}
                 fill={nodeColor(node)}
-                stroke={isSelected ? 'oklch(var(--p))' : 'oklch(var(--b1))'}
+                stroke={isSelected ? colorPrimary : colorBase100}
                 stroke-width={isSelected ? 3 : 1.5}
                 class="transition-all"
               />
@@ -319,7 +369,7 @@
                 dominant-baseline="middle"
                 font-size={node.isSolved ? '11' : '9'}
                 font-weight={node.isSolved ? 'bold' : 'normal'}
-                fill="oklch(var(--b1))"
+                fill={colorBase100}
                 class="pointer-events-none select-none"
               >
                 {node.isSolved ? 'Solved' : node.name.replace(' Perm', '')}

@@ -150,14 +150,18 @@ export function computePllGraph(): PllGraph {
     sourceStates.set(alg.id, alg.permutation);
   }
 
+  // Pre-compute algorithm effects (inverse of state permutation)
+  const algEffects = PLL_ALGORITHMS.map((alg) => ({
+    alg,
+    effect: invertPerm(alg.permutation),
+  }));
+
   // Collect raw edges
   const rawEdges = new Map<string, PllGraphEdgeAlgorithm[]>();
 
   for (const [sourceId, sourceState] of sourceStates) {
     for (const { label: aufLabel, perm: aufPerm } of AUF_PERMS) {
-      for (const alg of PLL_ALGORITHMS) {
-        // Apply AUF then algorithm effect (= inverse of permutation) to source state
-        const algEffect = invertPerm(alg.permutation);
+      for (const { alg, effect: algEffect } of algEffects) {
         const result = composePerm(sourceState, composePerm(aufPerm, algEffect));
         const targetId = STATE_LOOKUP.get(result.join(','));
 

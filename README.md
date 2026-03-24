@@ -43,6 +43,7 @@ Detailed documentation lives in [`docs/`](docs/):
 | [linting.md](docs/technical/linting.md)                           | ESLint + Prettier setup and configuration     |
 | [testing.md](docs/technical/testing.md)                           | Testing strategy, Vitest + Playwright         |
 | [theme-integration.md](docs/technical/theme-integration.md)       | Theme store, FOUC prevention, Three.js sync   |
+| [pll-graph.md](docs/technical/pll-graph.md)                       | PLL state transition graph: data model and API |
 
 **Product** (`docs/product/`):
 

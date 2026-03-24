@@ -56,6 +56,7 @@ See `docs/` for detailed documentation:
 - `linting.md` — ESLint + Prettier setup, configuration, CI integration
 - `testing.md` — Testing strategy, framework choices, what to test, CI integration
 - `theme-integration.md` — Theme store, FOUC prevention, CSS variable sync with Three.js
+- `pll-graph.md` — PLL state transition graph: permutation model, graph structure, module API
 
 **Product** (`docs/product/`):
 

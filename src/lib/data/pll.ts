@@ -276,6 +276,10 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 8, to: 0 },
       { from: 2, to: 6 },
       { from: 6, to: 2 },
+      { from: 1, to: 7 },
+      { from: 7, to: 1 },
+      { from: 3, to: 5 },
+      { from: 5, to: 3 },
     ],
   },
   {
@@ -292,6 +296,10 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 8, to: 0 },
       { from: 2, to: 6 },
       { from: 6, to: 2 },
+      { from: 1, to: 3 },
+      { from: 3, to: 1 },
+      { from: 5, to: 7 },
+      { from: 7, to: 5 },
     ],
   },
   {
@@ -376,12 +384,12 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
     altNotations: ["R2 U R' U' y R U R' U' R U R' U' R U R' U' R2 y'"],
     probability: '1/36',
     isTwoLook: false,
-    // swap all 4 diagonal corner pairs + swap edges on opposite sides
+    // swap adjacent corners (no edges move)
     pattern: [
-      { from: 0, to: 8 },
-      { from: 8, to: 0 },
-      { from: 2, to: 6 },
-      { from: 6, to: 2 },
+      { from: 0, to: 2 },
+      { from: 2, to: 0 },
+      { from: 6, to: 8 },
+      { from: 8, to: 6 },
     ],
   },
 ];

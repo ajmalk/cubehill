@@ -44,6 +44,8 @@
     "vitest": "^4.1.0"
   },
   "dependencies": {
+    "@types/d3": "^7.4.3",
+    "d3": "^7.9.0",
     "ninja-keys": "^1.2.2",
     "three": "^0.183.2"
   }

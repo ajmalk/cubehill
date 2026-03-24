@@ -93,7 +93,7 @@ export function patternToPermutation(pattern: PermutationArrow[]): Permutation {
 }
 
 /**
- * Compose two permutations: apply `a` first, then `b`.
+ * Compose two permutations: apply `b` first, then `a`.
  * compose(a, b)[i] = a[b[i]]
  * Does not mutate inputs.
  */
@@ -128,14 +128,19 @@ const ALG_PERMS = PLL_ALGORITHMS.map((alg) => ({
 
 /**
  * Identify a permutation as a PLL case id, "solved", or null.
- * Tries all 4 AUF rotations of each known case.
+ * Tries all 4 AUF post-rotations of each known case.
+ *
+ * AUF convention: checks whether `perm = composePerm(algPerm, aufPerm)`,
+ * i.e. `perm[i] = algPerm[aufPerm[i]]` — AUF applied first, then the alg.
+ * This is consistent with `computePllGraph`, which builds `combined` the same
+ * way: `composePerm(sourcePerm, composePerm(aufPerm, algPerm))`.
  */
 export function identifyPllCase(perm: Permutation): string | null {
   if (permEqual(perm, IDENTITY)) return 'solved';
 
   for (const { alg, perm: algPerm } of ALG_PERMS) {
     for (const { perm: aufPerm } of AUF_PERMS) {
-      // Apply auf rotation on top of the alg perm and see if it matches
+      // AUF (aufPerm) applied first, then alg (algPerm)
       const rotated = composePerm(algPerm, aufPerm);
       if (permEqual(perm, rotated)) return alg.id;
     }

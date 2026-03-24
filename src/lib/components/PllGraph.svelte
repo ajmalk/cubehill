@@ -32,7 +32,7 @@
   let simulationNodes = $state<(PllGraphNode & { x: number; y: number; vx: number; vy: number })[]>([]);
   let simulationEdges = $state<(PllGraphEdge & { sourceNode?: { x: number; y: number }; targetNode?: { x: number; y: number } })[]>([]);
 
-  // ── Group colors (DaisyUI-friendly palette) ─────────────────────────────────
+  // ── Group colors (DaisyUI-friendly palette) ──────────────────────────────────
   const GROUP_COLORS: Record<string, string> = {
     'Solved': 'oklch(var(--su))',
     'Edges Only': 'oklch(var(--in))',
@@ -73,8 +73,6 @@
 
   // ── D3 simulation ───────────────────────────────────────────────────────────
   let simulation: import('d3-force').Simulation<PllGraphNode & { x: number; y: number; vx: number; vy: number }, undefined> | null = null;
-  let animFrameId: number | null = null;
-
   onMount(async () => {
     const d3force = await import('d3-force');
 
@@ -147,7 +145,6 @@
 
   onDestroy(() => {
     if (simulation) simulation.stop();
-    if (animFrameId) cancelAnimationFrame(animFrameId);
   });
 
   // ── Interaction ─────────────────────────────────────────────────────────────
@@ -202,12 +199,7 @@
     );
   }
 
-  $effect(() => {
-    // Keep simulation alive when dimensions change
-    if (simulation && width && height) {
-      simulation.alpha(0.1).restart();
-    }
-  });
+
 </script>
 
 {#if browser}

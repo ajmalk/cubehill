@@ -93,7 +93,7 @@ export function patternToPermutation(pattern: PermutationArrow[]): Permutation {
 }
 
 /**
- * Compose two permutations: apply `b` first, then `a`.
+ * Compose two permutations: apply `a` first, then `b`.
  * compose(a, b)[i] = a[b[i]]
  * Does not mutate inputs.
  */
@@ -103,6 +103,18 @@ export function composePerm(a: Permutation, b: Permutation): Permutation {
     const srcIdx = posToIdx(src as PiecePosition);
     return a[srcIdx];
   });
+}
+
+/**
+ * Invert a permutation. If perm[i] = j (position i filled from j),
+ * then inv[j] = i (position j filled from i).
+ */
+function invertPerm(perm: Permutation): Permutation {
+  const inv = [...IDENTITY];
+  for (let i = 0; i < perm.length; i++) {
+    inv[posToIdx(perm[i] as PiecePosition)] = POSITIONS[i];
+  }
+  return inv;
 }
 
 function permEqual(a: Permutation, b: Permutation): boolean {
@@ -130,18 +142,17 @@ const ALG_PERMS = PLL_ALGORITHMS.map((alg) => ({
  * Identify a permutation as a PLL case id, "solved", or null.
  * Tries all 4 AUF post-rotations of each known case.
  *
- * AUF convention: checks whether `perm = composePerm(algPerm, aufPerm)`,
- * i.e. `perm[i] = algPerm[aufPerm[i]]` — AUF applied first, then the alg.
- * This is consistent with `computePllGraph`, which builds `combined` the same
- * way: `composePerm(sourcePerm, composePerm(aufPerm, algPerm))`.
+ * Compares against PLL states (inverse of algorithm effects) with AUF rotations.
+ * A PLL state is the cube configuration that a given algorithm solves: P^(-1)
+ * where P is the algorithm's effect permutation.
  */
 export function identifyPllCase(perm: Permutation): string | null {
   if (permEqual(perm, IDENTITY)) return 'solved';
 
   for (const { alg, perm: algPerm } of ALG_PERMS) {
+    const statePerm = invertPerm(algPerm);
     for (const { perm: aufPerm } of AUF_PERMS) {
-      // AUF (aufPerm) applied first, then alg (algPerm)
-      const rotated = composePerm(algPerm, aufPerm);
+      const rotated = composePerm(statePerm, aufPerm);
       if (permEqual(perm, rotated)) return alg.id;
     }
   }
@@ -164,11 +175,12 @@ export function computePllGraph(): PllGraph {
     })),
   ];
 
-  // Build source permutations: solved = identity, each PLL case = its own perm
+  // Build source permutations: solved = identity, each PLL case = inverse of its algorithm effect
+  // The state that algorithm X solves is P^(-1), because applying P to P^(-1) = identity.
   const sourcePerms: Map<string, Permutation> = new Map();
   sourcePerms.set('solved', IDENTITY);
   for (const { alg, perm } of ALG_PERMS) {
-    sourcePerms.set(alg.id, perm);
+    sourcePerms.set(alg.id, invertPerm(perm));
   }
 
   // Collect raw edges: key = "source::target", value = list of (algId, algName, auf)

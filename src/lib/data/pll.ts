@@ -107,7 +107,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 8, to: 2 },
       { from: 2, to: 0 },
     ],
-    permutation: [8, 1, 0, 3, 5, 6, 7, 2],
+    permutation: [2, 1, 8, 3, 5, 6, 7, 0],
   },
   {
     id: 'pll-ab',
@@ -125,7 +125,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 2, to: 8 },
       { from: 8, to: 0 },
     ],
-    permutation: [2, 1, 8, 3, 5, 6, 7, 0],
+    permutation: [8, 1, 0, 3, 5, 6, 7, 2],
   },
 
   // ── Both Edges and Corners (15 cases) ────────────────────────────────────
@@ -168,8 +168,8 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
     name: 'Ja Perm',
     category: 'pll',
     group: 'Both Edges and Corners',
-    notation: "x R2 F R F' R U2 r' U r U2 x'",
-    altNotations: ["R' U L' U2 R U' R' U2 R L U'"],
+    notation: "R' U L' U2 R U' R' U2 R L U'",
+    altNotations: ["x R2 F R F' R U2 r' U r U2 x'"],
     probability: '1/18',
     isTwoLook: false,
     // 3-cycle: UR corner, UL corner, top edge cycle
@@ -343,7 +343,8 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
     name: 'Gb Perm',
     category: 'pll',
     group: 'Both Edges and Corners',
-    notation: "R' U' R U D' R2 U R' U R U' R U' R2 D",
+    notation: "y' D R' U' R U D' R2 U R' U R U' R U' R2 U'",
+    altNotations: ["R' U' R U D' R2 U R' U R U' R U' R2 D"],
     probability: '1/18',
     isTwoLook: false,
     pattern: [
@@ -393,7 +394,7 @@ export const PLL_ALGORITHMS: PllAlgorithm[] = [
       { from: 7, to: 3 },
       { from: 3, to: 1 },
     ],
-    permutation: [8, 1, 2, 7, 3, 0, 5, 6],
+    permutation: [2, 3, 6, 7, 5, 0, 1, 8],
   },
   {
     id: 'pll-e',
